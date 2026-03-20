@@ -1,0 +1,1 @@
+export { api } from "@/plugins/axios/api";

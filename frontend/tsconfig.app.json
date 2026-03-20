@@ -1,0 +1,26 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "exclude": ["src/**/__tests__/*", "src/sw.ts"],
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "lib": ["WebWorker","esnext", "dom"],
+    "module": "ESNext",
+    "types": ["vite-plugin-pwa/client", "node"],
+    "baseUrl": "src",
+    "paths": { 
+      "@/*": ["*"],
+      "@components/*": ["components/*"],
+      "@pages/*": ["pages/*"],
+      "@api/*": ["api/*"],
+      "@modules/*": ["modules/*"],
+      "@composables/*": ["composables/*"],
+      "@store/*": ["store/*"],
+      "@plugins/*": ["plugins/*"],
+      "@assets/*": ["assets/*"],
+      "@utilities/*": ["utils/*"],
+      "@interfaces/*": ["interfaces/*"],
+      "@routes/*": ["routes/*"]
+    }
+  }
+}
