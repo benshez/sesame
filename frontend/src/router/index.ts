@@ -53,7 +53,7 @@ const router = createRouter({
       },
     },
     {
-      path: "/auth",
+      path: "/auth/:pathMatch(.*)*",
       name: "auth",
       component: () =>
         import(/* webpackChunkName: "auth" */ "@/views/AuthView.vue"),

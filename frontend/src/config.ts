@@ -2,8 +2,8 @@
 
 import SuperTokens from "supertokens-web-js";
 import Session from "supertokens-web-js/recipe/session";
-import Multitenancy from "supertokens-web-js/recipe/multitenancy";
-
+import EmailVerification from "supertokens-web-js/recipe/emailverification";
+import MultiFactorAuth from "supertokens-web-js/recipe/multifactorauth";
 
 const isMultitenancy = true;
 
@@ -81,19 +81,8 @@ export function initSuperTokensWebJS() {
     },
     recipeList: [
       Session.init(),
-      Multitenancy.init({
-        override: {
-          functions: (oI) => {
-            return {
-              ...oI,
-              getTenantId: async () => {
-                const tenantIdInStorage = localStorage.getItem("tenantId");
-                return tenantIdInStorage === null ? undefined : tenantIdInStorage;
-              },
-            };
-          },
-        },
-      })
+      EmailVerification.init(),
+      MultiFactorAuth.init()
     ]
   });
 

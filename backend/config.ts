@@ -8,6 +8,8 @@ import Multitenancy from "supertokens-node/recipe/multitenancy";
 import MultiFactorAuth from "supertokens-node/recipe/multifactorauth";
 import EmailVerification from "supertokens-node/recipe/emailverification";
 import WebAuthN from "supertokens-node/recipe/webauthn";
+import TOTP from "supertokens-node/recipe/totp";
+import { SMTPService } from "supertokens-node/recipe/emailverification/emaildelivery";
 import type { TypeInput } from "supertokens-node/types";
 import * as dotenvx from "@dotenvx/dotenvx";
 
@@ -16,6 +18,19 @@ const envFile = process.env.NODE_ENV === 'production'
   : '.env.development';
 
 dotenvx.config({ path: ['./environment/.env',`./environment/${envFile}`] });
+
+const smtpSettings = {
+  host: process.env.SMTP_HOST as string,
+  port: process.env.SMTP_PORT as unknown as number,
+  secure: true as boolean,
+  authUsername: process.env.SMTP_USER as string,
+  password: process.env.SMTP_USER_PASSWORD as string,
+  from: {
+    name: process.env.APP_TENANT_NAME as string,
+    email: process.env.SMTP_NO_REPLY_EMAIL as string,
+  },
+}
+
 
 export function getApiDomain() {
   const apiPort = process.env.API_PORT;
@@ -109,8 +124,12 @@ export const SuperTokensConfig: TypeInput = {
     MultiFactorAuth.init({
       firstFactors: ["thirdparty", "emailpassword"]
     }),
+    TOTP.init(),
     EmailVerification.init({
-      mode: "REQUIRED"
+      mode: "REQUIRED",
+      emailDelivery: {
+        service: new SMTPService({ smtpSettings }),
+      },      
     }),
     WebAuthN.init(),
     Session.init()
