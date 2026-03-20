@@ -68,6 +68,84 @@ export const SuperTokensConfig: TypeInput = {
     websiteBasePath: "/auth",
   },
   recipeList: [
-    
+    EmailPassword.init(),
+    ThirdParty.init({
+      signInAndUpFeature: {
+        providers: [
+          {
+            config: {
+              thirdPartyId: "google",
+              clients: [
+                {
+                  clientId: process.env.GOOGLE_CLIENT_ID as string,
+                  clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+
+                },
+              ],
+            },
+          },
+          {
+            config: {
+              thirdPartyId: "github",
+              clients: [
+                {
+                  clientId:  process.env.GITHUB_CLIENT_ID as string,
+                  clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+
+                },
+              ],
+            },
+          },
+          {
+            config: {
+              thirdPartyId: "twitter",
+              clients: [
+                {
+                  clientId: process.env.TWITTER_CLIENT_ID as string,
+                  clientSecret: process.env.TWITTER_CLIENT_SECRET as string,
+                },
+              ],
+            },
+          }
+        ],
+      },
+    }),
+    Passwordless.init({
+      contactMethod: "EMAIL",
+      flowType: "USER_INPUT_CODE_AND_MAGIC_LINK"
+    }),
+    Dashboard.init(),
+    UserRoles.init(),
+    Multitenancy.init({
+      override: {
+        functions: (oI) => {
+          return {
+            ...oI,
+          };
+        },
+      },
+    }),
+    MultiFactorAuth.init({
+      firstFactors: ["thirdparty", "emailpassword"]
+    }),
+    AccountLinking.init({
+      shouldDoAutomaticAccountLinking: async (
+        newAccountInfo: AccountInfoWithRecipeId,
+        user: User | undefined,
+        session: any,
+        tenantId: string,
+        userContext: any
+      ) => {
+        return {
+          shouldAutomaticallyLink: true,
+          shouldRequireVerification: false
+        };
+      }
+    }),
+    EmailVerification.init({
+      mode: "REQUIRED"
+    }),
+    WebAuthN.init(),
+    Session.init()
   ],
 };
