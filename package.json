@@ -9,7 +9,10 @@
     "start:backend": "cd backend && npm run start",
     "start:backend-live-demo-app": "cd backend && ./startLiveDemoApp.sh",
     "start": "npm-run-all --parallel start:frontend start:backend",
-    "start-live-demo-app": "npx npm-run-all --parallel start:frontend-live-demo-app start:backend-live-demo-app"
+    "start-live-demo-app": "npx npm-run-all --parallel start:frontend-live-demo-app start:backend-live-demo-app",
+    "install": "npm-run-all --parallel install:backend install:frontend",
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install"
   },
   "keywords": [],
   "author": "",

@@ -1,40 +1,21 @@
 import EmailPassword from "supertokens-node/recipe/emailpassword";
 import ThirdParty from "supertokens-node/recipe/thirdparty";
-import type { ProviderInput } from "supertokens-node/recipe/thirdparty/types";
 import Passwordless from "supertokens-node/recipe/passwordless";
 import Session from "supertokens-node/recipe/session";
 import Dashboard from "supertokens-node/recipe/dashboard";
 import UserRoles from "supertokens-node/recipe/userroles";
 import Multitenancy from "supertokens-node/recipe/multitenancy";
 import MultiFactorAuth from "supertokens-node/recipe/multifactorauth";
-import AccountLinking from "supertokens-node/recipe/accountlinking";
 import EmailVerification from "supertokens-node/recipe/emailverification";
 import WebAuthN from "supertokens-node/recipe/webauthn";
-import type { AccountInfoWithRecipeId } from "supertokens-node/recipe/accountlinking/types";
-import type { User } from "supertokens-node/types";
 import type { TypeInput } from "supertokens-node/types";
-//import * as dotenv from "dotenv";
 import * as dotenvx from "@dotenvx/dotenvx";
-
 
 const envFile = process.env.NODE_ENV === 'production'
   ? '.env.production'
   : '.env.development';
 
 dotenvx.config({ path: ['./environment/.env',`./environment/${envFile}`] });
-
-console.log('Loaded environment:', `${process.env.WEB_SITE_URL}:${process.env.WEB_SITE_PORT}`);
-
-//const configPath = `./environment/.env.${process.env.NODE_ENV}`;
-//console.log(process.env.NODE_ENV);
-//dotenvx.config({path: [configPath, `./environment/.env`]});
-
-//dotenv.config({ path: configPath });
-
-//console.log(process.env.API_URL);
-
-
-//dotenv.config({ path: "./environment/.env.dev" });
 
 export function getApiDomain() {
   const apiPort = process.env.API_PORT;
@@ -127,20 +108,6 @@ export const SuperTokensConfig: TypeInput = {
     }),
     MultiFactorAuth.init({
       firstFactors: ["thirdparty", "emailpassword"]
-    }),
-    AccountLinking.init({
-      shouldDoAutomaticAccountLinking: async (
-        newAccountInfo: AccountInfoWithRecipeId,
-        user: User | undefined,
-        session: any,
-        tenantId: string,
-        userContext: any
-      ) => {
-        return {
-          shouldAutomaticallyLink: true,
-          shouldRequireVerification: false
-        };
-      }
     }),
     EmailVerification.init({
       mode: "REQUIRED"
