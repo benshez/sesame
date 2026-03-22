@@ -3,8 +3,9 @@ import cors from "cors";
 import supertokens from "supertokens-node";
 import { verifySession } from "supertokens-node/recipe/session/framework/express";
 import { middleware, errorHandler, SessionRequest } from "supertokens-node/framework/express";
-import { getWebsiteDomain, SuperTokensConfig } from "./config.js";
+import { SuperTokensConfig } from "./config.js";
 import Multitenancy from "supertokens-node/recipe/multitenancy";
+import { useBackendConfig } from "./config/useBackendConfig";
 
 supertokens.init(SuperTokensConfig);
 
@@ -12,7 +13,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: getWebsiteDomain(),
+    origin: useBackendConfig().GetWebsiteDomain(),
     allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
     methods: ["GET", "PUT", "POST", "DELETE"],
     credentials: true,
@@ -35,6 +36,7 @@ app.get("/sessioninfo", verifySession(), async (req: SessionRequest, res) => {
     sessionHandle: session!.getHandle(),
     userId: session!.getUserId(),
     accessTokenPayload: session!.getAccessTokenPayload(),
+    tenantId: session!.getTenantId()
   });
 });
 

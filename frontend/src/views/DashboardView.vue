@@ -1,7 +1,7 @@
 <template>
-  <BaseLayout>
-    Dashboard
-  </BaseLayout>
+
+    <router-view />
+
 </template>
 
 

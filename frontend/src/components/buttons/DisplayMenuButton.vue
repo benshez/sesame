@@ -6,7 +6,7 @@
   </button>
 </template>
 <script setup lang="ts">
-import SVGDrawer from "@/components/SVG/SVGDrawer.vue";
+import SVGDrawer from "@/components/svg/SVGDrawer.vue";
 import { useDisplayStore } from "@/store";
 
 const displayStore = useDisplayStore();

@@ -1,12 +1,9 @@
 <template>
-  <BaseLayout>
-    <div id="supertokensui" />
-  </BaseLayout>
+  <div id="supertokensui" />
 </template>
 <script setup lang="ts">
 import { onMounted, onUnmounted } from "vue";
 import { initSuperTokensUI } from "@/config";
-import BaseLayout from "@/layouts/BaseLayout.vue";
 
 // Load the SuperTokens script dynamically
 const loadScript = (src: string) => {

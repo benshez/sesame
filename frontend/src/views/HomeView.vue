@@ -1,5 +1,7 @@
 <template>
   <BaseLayout>
+    <div v-if="doesSessionExist">If Session exists</div>
+    <div v-else>Session doesn't exists</div>
     Home
   </BaseLayout>
 </template>

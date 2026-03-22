@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import { toRefs } from "vue";
-import SVGDrawer from "@/components/SVG/SVGDrawer.vue";
+import SVGDrawer from "@/components/svg/SVGDrawer.vue";
 
 const props = defineProps({
   svgPathD: {

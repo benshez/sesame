@@ -6,7 +6,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "encrypt": "cd ./environment && dotenvx encrypt touch '.env.development'",
+    "encrypt": "cd environment && dotenvx encrypt touch '.env.development'",
     "start": "set NODE_ENV=production && npx vite-node ./index.ts",
     "lint": "eslint .",
     "build": "tsc"

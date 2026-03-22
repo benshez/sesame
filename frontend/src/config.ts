@@ -65,7 +65,9 @@ export function initSuperTokensUI() {
     ],
     getRedirectionURL: async (context: any) => {
       if (context.action === "SUCCESS") {
-        return "/dashboard";
+        const ST_TENANT_ID_KEY = "tenantId";
+        let currentTenantId = localStorage.getItem(ST_TENANT_ID_KEY) || 'public';
+        return `/home/${currentTenantId}`;
       }
       return undefined;
     },

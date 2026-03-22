@@ -27,7 +27,7 @@
   },
   "include": [
     "./*.ts",
-    "environment.d.ts"
+    "config/useBackendConfig.ts"
   ],
   "exclude": [
     "node_modules"

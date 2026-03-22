@@ -6,7 +6,8 @@ export const useDisplayStore = defineStore("auth", {
     sidebarShowingState: false as boolean,
     menuShowingState: false as  boolean,
     profileListShowingState: false as  boolean,
-    darkModeState: false as boolean
+    darkModeState: false as boolean,
+    hasSessionState: false as boolean
   }),
   actions: {
     UpdateLoaderShowingState(show: boolean) {
@@ -23,13 +24,17 @@ export const useDisplayStore = defineStore("auth", {
     },    
     UpdateDarkModeState(show: boolean) {
       this.$state.darkModeState = show;
-    }
+    },    
+    UpdateHasSessionState(show: boolean) {
+      this.$state.hasSessionState = show;
+    }    
   },
   getters: {
     loaderShowing: (state) => state.loaderShowingState,
     sidebarShowing: (state) => state.sidebarShowingState,
     menuShowing: (state) => state.menuShowingState,
     profileListShowing: (state) => state.profileListShowingState,
-    darkMode: (state) => state.darkModeState
+    darkMode: (state) => state.darkModeState,
+    hasSession: (state) => state.hasSessionState
   }
 })
