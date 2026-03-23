@@ -17,7 +17,7 @@
 import { useRoute } from "vue-router";
 import { ElementProps } from "@/components/Form/props/Props";
 import FormElement from "@/components/Form/FromElement.vue";
-import SVGDrawer from "@/components/SVG/SVGDrawer.vue";
+import SVGDrawer from "@/components/svg/SVGDrawer.vue";
 import { useFormStore } from "@/store/forms/formStore";
 
 const route = useRoute();

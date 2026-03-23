@@ -1,0 +1,110 @@
+version: "3.9"
+
+services:
+  # Note: If you are assigning a custom name to your db service on the line below, make sure it does not contain underscores
+  sesame-db:
+    image: "postgres:latest"
+    container_name: sesame-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER} 
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} 
+      POSTGRES_DB: ${POSTGRES_DB}
+    command:
+      - postgres
+      - -c
+      - ssl=off      
+    ports:
+      - 5432:5432
+    networks:
+      - sesame-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway" 
+    volumes:
+      - pgdata:/var/lib/postgresql           
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  sesame-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: frontend-dev-stage
+    container_name: sesame-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run install && npm run start
+    depends_on:
+      - sesame-backend
+    networks:
+      - sesame-network
+
+  sesame-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: backend-dev-stage
+    container_name: sesame-backend
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+      - /app/node_modules   
+    ports:
+      - "3001:3001"
+    command: npm run install && npm run start
+    depends_on:
+      sesame-db:
+        condition: service_healthy
+    networks:
+      - sesame-network
+
+  sesame-supertokens:
+    image: registry.supertokens.io/supertokens/supertokens-postgresql:latest
+    container_name: sesame-supertokens
+    depends_on:
+      sesame-db:
+        condition: service_healthy
+    ports:
+      - 3567:3567
+    environment:
+      POSTGRESQL_CONNECTION_URI: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@sesame-db:5432/${POSTGRES_DB}"
+    networks:
+      - sesame-network
+    restart: unless-stopped
+    healthcheck:
+      test: >
+        bash -c "exec 3<>/dev/tcp/127.0.0.1/3567 && echo -e "GET /hello HTTP/1.1\r\nhost: 127.0.0.1:3567\r\nConnection: close\r\n\r\n" >&3 && cat <&3 | grep "Hello""
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  sesame-pgadmin:
+    image: dpage/pgadmin4:9.13
+    container_name: sesame-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: benshez1@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: ${POSTGRES_PASSWORD}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    networks:
+      - sesame-network      
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - sesame-db
+    restart: always      
+
+networks:
+  sesame-network:
+    driver: bridge
+
+volumes:
+  pgdata:
+  pgadmin_data:    
