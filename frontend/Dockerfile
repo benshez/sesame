@@ -13,20 +13,14 @@ RUN npm install
 
 COPY . .
 
-# Expose the port the app runs on
-EXPOSE 3000
+RUN npm run build-only
 
-RUN npm run dev
+FROM nginx:alpine AS production
 
-# Use a simple static file server for production
-FROM node:lts-alpine
+COPY --from=frontend-dev-stage /app/dist /usr/share/nginx/html
 
-RUN npm install -g http-server
-
-WORKDIR /app
-
-COPY --from=frontend-dev-stage /app/dist .
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
-CMD ["http-server", "dist"]
+CMD ["nginx", "-g", "daemon off;"]

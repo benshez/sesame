@@ -1,20 +1,19 @@
-version: "3.9"
-
 services:
-  # Note: If you are assigning a custom name to your db service on the line below, make sure it does not contain underscores
+
   sesame-db:
     image: "postgres:latest"
     container_name: sesame-db
     environment:
-      POSTGRES_USER: ${POSTGRES_USER} 
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} 
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: xxx 
+      POSTGRES_PASSWORD: xxx 
+      POSTGRES_DB: xxx
+      PGPORT: 5435
     command:
       - postgres
       - -c
       - ssl=off      
     ports:
-      - 5432:5432
+      - 5435:5435
     networks:
       - sesame-network
     extra_hosts:
@@ -23,7 +22,7 @@ services:
       - pgdata:/var/lib/postgresql           
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
+      test: ["CMD", "pg_isready", "-U", "xx", "-d", "xx"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -32,16 +31,14 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      target: frontend-dev-stage
     container_name: sesame-frontend
-    ports:
-      - "3000:3000"
     volumes:
       - ./frontend:/app
-      - /app/node_modules
-    command: npm run install && npm run start
-    depends_on:
-      - sesame-backend
+      - frontend_node_modules:/app/node_modules    
+    ports:
+      - "8001:80"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     networks:
       - sesame-network
 
@@ -49,15 +46,13 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-      target: backend-dev-stage
     container_name: sesame-backend
     working_dir: /app
     volumes:
       - ./backend:/app
-      - /app/node_modules   
+      - backend_node_modules:/app/node_modules   
     ports:
       - "3001:3001"
-    command: npm run install && npm run start
     depends_on:
       sesame-db:
         condition: service_healthy
@@ -73,7 +68,7 @@ services:
     ports:
       - 3567:3567
     environment:
-      POSTGRESQL_CONNECTION_URI: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@sesame-db:5432/${POSTGRES_DB}"
+      POSTGRESQL_CONNECTION_URI: "postgresql://xx:xx@sesame-db:5435/xx"
     networks:
       - sesame-network
     restart: unless-stopped
@@ -88,8 +83,8 @@ services:
     image: dpage/pgadmin4:9.13
     container_name: sesame-pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: benshez1@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: ${POSTGRES_PASSWORD}
+      PGADMIN_DEFAULT_EMAIL: xx
+      PGADMIN_DEFAULT_PASSWORD: xx
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     ports:
       - "5050:80"
@@ -107,4 +102,6 @@ networks:
 
 volumes:
   pgdata:
-  pgadmin_data:    
+  pgadmin_data: 
+  frontend_node_modules:
+  backend_node_modules:   

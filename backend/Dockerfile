@@ -15,25 +15,25 @@ RUN npm install
 COPY . .
 
 # Expose the port the app runs on
-EXPOSE 3001
+EXPOSE 3000
 
 # Define the command to run the app
-CMD ["npm", "run", "start"]
+RUN npm run start
 
 
 # Production stage
-FROM node:lts AS prod-stage
+#FROM node:lts AS prod-stage
 
-WORKDIR /app
+#WORKDIR /app
 
-COPY package*.json ./
+#COPY package*.json ./
 
-RUN npm ci --only=production
+#RUN npm ci --only=production
 
-COPY . .
+#COPY . .
 
-RUN npm run build
+#RUN npm run build
 
-EXPOSE 80
+#EXPOSE 80
 
-CMD ["npx", "serve", "-s", "dist"]
+#CMD ["npx", "serve", "-s", "dist"]
