@@ -1,6 +1,5 @@
 import * as dotenvx from "@dotenvx/dotenvx";
 
-
 export const useBackendConfig = () => {
 
   const ef = process.env.NODE_ENV === 'production'

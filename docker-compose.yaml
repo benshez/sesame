@@ -4,9 +4,9 @@ services:
     image: "postgres:latest"
     container_name: sesame-db
     environment:
-      POSTGRES_USER: xxx 
-      POSTGRES_PASSWORD: xxx 
-      POSTGRES_DB: xxx
+      POSTGRES_USER: sesame_supertokens_user 
+      POSTGRES_PASSWORD: B3nSh3z* 
+      POSTGRES_DB: supertokens
       PGPORT: 5435
     command:
       - postgres
@@ -22,7 +22,7 @@ services:
       - pgdata:/var/lib/postgresql           
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "xx", "-d", "xx"]
+      test: ["CMD", "pg_isready", "-U", "sesame_supertokens_user", "-d", "supertokens"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -68,7 +68,7 @@ services:
     ports:
       - 3567:3567
     environment:
-      POSTGRESQL_CONNECTION_URI: "postgresql://xx:xx@sesame-db:5435/xx"
+      POSTGRESQL_CONNECTION_URI: "postgresql://sesame_supertokens_user:B3nSh3z*@sesame-db:5435/supertokens"
     networks:
       - sesame-network
     restart: unless-stopped
@@ -83,8 +83,8 @@ services:
     image: dpage/pgadmin4:9.13
     container_name: sesame-pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: xx
-      PGADMIN_DEFAULT_PASSWORD: xx
+      PGADMIN_DEFAULT_EMAIL: benshez1@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: B3nSh3z*
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     ports:
       - "5050:80"

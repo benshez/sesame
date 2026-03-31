@@ -9,14 +9,22 @@
     "encrypt": "cd environment && dotenvx encrypt touch '.env.development'",
     "start": "set NODE_ENV=production && npx vite-node ./index.ts",
     "lint": "eslint .",
-    "build": "tsc"
+    "build": "tsc",
+    "create-migrate": "pg-migrations apply --directory db-migrations --database xxx",
+    "create-models": "npx @databases/pg-schema-cli --database xxx --directory models/__generated__"
   },
   "dependencies": {
+    "@databases/pg": "^5.5.0",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "supertokens-node": "latest"
   },
   "devDependencies": {
+    "@databases/pg-migrations": "^5.0.3",
+    "@databases/pg-schema-cli": "^4.5.0",
+    "@databases/pg-test": "^3.1.2",
+    "@databases/pg-typed": "^4.4.1",
+    "@dotenvx/dotenvx": "^1.55.1",
     "@eslint/js": "^9.16.0",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.17",
@@ -24,8 +32,7 @@
     "eslint": "^9.16.0",
     "globals": "^15.13.0",
     "typescript-eslint": "^8.18.0",
-    "vite-node": "^2.1.8",
-    "@dotenvx/dotenvx": "^1.55.1"
+    "vite-node": "^2.1.8"
   },
   "keywords": [],
   "author": "",

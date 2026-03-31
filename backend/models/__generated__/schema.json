@@ -1,0 +1,564 @@
+[
+  {
+    "name": "atdatabases_migrations_applied",
+    "columns": [
+      {
+        "name": "applied_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1184,
+        "typeName": "TIMESTAMPTZ"
+      },
+      {
+        "name": "id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "ignored_error",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "index",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "name",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "obsolete",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
+        "name": "script",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      }
+    ]
+  },
+  {
+    "name": "atdatabases_migrations_version",
+    "columns": [
+      {
+        "name": "id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "version",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      }
+    ]
+  },
+  {
+    "name": "attendee",
+    "columns": [
+      {
+        "name": "attendee_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "email",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "first_name",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "last_name",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "phone",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "employee",
+    "columns": [
+      {
+        "name": "email",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "employee_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "first_name",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "job_title",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "last_name",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "organization_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      }
+    ]
+  },
+  {
+    "name": "event",
+    "columns": [
+      {
+        "name": "actual_attendance",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "budget_estimated",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 790,
+        "typeName": "MONEY"
+      },
+      {
+        "name": "description",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "end_date",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1082,
+        "typeName": "DATE"
+      },
+      {
+        "name": "estimated_attendance",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "event_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "event_type_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "organization_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "start_date",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1082,
+        "typeName": "DATE"
+      },
+      {
+        "name": "status",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "total_expenditure",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 790,
+        "typeName": "MONEY"
+      },
+      {
+        "name": "venue_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      }
+    ]
+  },
+  {
+    "name": "event_employee",
+    "columns": [
+      {
+        "name": "deadline",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1082,
+        "typeName": "DATE"
+      },
+      {
+        "name": "employee_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "event_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "start_date",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1082,
+        "typeName": "DATE"
+      },
+      {
+        "name": "task",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "task_completed",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1560,
+        "typeName": "BIT"
+      }
+    ]
+  },
+  {
+    "name": "event_partner",
+    "columns": [
+      {
+        "name": "event_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "partner_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "role",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "event_ticket_assignment",
+    "columns": [
+      {
+        "name": "attendee_id",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "event_id",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "expiry_date",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1184,
+        "typeName": "TIMESTAMPTZ"
+      },
+      {
+        "name": "price",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 790,
+        "typeName": "MONEY"
+      },
+      {
+        "name": "purchase_date",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1184,
+        "typeName": "TIMESTAMPTZ"
+      },
+      {
+        "name": "ticket_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 2950,
+        "typeName": "UUID"
+      },
+      {
+        "name": "ticket_type",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "event_tickets",
+    "columns": [
+      {
+        "name": "event_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "price",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 790,
+        "typeName": "MONEY"
+      },
+      {
+        "name": "ticket_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 2950,
+        "typeName": "UUID"
+      },
+      {
+        "name": "ticket_type",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "event_type",
+    "columns": [
+      {
+        "name": "event_type_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "event_type_name",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "organization",
+    "columns": [
+      {
+        "name": "contact_person",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "email",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "name",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "organization_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "phone",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "partner",
+    "columns": [
+      {
+        "name": "email",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "name",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "partner_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "phone",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "venue",
+    "columns": [
+      {
+        "name": "address_line",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "capacity",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "city",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "country",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "onlineflag",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1560,
+        "typeName": "BIT"
+      },
+      {
+        "name": "postal_code",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "state",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "venue_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      }
+    ]
+  }
+]
