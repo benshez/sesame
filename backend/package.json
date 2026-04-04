@@ -10,8 +10,11 @@
     "start": "set NODE_ENV=production && npx vite-node ./index.ts",
     "lint": "eslint .",
     "build": "tsc",
-    "create-migrate": "pg-migrations apply --directory db-migrations --database xxx",
-    "create-models": "npx @databases/pg-schema-cli --database xxx --directory models/__generated__"
+    "create-db": "npm run create-migrations  && npm run create-models",
+    "create-migrations": "pg-migrations apply --directory db/migrations --database ***/sesame",
+    "create-seeds": "pg-migrations apply --directory db/seeds --database ***/sesame",
+    "create-models": "npx @databases/pg-schema-cli --database ***/sesame --directory model_types",
+    "create-supertokens-models": "npx @databases/pg-schema-cli --database ***/supertokens --directory model_types"
   },
   "dependencies": {
     "@databases/pg": "^5.5.0",

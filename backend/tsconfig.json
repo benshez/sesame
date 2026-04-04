@@ -20,15 +20,23 @@
     /* Module Resolution Options */
     "moduleResolution": "node",
     "baseUrl": "./",
+    "paths": {
+      "@/*": ["*"],
+      "@/models/*": ["models/*"],
+      "@/routes/*": ["routes/*"],
+      "@/modelTypes/*": ["model_types/*"],
+    },
     /* Additional Checks */
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
   },
   "include": [
-    "./*.ts",
-    "config/useBackendConfig.ts"
+    "**/*.d.ts",
+    "**/*.ts",
+    "config/useBackendConfig.ts",
+    "env.d.ts"
   ],
   "exclude": [
     "node_modules"
