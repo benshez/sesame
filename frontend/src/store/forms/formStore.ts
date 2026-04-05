@@ -14,7 +14,7 @@ export const useFormStore = defineStore("form", {
         case "edit":
           elements = useEditView().GetElements();
           break;
-        case "login":
+        case "auth":
           elements = useLoginView().GetElements();
           break;
         case "register":

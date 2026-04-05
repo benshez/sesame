@@ -4,11 +4,24 @@ import { createPinia } from "pinia";
 import App from "@/App.vue";
 import router from "@/router/";
 import { widget } from "@/utilities/index";
-import { initSuperTokensWebJS } from "./config";
+import SuperTokens from "supertokens-web-js";
+import ThirdParty from "supertokens-web-js/recipe/thirdparty";
+import EmailPassword from "supertokens-web-js/recipe/emailpassword";
+import Session from "supertokens-web-js/recipe/session";
+
 
 const pinia = createPinia();
 
-initSuperTokensWebJS();
+const apiPort = import.meta.env.VUE_APP_API_PORT || 3001;
+export const apiDomain = import.meta.env.VUE_APP_API_URL || `http://localhost:${apiPort}`;
+
+SuperTokens.init({
+    appInfo: {
+        appName: "SuperTokens Vue ThirdPartyEmailPassword Example",
+        apiDomain,
+    },
+    recipeList: [EmailPassword.init(), ThirdParty.init(), Session.init()],
+});
 
 createApp(App)
   .provide("options", widget.GetWidgetOptions())

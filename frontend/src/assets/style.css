@@ -189,27 +189,22 @@ layer(base);
     @apply text-gray-500 border-gray-200 dark:border-gray-800 dark:text-gray-400
   }
 
-  /*SignIn Start*/
-  .body [data-supertokens~="row"] * {
-    @apply font-normal !font-outfit border-gray-200 z-1 rounded-lg;
-  }
+.fill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
 
-  .body [data-supertokens~="container"] {
-    @apply font-normal !font-outfit !border-gray-200 !shadow-none rounded-lg border;
-  }
-
-  .body.dark [data-supertokens~="row"] * {
-    @apply font-normal !font-outfit z-1 dark:bg-gray-dark;
-  }
-
-  .body.dark [data-supertokens~="container"] {
-    @apply font-normal !font-outfit z-1 dark:!bg-gray-dark dark:!text-gray-400 dark:!border-gray-800 border;
-  }
-
-  .body.dark [data-supertokens~="container"] * {
-    @apply font-normal !font-outfit z-1 dark:!bg-gray-dark dark:!text-gray-500 dark:!border-gray-800;
-  }
-  /*SignIn End*/
+.spinner {
+    width: 80px;
+    height: auto;
+    padding-top: 20px;
+    padding-bottom: 40px;
+    margin: 0 auto;
+}
 
   /*Map Start*/
 .map-container {

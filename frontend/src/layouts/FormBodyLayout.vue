@@ -1,11 +1,8 @@
 <template>
-    <div class="flex w-full min-h-full flex-1 flex-col justify-center">
-        <slot name="header"></slot>
-        <slot name="content">
-            <FormBuilder :elements="elements" />
-        </slot>
-        <slot name="footer" :elements="elements"></slot>
-    </div>
+  <slot name="header">Input States</slot>
+  <slot name="content">
+  </slot>
+  <slot name="footer" :elements="elements"></slot>
 </template>
 <script lang="ts" setup>
 import { useRoute } from "vue-router";

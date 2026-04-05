@@ -2,9 +2,9 @@ import type { IElement, IPage } from "@/interfaces";
 
 export const useLoginView = () => {
   const LoginView = {
-    "name": "login",
+    "name": "auth",
     "heading": "Login",
-    "path": "/login",
+    "path": "/auth",
     "requiresAuthenticaton": true,
     "elements": [
       {
@@ -20,11 +20,17 @@ export const useLoginView = () => {
         "isRequired": true,
         "isValid": true,
         "isValidIf": (): boolean => {
-          //const email: IElement = getElementsById("login", "email");
-          //email.isValid = email.value !== "";
+          const email: IElement = GetElement("email");
+          const isValidEmail: boolean = email
+          .value?.toString()
+            .toLowerCase()
+            .match(
+              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            ) ? true : false;
 
-          //return email.isValid;
-          return true;
+          email.isValid = email.value?.toString().length > 0 && isValidEmail ? true : false;  
+
+          return email.isValid;
         },
         "type": "email",
         "cssClass": "w-full pl-3 pr-10 py-2 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300",
@@ -40,20 +46,14 @@ export const useLoginView = () => {
         "isReadonly": false,
         "isVisible": true,
         "isVisibleIf": (): boolean => {
-          //const email: IElement = getElementsById("login", "email");
-          //const query = email?.isValidIf || null;
-          //let visible: boolean = true;
-
-          //if (typeof query === "function") {
-          //  if (visible) visible = query();
-          //}
-
-          //return visible;
           return true;
         },
         "isRequired": true,
         "isValid": true,
-        "isValidIf": (): boolean => { return true; },
+        "isValidIf": (): boolean => { 
+          const password: IElement = GetElement("password");
+          return password.value?.toString().length > 7 ? true : false;
+         },
         "type": "password",
         "cssClass": "w-full pl-3 pr-10 py-2 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300",
         "labelIcon": "M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"
@@ -65,12 +65,12 @@ export const useLoginView = () => {
     return LoginView.elements;
   }
   const GetElement = (key: string): IElement => {
-    const element: IElement = GetElements().filter((e: IElement) => { 
-            if (e.id === key) return e as IElement;;
-    }) as unknown as IElement;
+    const element: IElement[] = GetElements().filter((e: IElement) => {
+      if (e.id === key) return e;
+    }) as unknown as IElement[];
 
-    return element;
-  }  
+    return element[0];
+  }
   return {
     useLoginView,
     GetElements
