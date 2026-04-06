@@ -50,7 +50,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import ThirdParty from "supertokens-web-js/recipe/thirdparty";
 import EmailPassword from "supertokens-web-js/recipe/emailpassword";
 import BaseLayout from "@/layouts/BaseLayout.vue";
 import FormBody from "@/components/Form/FormBody.vue";
@@ -132,13 +131,12 @@ const signUp = async (_: Event) => {
     updateErrorState("password", { key: "isValid", value: false });
     updateErrorState("password", { key: "helpText", value: response.formFields.find((f: any) => f.id === "password")?.error || "" });
   }
-};
 
+
+};
 
 const onSubmitPressed = (e: Event) => {
   e.preventDefault();
-  // we reset the error states in case the user has fixed the input errors
-
 
   if (isSignIn.value) {
     signIn(e);
@@ -146,8 +144,6 @@ const onSubmitPressed = (e: Event) => {
     signUp(e);
   }
 };
-
-
 
 onMounted(() => {
   const params = new URLSearchParams(window.location.search);

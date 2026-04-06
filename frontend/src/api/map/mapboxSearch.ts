@@ -1,12 +1,15 @@
-import { api } from "@/plugins";
-import { configuration } from "@/utilities";
+import { ApiClient } from "@/plugins";
 import type { MapboxDirections } from "@/interfaces";
 
 class MapboxSearch {
-  constructor() { }
+  apiClient: ApiClient;
+
+  constructor() {
+    this.apiClient = new ApiClient('', 'en');
+   }
 
   GetDirections = async (profile: string, coordinates: Array<Array<number>>): Promise<MapboxDirections> => {
-    const response = await api.get<unknown>(`https://api.mapbox.com/directions/v5/mapbox/${profile}/${coordinates[0]};${coordinates[1]}?steps=true&geometries=geojson&access_token=${configuration.GetMapboxToken()}`);
+    const response = await this.apiClient.mapbox().getDirections(profile, coordinates);
 
      return await response.data as MapboxDirections;
   }

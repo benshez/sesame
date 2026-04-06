@@ -133,16 +133,17 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import * as Session from "supertokens-web-js/recipe/session";
-
 import Modal from "@/components/profile/Modal.vue";
 import FormBody from "@/components/Form/FormBody.vue";
 import { useUserStore, useFormStore, useDisplayStore } from "@/store";
+import { ApiClient } from "@/plugins";
 
 const formStore = useFormStore();
 const userStore = useUserStore();
 const isProfileInfoModal = ref(false);
 const apiPort = import.meta.env.VUE_APP_API_PORT || 3001;
 const apiDomain = import.meta.env.VUE_APP_API_URL || `http://localhost:${apiPort}`;
+const apiClient = new ApiClient(apiDomain);
 
 const SaveProfile = () => {
   // Implement save profile logic here
@@ -154,18 +155,23 @@ onMounted(async () => {
   if (await Session.doesSessionExist()) {
     const userId = await Session.getUserId();
 
-  const accessToken = await Session.getAccessToken();
+  const accessToken = await Session.getAccessTokenPayloadSecurely();
     try {
-      const response = await fetch(`${apiDomain}/users/get-user-info/${userId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': accessToken ? `Bearer ${accessToken}` : '',
-        },
-        credentials: "include",
-      });
-      const status = await response.json();
-      const data = status
+      const response = await apiClient
+      .setBearerAuth(accessToken)
+      .users()
+      .userInfo(userId);
+
+      console.log("User info fetched successfully:", response);
+      //   method: "GET",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     'Authorization': accessToken ? `Bearer ${accessToken}` : '',
+      //   },
+      //   credentials: "include",
+      // });
+      // const status = await response.json();
+      // const data = status
     } catch (error) {
       //console.error("Error fetching user info:", error);
     }
