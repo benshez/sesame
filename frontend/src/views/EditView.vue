@@ -1,58 +1,23 @@
 <template>
   <BaseLayout>
-    <FormTwoColumnLayout>
-      <template v-slot:form-body-left>
-        <div class="flex flex-col items-center">
-          <div class="relative profile-pic-upload mb-4">
-            <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow">
-              <img id="profileImage" :src="userStore?.userInfo?.photoURL!" alt="Profile"
-                class="w-full h-full object-cover">
-            </div>
-            <div
-              class="upload-overlay absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 transition-opacity duration-300 cursor-pointer">
-              <label for="fileInput" class="text-white cursor-pointer">
-                <i class="fas fa-camera text-xl"></i>
-              </label>
-              <input type="file" id="fileInput" class="hidden" accept="image/*">
-            </div>
-          </div>
-          <h2>
-            {{ userStore.userInfo.displayName }}
-          </h2>
-          <p class="text-sm mb-5">Software Developer</p>
-          <button id="changePhotoBtn" class="flex w-full justify-center border p-2 rounded">
-            Change Photo
-          </button>
-        </div>
-      </template>
-
-      <template v-slot:form-body-right>
-        <FormBodyLayout>
-          <template v-slot:header>
-            Personal Information
-          </template>
-          <template v-slot:content></template>
-          <template v-slot:footer="elements">
-            <div class="mb-6 text-center">
-              <div class="mt-6">
-                <button type="button" @click="SaveProfile(elements.elements)"
-                  class="flex w-full justify-center border p-2 rounded">
-                  Save Changes
-                </button>
-              </div>
-            </div>
-          </template>
-        </FormBodyLayout>
-      </template>
-    </FormTwoColumnLayout>
+    <div
+      class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] col-span-12 xl:col-span-6 xl:col-start-5 xl:col-end-9">
+      <div class="px-6 py-5">
+        <slot name="header">
+          <h3 class="text-base font-medium text-gray-800 dark:text-white/90">Profile</h3>
+        </slot>
+      </div>
+      <slot name="subheader"></slot>  
+      <ProfileCard />
+    </div>
   </BaseLayout>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import BaseLayout from "@/layouts/BaseLayout.vue";
-import FormBodyLayout from "@/layouts/FormBodyLayout.vue";
-import FormTwoColumnLayout from "@/layouts/FormTwoColumnLayout.vue";
+import ProfileCard from "@/components/profile/ProfileCard.vue";
+import Modal from "@/components/profile/Modal.vue";
 import { useUserStore, useFormStore, useDisplayStore } from "@/store";
 import type { IElement } from "@/interfaces";
 
@@ -87,8 +52,8 @@ const SaveProfile = async (elements: Array<IElement>) => {
 
 onMounted(async () => {
   //const user = await userStore.UpdateUserInfo();
-  formStore.updateElementState("email", { key: "value", value: userStore.userInfo.email });
-  formStore.updateElementState("name", { key: "value", value: userStore.userInfo.displayName });
+  //formStore.updateElementState("email", { key: "value", value: userStore.userInfo.email });
+  //formStore.updateElementState("name", { key: "value", value: userStore.userInfo.displayName });
 })
 
 </script>

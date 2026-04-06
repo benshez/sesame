@@ -2,8 +2,8 @@
   <h3 class="pt-4 text-2xl text-center">{{props.heading}}</h3>
   <div class="pt-5 pb-5">
     <h3 class="text-center mb-4 font-semibold">{{ props.message }}</h3>
-    <div class="grid grid-cols-2 gap-1">
-      <Google />
+    <div class="grid grid-cols-1 gap-1">
+      <Google class="mb-5" />
       <GitHub />
     </div>
   </div>

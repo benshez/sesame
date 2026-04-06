@@ -8,12 +8,14 @@
         </template>
         <template v-slot:content></template>
         <template v-slot:footer="elements">
-          <div class="mb-6 text-center">
-            <div class="mt-6">
+          <div class="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
+            <div class="space-y-5">
+              <div class="flex items-center gap-5">
               <button type="button" @click="saveTrip(elements.elements)"
-                class="flex w-full justify-center border p-2 rounded">
+                class="inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-4 py-3 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300">
                 Save Changes
               </button>
+              </div>
             </div>
           </div>
         </template>

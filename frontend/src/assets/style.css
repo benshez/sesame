@@ -185,8 +185,16 @@ layer(base);
     cursor: pointer;
   }
 
+  aside, #sub-navbar {
+    background-color: #fff;
+  }
+
+  .body.dark aside, .body.dark#sub-navbar   {
+    @apply dark:bg-gray-dark 
+  }
+
   .body.dark [class*="border"] {
-    @apply text-gray-500 border-gray-200 dark:border-gray-800 dark:text-gray-400
+    @apply text-gray-500 border-gray-200 dark:border-gray-800 dark:text-gray-400;
   }
 
 .fill {
@@ -210,6 +218,7 @@ layer(base);
 .map-container {
   @apply relative;
 }
+
 .body .mapboxgl-map {
     width: 100%;
     height: 600px;

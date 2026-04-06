@@ -18,7 +18,7 @@
   </header>
   <Transition enter-from-class="opacity-0 translate-y-[-100%]" enter-active-class="transition-all duration-300 ease-out"
     leave-active-class="transition-all duration-300 ease-in" leave-to-class="opacity-0 translate-y-[-100%]">
-    <div v-if="displayStore.menuShowing" class="sticky top-0 z-99999 flex w-full border-b xl:hidden">
+    <div id="" v-if="displayStore.menuShowing" class="sticky top-0 z-99999 flex w-full border-b xl:hidden">
       <MenuItems />
     </div>
   </Transition>

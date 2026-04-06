@@ -11,10 +11,10 @@
     "lint": "eslint .",
     "build": "tsc",
     "create-db": "npm run create-migrations  && npm run create-models",
-    "create-migrations": "pg-migrations apply --directory db/migrations --database postgres://sesame_supertokens_user:B3nSh3z*@192.168.1.2:5435/sesame",
-    "create-seeds": "pg-migrations apply --directory db/seeds --database postgres://sesame_supertokens_user:B3nSh3z*@192.168.1.2:5435/sesame",
-    "create-models": "npx @databases/pg-schema-cli --database postgres://sesame_supertokens_user:B3nSh3z*@192.168.1.2:5435/sesame --directory sesame_model_types",
-    "create-supertokens-models": "npx @databases/pg-schema-cli --database postgres://sesame_supertokens_user:B3nSh3z*@192.168.1.2:5435/supertokens --directory supertokens_model_types"
+    "create-migrations": "pg-migrations apply --directory db/migrations --database ***/sesame",
+    "create-seeds": "pg-migrations apply --directory db/seeds --database ***/sesame",
+    "create-models": "npx @databases/pg-schema-cli --database ***/sesame --directory sesame_model_types",
+    "create-supertokens-models": "npx @databases/pg-schema-cli --database ***/supertokens --directory supertokens_model_types"
   },
   "dependencies": {
     "@databases/pg": "^5.5.0",

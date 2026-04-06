@@ -43,6 +43,9 @@ export const useFormStore = defineStore("form", {
         case "isVisible":
           element.isVisible = options.value as boolean;
           break;
+        case "helpText":
+          element.helpText = options.value as string;
+          break;
       }
     },
     handleInput(key: string) {
