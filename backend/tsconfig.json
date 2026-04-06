@@ -21,10 +21,24 @@
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["*"],
-      "@/models/*": ["models/*"],
-      "@/routes/*": ["routes/*"],
-      "@/modelTypes/*": ["model_types/*"],
+      "@/*": [
+        "*"
+      ],
+      "@/models/*": [
+        "models/*"
+      ],
+      "@/routes/*": [
+        "routes/*"
+      ],
+      "@/modelTypes/*": [
+        "model_types/*"
+      ],
+      "@/controllers/*": [
+        "controllers/*"
+      ],
+      "@/utilities/*": [
+        "utilities/*"
+      ],
     },
     /* Additional Checks */
     "noUnusedLocals": true,

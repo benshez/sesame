@@ -4,6 +4,7 @@
   "exclude": ["src/**/__tests__/*", "src/sw.ts"],
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "ignoreDeprecations": "6.0",
     "lib": ["WebWorker","esnext", "dom"],
     "module": "ESNext",
     "types": ["vite-plugin-pwa/client", "node"],

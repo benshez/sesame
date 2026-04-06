@@ -9,13 +9,13 @@
         <h2 class="mb-4 text-xs uppercase flex leading-[20px] justify-start">Menu</h2>
         <ul class="flex flex-col gap-4">
           <li v-for="(route, routeIndex) in GetTenantRoutes()" :key="routeIndex">
-            <button class="menu-item group w-full menu-item-inactive lg:justify-start" @click="OnTenantRouteClick(route.name)">
-              <span class="menu-item-text">{{ route.meta.name }}</span>
+            <button class="menu-item group w-full menu-item-inactive lg:justify-start" @click="OnTenantRouteClick(route?.name?.toString() ?? '')">
+              <span class="menu-item-text">{{ route.meta?.name }}</span>
             </button>
           </li>
           <li v-for="(route, routeIndex) in GetUserRoutes()" :key="routeIndex">
-            <button class="menu-item group w-full menu-item-inactive lg:justify-start" @click="OnUserRoutesClick(route.name)">
-              <span class="menu-item-text">{{ route.meta.name }}</span>
+            <button class="menu-item group w-full menu-item-inactive lg:justify-start" @click="OnUserRoutesClick(route?.name?.toString() ?? '')">
+              <span class="menu-item-text">{{ route.meta?.name }}</span>
             </button>
           </li>
         </ul>
@@ -57,17 +57,17 @@ const OnUserRoutesClick = (routeName: string) => {
 
 const GetParentMenuItems = () => {
   const routes = useRoutes();
-  return routes.GetRoutes().filter(route => route.meta.isParentRoute === true);
+  return routes.GetRoutes().filter(route => route?.meta?.isParentRoute === true);
 }
 
 const GetTenantRoutes = () => {
   const routes = useTenantRoutes();
-  return routes.GetRoutes().filter(route => route.meta.isTenantRoute === true);
+  return routes.GetRoutes().filter(route => route?.meta?.isTenantRoute === true);
 }
 
 const GetUserRoutes = () => {
   const routes = useUserRoutes();
-  return routes.GetRoutes().filter(route => route.meta.isUserRoute === true);
+  return routes.GetRoutes().filter(route => route?.meta?.isUserRoute === true);
 }
 
 onMounted(async () => {

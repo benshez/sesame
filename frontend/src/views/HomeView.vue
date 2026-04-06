@@ -25,7 +25,15 @@ const signOut = async () => {
 };
 
 const callAPI = async function () {
-  const response = await fetch(`${apiDomain}/sessioninfo`);
+  const accessToken = await Session.getAccessToken();
+  const response = await fetch(`${apiDomain}/sessioninfo`,{
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": accessToken ? `Bearer ${accessToken}` : '',
+    },
+    credentials: "include",
+  });
 
   if (response.status === 401) {
     // this means that the session has expired and the
@@ -44,7 +52,7 @@ const checkForSession = async function () {
     // since a session does not exist, we send the user to the login page.
     return window.location.assign("/auth");
   }
-
+    await callAPI()
   // this will render the UI
   doesSessionExist.value = true;
   userId.value = await Session.getUserId();

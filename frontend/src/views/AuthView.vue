@@ -57,8 +57,9 @@ import FormBody from "@/components/Form/FormBody.vue";
 import LoginProviders from "@/components/LoginProviders/LoginProviders.vue";
 import FormOneColumnLayout from "@/layouts/FormOneColumnLayout.vue";
 import FormBuilder from "@/components/Form/FormBuilder.vue";
-import { useFormStore } from "@/store";
+import { useFormStore, useDisplayStore } from "@/store";
 
+const displayStore = useDisplayStore();
 const router = useRouter();
 const formStore = useFormStore();
 const websitePort = import.meta.env.VUE_APP_WEB_PORT || 3000;
@@ -103,7 +104,8 @@ const signIn = async (_: Event) => {
     return;
   }
 
-  window.location.assign("/");
+  displayStore.UpdateHasSessionState(true);
+  router.push("/");
 };
 
 const updateErrorState = (field: string, values: { key: string, value: boolean | string }) => {
