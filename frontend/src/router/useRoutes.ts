@@ -24,7 +24,7 @@ export const useRoutes = () => {
         },
       },
       {
-        path: "/auth",
+        path: "/auth/:pathMatch(.*)*",
         name: "auth",
         component: AuthView,
         beforeEnter: async () => {

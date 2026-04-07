@@ -51,12 +51,14 @@
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import EmailPassword from "supertokens-web-js/recipe/emailpassword";
+import Session from "supertokens-web-js/recipe/session";
 import BaseLayout from "@/layouts/BaseLayout.vue";
 import FormBody from "@/components/Form/FormBody.vue";
 import LoginProviders from "@/components/LoginProviders/LoginProviders.vue";
 import FormOneColumnLayout from "@/layouts/FormOneColumnLayout.vue";
 import FormBuilder from "@/components/Form/FormBuilder.vue";
 import { useFormStore, useDisplayStore } from "@/store";
+import { ApiClient } from "@/plugins";
 
 const displayStore = useDisplayStore();
 const router = useRouter();
@@ -64,6 +66,9 @@ const formStore = useFormStore();
 const websitePort = import.meta.env.VUE_APP_WEB_PORT || 3000;
 const websiteDomain = import.meta.env.VUE_APP_WEB_URL || `http://localhost:${websitePort}`;
 const isSignIn = ref<boolean | true>(true);
+const apiPort = import.meta.env.VUE_APP_API_PORT || 3001;
+const apiDomain = import.meta.env.VUE_APP_API_URL || `http://localhost:${apiPort}`;
+const apiClient = new ApiClient(apiDomain);
 
 const goToSignUp = () => {
   isSignIn.value = false;
@@ -145,11 +150,33 @@ const onSubmitPressed = (e: Event) => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
   const params = new URLSearchParams(window.location.search);
 
   if (params.has("error")) {
 
   }
+  const userId = await Session.getUserId();
+  if (params.has("token")) {
+    const token = params.get("token");
+    const tenantId = params.get("tenantId");
+    const unverify = await apiClient
+      //.setBearerAuth(accessToken)
+      .email()
+      .unVerifyEmail({
+        "userId": userId
+      });
+
+    const sendVerificationEmailResponse = await apiClient
+      //.setBearerAuth(accessToken)
+      .email()
+      .verifyEmail({
+        "token": token || "",
+        "tenantId": tenantId || "",
+        "userId": userId
+      });
+    router.push("/");
+  }
+
 });
 </script>

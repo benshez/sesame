@@ -6,11 +6,13 @@ import { middleware, errorHandler, SessionRequest } from "supertokens-node/frame
 import { SuperTokensConfig } from "./config";
 //import Multitenancy from "supertokens-node/recipe/multitenancy";
 import { useBackendConfig } from "./config/useBackendConfig";
-import { UserRoutes } from "./routes";
+import { UserRoutes, EmailRoutes } from "./routes";
 
 supertokens.init(SuperTokensConfig);
 
 const app = express();
+
+app.use(express.json());
 
 app.use(
   cors({
@@ -24,11 +26,6 @@ app.use(
 // This exposes all the APIs from SuperTokens to the client.
 app.use(middleware());
 
-app.options('*', (req, res) => {
-  res.json({
-    status: 'OK'
-  });
-});
 
 // This endpoint can be accessed regardless of
 // having a session with SuperTokens
@@ -55,7 +52,9 @@ app.get("/sessioninfo", verifySession(), async (req: SessionRequest, res) => {
 // });
 
 app
-  .use("/users", UserRoutes);
+  .use("/users", UserRoutes)
+  .use("/emails", EmailRoutes);
+
 
 // In case of session related errors, this error handler
 // returns 401 to the client.

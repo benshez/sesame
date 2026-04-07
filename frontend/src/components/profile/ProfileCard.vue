@@ -155,14 +155,21 @@ onMounted(async () => {
   if (await Session.doesSessionExist()) {
     const userId = await Session.getUserId();
 
-  const accessToken = await Session.getAccessTokenPayloadSecurely();
+    const accessToken = await Session.getAccessTokenPayloadSecurely();
     try {
       const response = await apiClient
-      .setBearerAuth(accessToken)
-      .users()
-      .userInfo(userId);
+        .setBearerAuth(accessToken)
+        .users()
+        .userInfo(userId);
 
       console.log("User info fetched successfully:", response);
+
+      const sendVerificationEmailResponse = await apiClient
+        .setBearerAuth(accessToken)
+        .email()
+        .sendVerificationEmail({
+          "email": "benshez1@gmail.com",
+        });
       //   method: "GET",
       //   headers: {
       //     "Content-Type": "application/json",
@@ -173,6 +180,7 @@ onMounted(async () => {
       // const status = await response.json();
       // const data = status
     } catch (error) {
+
       //console.error("Error fetching user info:", error);
     }
     //   const userInfo = await supertokens.init().getUser(userId);
