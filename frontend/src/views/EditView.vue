@@ -15,6 +15,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import Session from "supertokens-web-js/recipe/session";
 import BaseLayout from "@/layouts/BaseLayout.vue";
 import ProfileCard from "@/components/profile/ProfileCard.vue";
 import Modal from "@/components/profile/Modal.vue";

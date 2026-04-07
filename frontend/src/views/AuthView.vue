@@ -107,6 +107,28 @@ const signIn = async (_: Event) => {
     updateErrorState("password", { key: "helpText", value: response.formFields.find((f: any) => f.id === "password")?.error || "" });
     return;
   }
+const params = new URLSearchParams(window.location.search);
+    if (params.has("token")) {
+    const userId = await Session.getUserId();
+    const token = params.get("token");
+    const tenantId = params.get("tenantId");
+    const unverify = await apiClient
+      //.setBearerAuth(accessToken)
+      .email()
+      .unVerifyEmail({
+        "userId": userId
+      });
+
+    const sendVerificationEmailResponse = await apiClient
+      //.setBearerAuth(accessToken)
+      .email()
+      .verifyEmail({
+        "token": token || "",
+        "tenantId": tenantId || "",
+        "userId": userId
+      });
+    router.push("/");
+  }
 
   displayStore.UpdateHasSessionState(true);
   router.push("/");
@@ -156,27 +178,7 @@ onMounted(async () => {
   if (params.has("error")) {
 
   }
-  const userId = await Session.getUserId();
-  if (params.has("token")) {
-    const token = params.get("token");
-    const tenantId = params.get("tenantId");
-    const unverify = await apiClient
-      //.setBearerAuth(accessToken)
-      .email()
-      .unVerifyEmail({
-        "userId": userId
-      });
 
-    const sendVerificationEmailResponse = await apiClient
-      //.setBearerAuth(accessToken)
-      .email()
-      .verifyEmail({
-        "token": token || "",
-        "tenantId": tenantId || "",
-        "userId": userId
-      });
-    router.push("/");
-  }
 
 });
 </script>

@@ -137,6 +137,7 @@ import Modal from "@/components/profile/Modal.vue";
 import FormBody from "@/components/Form/FormBody.vue";
 import { useUserStore, useFormStore, useDisplayStore } from "@/store";
 import { ApiClient } from "@/plugins";
+import router from "@/router";
 
 const formStore = useFormStore();
 const userStore = useUserStore();
@@ -164,12 +165,14 @@ onMounted(async () => {
 
       console.log("User info fetched successfully:", response);
 
-      const sendVerificationEmailResponse = await apiClient
-        .setBearerAuth(accessToken)
-        .email()
-        .sendVerificationEmail({
-          "email": "benshez1@gmail.com",
-        });
+      // const sendVerificationEmailResponse = await apiClient
+      //   .setBearerAuth(accessToken)
+      //   .email()
+      //   .sendVerificationEmail({
+      //     "email": "benshez1@gmail.com",
+      //   });
+
+      
       //   method: "GET",
       //   headers: {
       //     "Content-Type": "application/json",
@@ -180,7 +183,7 @@ onMounted(async () => {
       // const status = await response.json();
       // const data = status
     } catch (error) {
-
+      router.push("/auth");
       //console.error("Error fetching user info:", error);
     }
     //   const userInfo = await supertokens.init().getUser(userId);
