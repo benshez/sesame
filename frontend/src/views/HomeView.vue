@@ -16,9 +16,7 @@ import { ApiClient } from "@/plugins";
 // Define reactive variables
 const doesSessionExist = ref<boolean | false>(false);
 const userId = ref<string | null>(null);
-const apiPort = import.meta.env.VUE_APP_API_PORT || 3001;
-const apiDomain = import.meta.env.VUE_APP_API_URL || `http://localhost:${apiPort}`;
-const apiClient = new ApiClient(apiDomain);
+const apiClient = new ApiClient();
 
 const signOut = async () => {
   await Session.signOut();

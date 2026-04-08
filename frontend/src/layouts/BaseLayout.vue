@@ -9,9 +9,7 @@
       </div>
     </div>
   </div>
-  <footer>
-    dfsdfsf
-  </footer>
+  <footer></footer>
 </template>
 <script setup lang="ts">
 

@@ -2,9 +2,12 @@ import { HttpClient } from "@/plugins";
 
 export class ApiClient extends HttpClient {
 
-  constructor(baseURL: string) {
+  constructor() {
+    const apiPort = import.meta.env.VUE_APP_API_PORT || 3001;
+    const apiDomain: string = import.meta.env.VUE_APP_API_URL || `http://localhost:${apiPort}`;
+
     super({
-      baseURL,
+      baseURL: apiDomain,
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json"
@@ -22,7 +25,7 @@ export class ApiClient extends HttpClient {
     return {
       sendVerificationEmail: (email: { email: string }) => this.post("/emails/send-verification-email", { ...email }, this.getHeader("Authorization")),
       verifyEmail: (args: { token: string, tenantId: string, userId: string }) => this.post("/emails/verify-email", { ...args }, this.getHeader("Authorization")),
-      unVerifyEmail: (args: {userId: string}) => this.post("/emails/un-verify-email", { ...args }, this.getHeader("Authorization"))
+      unVerifyEmail: (args: { userId: string }) => this.post("/emails/un-verify-email", { ...args }, this.getHeader("Authorization"))
     }
   }
 

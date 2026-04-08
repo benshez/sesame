@@ -142,9 +142,7 @@ import router from "@/router";
 const formStore = useFormStore();
 const userStore = useUserStore();
 const isProfileInfoModal = ref(false);
-const apiPort = import.meta.env.VUE_APP_API_PORT || 3001;
-const apiDomain = import.meta.env.VUE_APP_API_URL || `http://localhost:${apiPort}`;
-const apiClient = new ApiClient(apiDomain);
+const apiClient = new ApiClient();
 
 const SaveProfile = () => {
   // Implement save profile logic here
