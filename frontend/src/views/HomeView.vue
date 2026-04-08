@@ -11,13 +11,14 @@
 import { ref, onMounted } from "vue";
 import Session from "supertokens-web-js/recipe/session";
 import BaseLayout from "@/layouts/BaseLayout.vue";
+import { ApiClient } from "@/plugins";
 
 // Define reactive variables
 const doesSessionExist = ref<boolean | false>(false);
 const userId = ref<string | null>(null);
 const apiPort = import.meta.env.VUE_APP_API_PORT || 3001;
 const apiDomain = import.meta.env.VUE_APP_API_URL || `http://localhost:${apiPort}`;
-
+const apiClient = new ApiClient(apiDomain);
 
 const signOut = async () => {
   await Session.signOut();
@@ -25,26 +26,21 @@ const signOut = async () => {
 };
 
 const callAPI = async function () {
-  const accessToken = await Session.getAccessToken();
-  const response = await fetch(`${apiDomain}/sessioninfo`,{
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": accessToken ? `Bearer ${accessToken}` : '',
-    },
-    credentials: "include",
-  });
+  const accessToken = await Session.getAccessTokenPayloadSecurely();
+  let err: any = "";
 
-  if (response.status === 401) {
-    // this means that the session has expired and the
-    // user needs to relogin.
-    window.location.assign("/auth");
-    return;
+  try {
+    const response = await apiClient
+      .setBearerAuth(accessToken)
+      .session()
+      .sessionInfo();
+
+    if (response.status === 401) {
+      window.location.assign("/auth");
+      return;
+    }
+  } catch (error) {
   }
-
-  const json = await response.json();
-
-  window.alert("Session Information:\n" + JSON.stringify(json, null, 2));
 };
 
 const checkForSession = async function () {
@@ -52,7 +48,7 @@ const checkForSession = async function () {
     // since a session does not exist, we send the user to the login page.
     return window.location.assign("/auth");
   }
-    await callAPI()
+  await callAPI()
   // this will render the UI
   doesSessionExist.value = true;
   userId.value = await Session.getUserId();

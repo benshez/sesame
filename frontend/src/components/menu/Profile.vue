@@ -57,6 +57,7 @@ const userId = ref<string | null>(null);
 const tenantId = ref<string | null>(null);
 
 const SignIn = () => {
+  displayStore.UpdateActionTextState("Sign In");
   router.push("/auth");
 }  
 

@@ -4,8 +4,7 @@
       <template v-slot:form-body>
         <FormBody>
           <template v-slot:header>
-            <span v-if="!isSignIn">Sign Up</span>
-            <span v-else>Sign In</span>
+            <span>{{ displayStore.authActionText }}</span>
           </template>
           <template v-slot:subheader v-if="!isSignIn">
             <div class="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
@@ -19,10 +18,10 @@
             <div class="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
               <div class="space-y-5">
                 <div class="flex items-center gap-5 lg:justify-end">
-                  <button v-if="isSignIn" @click="goToSignUp"
+                  <button v-if="isSignIn && !isVerify" @click="goToSignUp"
                     class="inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-4 py-3 text-sm bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03] dark:hover:text-gray-300">Sign
                     Up</button>
-                  <button v-else @click="goToSignIn"
+                  <button v-if="!isSignIn && !isVerify" @click="goToSignIn"
                     class="inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-4 py-3 text-sm bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03] dark:hover:text-gray-300">Sign
                     In</button>
                   <button @click="onSubmitPressed"
@@ -35,8 +34,7 @@
                         </path>
                       </svg>
                     </span>
-                    <span v-if="!isSignIn">Sign Up</span>
-                    <span v-else>Sign In</span>
+                    <span>{{ displayStore.authActionText }}</span>
                   </button>
                 </div>
               </div>
@@ -66,31 +64,40 @@ const formStore = useFormStore();
 const websitePort = import.meta.env.VUE_APP_WEB_PORT || 3000;
 const websiteDomain = import.meta.env.VUE_APP_WEB_URL || `http://localhost:${websitePort}`;
 const isSignIn = ref<boolean | true>(true);
+const isVerify = ref<boolean | false>(false);
 const apiPort = import.meta.env.VUE_APP_API_PORT || 3001;
 const apiDomain = import.meta.env.VUE_APP_API_URL || `http://localhost:${apiPort}`;
 const apiClient = new ApiClient(apiDomain);
 
+
 const goToSignUp = () => {
   isSignIn.value = false;
+  let actionText = "Sign Up";
+  if (isVerify.value) actionText = "Verify Email";
+  displayStore.UpdateActionTextState(actionText);
 };
 
 const goToSignIn = () => {
   isSignIn.value = true;
+  let actionText = "Sign In";
+  if (isVerify.value) actionText = "Verify Email";
+  displayStore.UpdateActionTextState(actionText);
 };
 
 const signIn = async (_: Event) => {
-  const response = await EmailPassword.signIn({
-    formFields: [
-      {
-        id: "email",
-        value: formStore.getElement("email").value || "",
-      },
-      {
-        id: "password",
-        value: formStore.getElement("password").value || "",
-      },
-    ],
-  });
+  const response = await EmailPassword
+    .signIn({
+      formFields: [
+        {
+          id: "email",
+          value: formStore.getElement("email").value || "",
+        },
+        {
+          id: "password",
+          value: formStore.getElement("password").value || "",
+        },
+      ],
+    });
 
   if (response.status === "WRONG_CREDENTIALS_ERROR") {
     updateErrorState("email", { key: "isValid", value: false });
@@ -107,20 +114,23 @@ const signIn = async (_: Event) => {
     updateErrorState("password", { key: "helpText", value: response.formFields.find((f: any) => f.id === "password")?.error || "" });
     return;
   }
-const params = new URLSearchParams(window.location.search);
-    if (params.has("token")) {
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.has("token")) {
+    isVerify.value = true;
+    const accessToken = await Session.getAccessTokenPayloadSecurely();
     const userId = await Session.getUserId();
     const token = params.get("token");
     const tenantId = params.get("tenantId");
-    const unverify = await apiClient
-      //.setBearerAuth(accessToken)
+    const unVerifyResponse = await apiClient
+      .setBearerAuth(accessToken)
       .email()
       .unVerifyEmail({
         "userId": userId
       });
 
-    const sendVerificationEmailResponse = await apiClient
-      //.setBearerAuth(accessToken)
+    const verifyResponse = await apiClient
+      .setBearerAuth(accessToken)
       .email()
       .verifyEmail({
         "token": token || "",
@@ -158,8 +168,6 @@ const signUp = async (_: Event) => {
     updateErrorState("password", { key: "isValid", value: false });
     updateErrorState("password", { key: "helpText", value: response.formFields.find((f: any) => f.id === "password")?.error || "" });
   }
-
-
 };
 
 const onSubmitPressed = (e: Event) => {
@@ -173,12 +181,16 @@ const onSubmitPressed = (e: Event) => {
 };
 
 onMounted(async () => {
+  isVerify.value = false;
+
   const params = new URLSearchParams(window.location.search);
 
   if (params.has("error")) {
 
   }
 
+  isVerify.value = params.has("token");
 
+  if (isVerify.value) displayStore.UpdateActionTextState("Verify Email");
 });
 </script>

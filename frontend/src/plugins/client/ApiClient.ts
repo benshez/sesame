@@ -12,6 +12,12 @@ export class ApiClient extends HttpClient {
     });
   }
 
+  session = () => {
+    return {
+      sessionInfo: () => this.get("/session/info", this.getHeader("Authorization"))
+    }
+  }
+
   email = () => {
     return {
       sendVerificationEmail: (email: { email: string }) => this.post("/emails/send-verification-email", { ...email }, this.getHeader("Authorization")),

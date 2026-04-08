@@ -1,12 +1,13 @@
 import express from "express";
 import cors from "cors";
 import supertokens from "supertokens-node";
-import { verifySession } from "supertokens-node/recipe/session/framework/express";
-import { middleware, errorHandler, SessionRequest } from "supertokens-node/framework/express";
+//import { verifySession } from "supertokens-node/recipe/session/framework/express";
+//import { middleware, errorHandler, SessionRequest } from "supertokens-node/framework/express";
+import { middleware, errorHandler } from "supertokens-node/framework/express";
 import { SuperTokensConfig } from "./config";
 //import Multitenancy from "supertokens-node/recipe/multitenancy";
 import { useBackendConfig } from "./config/useBackendConfig";
-import { UserRoutes, EmailRoutes } from "./routes";
+import { UserRoutes, EmailRoutes, SessionRoutes } from "./routes";
 
 supertokens.init(SuperTokensConfig);
 
@@ -34,15 +35,15 @@ app.get("/hello", async (_req, res) => {
 });
 
 // // An example API that requires session verification
-app.get("/sessioninfo", verifySession(), async (req: SessionRequest, res) => {
-  const session = req.session;
-  res.send({
-    sessionHandle: session!.getHandle(),
-    userId: session!.getUserId(),
-    accessTokenPayload: session!.getAccessTokenPayload(),
-    tenantId: session!.getTenantId()
-  });
-});
+// app.get("/sessioninfo", verifySession(), async (req: SessionRequest, res) => {
+//   const session = req.session;
+//   res.send({
+//     sessionHandle: session!.getHandle(),
+//     userId: session!.getUserId(),
+//     accessTokenPayload: session!.getAccessTokenPayload(),
+//     tenantId: session!.getTenantId()
+//   });
+// });
 
 // // This API is used by the frontend to create the tenants drop down when the app loads.
 // // Depending on your UX, you can remove this API.
@@ -52,6 +53,7 @@ app.get("/sessioninfo", verifySession(), async (req: SessionRequest, res) => {
 // });
 
 app
+  .use("/session", SessionRoutes)
   .use("/users", UserRoutes)
   .use("/emails", EmailRoutes);
 
