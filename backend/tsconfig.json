@@ -19,7 +19,7 @@
     "sourceMap": true,
     /* Module Resolution Options */
     "moduleResolution": "node",
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "paths": {
       "@/*": [
         "*"
@@ -28,7 +28,7 @@
         "models/*"
       ],
       "@/routes/*": [
-        "routes/*"
+        "src/routes/*"
       ],
       "@/modelTypes/*": [
         "model_types/*"
@@ -49,7 +49,7 @@
   "include": [
     "**/*.d.ts",
     "**/*.ts",
-    "config/useBackendConfig.ts",
+    "src/config/useBackendConfig.ts",
     "env.d.ts"
   ],
   "exclude": [

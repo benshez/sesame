@@ -4,7 +4,7 @@
     leave-active-class="transition-transform duration-300 ease-in-out" leave-to-class="translate-x-[-100%]">
     <aside ref="sideBar" v-if="displayStore.sidebarShowing"
       class="fixed left-0 top-0 h-full w-64 z-50 border-r xl:relative px-5 py-5">
-      <div class="flex justify-start mb-5 text-2xl">{{ configuration.AppTitle }}</div>
+      <div class="flex justify-end mb-5 text-xl">{{ configuration.AppTitle }}</div>
       <div class="flex flex-col gap-4 mt-2">
         <h2 class="mb-4 text-xs uppercase flex leading-[20px] justify-start">Menu</h2>
         <ul class="flex flex-col gap-4">

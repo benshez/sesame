@@ -6,8 +6,8 @@ import supertokens from "supertokens-node";
 import { middleware, errorHandler } from "supertokens-node/framework/express";
 import { SuperTokensConfig } from "./config";
 //import Multitenancy from "supertokens-node/recipe/multitenancy";
-import { useBackendConfig } from "./config/useBackendConfig";
-import { UserRoutes, EmailRoutes, SessionRoutes } from "./routes";
+import { useBackendConfig } from "./src/config/useBackendConfig";
+import { UserRoutes, EmailRoutes, SessionRoutes } from "./src/routes";
 
 supertokens.init(SuperTokensConfig);
 

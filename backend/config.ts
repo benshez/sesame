@@ -11,7 +11,7 @@ import WebAuthN from "supertokens-node/recipe/webauthn";
 import TOTP from "supertokens-node/recipe/totp";
 import { SMTPService } from "supertokens-node/recipe/emailverification/emaildelivery";
 import type { TypeInput } from "supertokens-node/types";
-import { useBackendConfig } from "./config/useBackendConfig";
+import { useBackendConfig } from "./src/config/useBackendConfig";
 
 const backendConfig = useBackendConfig();
 const smtpSettings = backendConfig.GetSMTPConfig();
@@ -25,7 +25,7 @@ export const SuperTokensConfig: TypeInput = {
     apiDomain: backendConfig.GetApiDomain(),
     websiteDomain: backendConfig.GetWebsiteDomain(),
     apiBasePath: "/auth",
-    websiteBasePath: "/auth",
+    websiteBasePath: "/auth"
   },
   recipeList: [
     EmailPassword.init(),
