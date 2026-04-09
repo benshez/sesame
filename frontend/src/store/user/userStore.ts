@@ -1,142 +1,72 @@
-import { defineStore, } from "pinia";
+import Session from "supertokens-web-js/recipe/session";
+import { ApiClient } from "@/plugins";
+import { useFormStore } from "@/store";
 
-// import {
-//   createUserWithEmailAndPassword,
-//   sendEmailVerification,
-//   updatePassword,
-//   updateEmail,
-//   updateProfile,
-//   sendPasswordResetEmail,
-//   signInWithEmailAndPassword,
-//   signOut,
-//   type User
-// } from "firebase/auth";
-// import { useFirebase } from "@/utilities/firebase/useFirebase";
-import { configuration } from "@/utilities";
+export const useUserStore = () => {
+  const apiClient = new ApiClient();
+  const formStore = useFormStore();
 
-export const useUserStore = defineStore("users", {
-  state: () => ({
-    userInfoState: {} as any,
-    isAuthenticatedState: false as boolean
-  }),
-  actions: {
-    // async GetUserInfo() {
-    //   await this.UpdateUserInfo();
-    // },
+  let UserInfo = {
+    emails: []
+  };
 
-    // async CreateUser(email: string, password: string) {
-    //   await createUserWithEmailAndPassword(useFirebase().auth, email, password);
+  let MetaData = {
+    metadata: {
+      name: ""
+    }
+  };
 
-    //   this.UpdateUserInfo();
-    // },
-
-    // async SendVerificationEmail() {
-    //   const user = await this.GetCurrentUser();
-
-    //   if (user) {
-    //     await sendEmailVerification(user);
-    //   }
-    // },
-
-    // async UpdateUserPassword(newPassword: string) {
-    //   const user = await this.GetCurrentUser();
-
-    //   if (user) {
-    //     await updatePassword(user, newPassword);
-    //   }
-    // },
-
-    // async ResetUserPassword(email: string) {
-    //   const user = await this.GetCurrentUser();
-    //   const password = this.GenerateSecureRandomPassword();
-
-    //   if (user) {
-    //     await this.UpdateUserPassword(password);
-    //     await this.SendUserPasswordResetEmail(email);
-    //   }
-    // },
-
-    // async SendUserPasswordResetEmail(email: string) {
-    //   await sendPasswordResetEmail(useFirebase().auth, email);
-    // },
-
-    // async UpdateUserEmail(newEmail: string) {
-    //   const user = await this.GetCurrentUser();
-
-    //   if (user) {
-    //     await updateEmail(user, newEmail);
-    //     await this.UpdateUserInfo();
-    //   }
-    // },
-
-    // async UpdateUserProfile(profile: {}) {
-    //   const user = await this.GetCurrentUser();
-
-    //   if (user) {
-    //     await updateProfile(user, profile);
-    //     await this.UpdateUserInfo();
-    //   }
-    // },
-
-    // GenerateSecureRandomPassword() {
-    //   const uppercases = "abcdefghijklmnopqrstuvwxyz"
-    //   const lowercases = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    //   const numbers = "0123456789"
-    //   const sympbols = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
-    //   const charset = uppercases + lowercases + numbers + sympbols;
-    //   let password = "";
-
-    //   for (let i = 0, n = charset.length; i < length; ++i) {
-    //     password += charset.charAt(Math.floor(Math.random() * n));
-    //   }
-
-    //   return password;
-    // },
-
-    // async LoginUser(email: string, password: string) {
-    //   await signInWithEmailAndPassword(useFirebase().auth, email, password);
-    //   await this.UpdateUserInfo();
-    // },
-
-    // async LogoutUser() {
-    //   try {
-    //     await signOut(useFirebase().auth);
-    //     this.$state.userInfoState = {} as User;
-    //     this.$state.isAuthenticatedState = false;
-    //   } catch (error) {
-    //     console.error("Error signing out:", error);
-    //   }
-    // },
-
-    // async UpdateUserInfo() {
-    //   const user = await this.GetCurrentUser();
-    //   if (user) {
-    //     const userToken = user ? await user.getIdTokenResult() : null;
-    //     const authedUser = {
-    //       uid: user.uid,
-    //       displayName: user.displayName || "",
-    //       email: user.email || "",
-    //       emailVerified: user.emailVerified,
-    //       isAnonymous: user.isAnonymous,
-    //       phoneNumber: user.phoneNumber || "",
-    //       photoURL: user.photoURL || "",
-    //       roles: { permission: ["user"], access: ["read", "write"] },
-    //       accessToken: userToken as unknown as string,
-    //     } as unknown as User;
-
-    //     this.$state.userInfoState = authedUser;
-    //     this.$state.isAuthenticatedState = authedUser.uid !== undefined && authedUser.emailVerified !== undefined && userToken !== undefined;
-    //     //configuration.SetAuthorizationBearerToken(userToken as string);
-    //   }
-    // },
-    // async GetCurrentUser(): Promise<User | null> {
-    //   const auth = useFirebase().auth;
-    //   await auth.authStateReady();
-    //   return auth.currentUser;
-    // }
-  },
-  getters: {
-    userInfo: (state) => state.userInfoState,
-    isAuthenticated: (state) => state.isAuthenticatedState
+  const GetAccessToken = async () => {
+    return await Session.getAccessTokenPayloadSecurely();
   }
-})
+
+  const GetUserId = async () => {
+    return await Session.getUserId();
+  }
+
+  const GetUserInfo = async () => {
+    const user = await apiClient
+      .setBearerAuth(await GetAccessToken())
+      .users()
+      .userInfo(await GetUserId())
+
+    return Object.assign(UserInfo, user);;
+  }
+
+  const SaveUserMetaData = async () => {
+    const metadata = {
+      "name": formStore.getElement("name").value
+    }
+    const upd = await apiClient
+      .setBearerAuth(await GetAccessToken())
+      .users()
+      .updateUserMetadata(metadata);
+  }
+
+  const GetUserMetaData = async () => {
+    MetaData = Object.assign(MetaData, await apiClient
+      .setBearerAuth(await GetAccessToken())
+      .users()
+      .getUserMetadata(await GetUserId()));
+
+    formStore.updateElementState("name", { key: "value", value: MetaData?.metadata?.name });
+  }
+
+  const SendVerificationEmail = async () => {
+    const user = await GetUserInfo();
+
+    const sendVerificationEmailResponse = await apiClient
+      .setBearerAuth(await GetAccessToken())
+      .email()
+      .sendVerificationEmail({
+        "email": UserInfo.emails[0]
+      });
+  }
+
+  return {
+    GetUserInfo,
+    SaveUserMetaData,
+    GetUserMetaData,
+    SendVerificationEmail
+  }
+}

@@ -35,6 +35,12 @@ class UserRoutes {
     .post("/add-role-to-user", verifySession(), async (req, res) => {
       return await this.controller.AddRoleToUser(req, res);
     })
+
+    this
+    .router
+    .post("/update-user-email-password", verifySession(), async (req, res) => {
+      return await this.controller.UpdateUserPaswordAndEmail(req, res);
+    })
   }  
 }
 

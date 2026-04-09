@@ -18,7 +18,7 @@
                   </div>
                   <div class="order-3 xl:order-2">
                     <h4 class="mb-2 text-lg font-semibold text-center text-gray-800 dark:text-white/90 xl:text-left">
-                      {{ userStore.userInfo.displayName }}
+                      abc
                     </h4>
                     <div class="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
                       <p class="text-sm text-gray-500 dark:text-gray-400">Team Manager</p>
@@ -136,51 +136,19 @@ import * as Session from "supertokens-web-js/recipe/session";
 import Modal from "@/components/profile/Modal.vue";
 import FormBody from "@/components/Form/FormBody.vue";
 import { useUserStore, useFormStore, useDisplayStore } from "@/store";
-import { ApiClient } from "@/plugins";
 import router from "@/router";
-import type { IElement } from "@/interfaces";
 
-const formStore = useFormStore();
 const userStore = useUserStore();
 const isProfileInfoModal = ref(false);
-const apiClient = new ApiClient();
 
 const SaveProfile = async () => {
-  // Implement save profile logic here
-
-  const accessToken = await Session.getAccessTokenPayloadSecurely();
-  const metadata = {
-    "name": formStore.getElement("name").value
-  }
-  const upd = await apiClient
-    .setBearerAuth(accessToken)
-    .users()
-    .updateUserMetadata(metadata)
-
-      console.log('Profile saved' + metadata )
-
+  await userStore.SaveUserMetaData();
   isProfileInfoModal.value = false
 }
 
 const ShowModal = async () => {
-
   isProfileInfoModal.value = true
-
-  const userId = await Session.getUserId();
-
-  const accessToken = await Session.getAccessTokenPayloadSecurely();
-
-  const response = await apiClient
-    .setBearerAuth(accessToken)
-    .users()
-    .getUserMetadata(userId);
-
-
-  console.log("User info fetched successfully:", response);
-  const meta: any = response
-
-  formStore.updateElementState("name", { key: "value", value: meta?.metadata?.name });
-
+  await userStore.GetUserMetaData();
 }
 
 onMounted(async () => {

@@ -2,9 +2,10 @@ import type { RouteRecordRaw } from "vue-router";
 import Session from "supertokens-web-js/recipe/session";
 import { EmailVerificationClaim } from "supertokens-web-js/recipe/emailverification";
 import EditView from "@/views/EditView.vue"
-import { configuration } from "@/utilities";
+import { configuration, useUser } from "@/utilities";
 
 const title = configuration.AppTitle;
+const user = useUser();
 
 export const useUserRoutes = () => {
   const GetRoutes = (): RouteRecordRaw[] => {
@@ -18,13 +19,7 @@ export const useUserRoutes = () => {
           if (!sessionExists) {
             return ({ name: "auth" });
           } else {
-            const claims = await Session.validateClaims();
-            let verified = claims.length === 0;
-
-            claims.forEach(claim => {
-              if(claim.id === EmailVerificationClaim.id) verified = false;
-            })
-            return verified;
+            return await user.hasClaim(EmailVerificationClaim.id);
           }
         },
         meta: {

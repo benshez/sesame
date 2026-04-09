@@ -21,13 +21,17 @@ export class UserController {
   }
 
   GetUserMetadata = async (req: SessionRequest, res: Response) => {
-    const session = req.session;
-    const userId = session!.getUserId();
+    try {
+      const session = req.session;
+      const userId = session!.getUserId();
 
-    const metadata = await UserMetadata.getUserMetadata(userId);
+      const metadata = await UserMetadata.getUserMetadata(userId);
 
-    res.send(metadata);
-    //res.json(metadata);
+      res.send(metadata);
+    } catch (error) {
+      console.log("Error fetching user info: ", error);
+      throw error;
+    }
   }
 
   UpdateUserMetadata = async (req: SessionRequest, res: Response) => {
@@ -38,7 +42,7 @@ export class UserController {
 
       await UserMetadata.updateUserMetadata(userId, userInfo);
 
-      res.send({resp: `User info updated successfully - ${userId}`});
+      res.send({ resp: `User info updated successfully - ${userId}` });
     } catch (error) {
       console.log("Error updating user info: ", error);
       throw error;
@@ -49,6 +53,7 @@ export class UserController {
     try {
       const session = req.session;
       const roleId = req.body.roleId;
+      
       const roleResponse = await UserRoles.addRoleToUser(session!.getTenantId(), session!.getUserId(), roleId);
 
       res.send(roleResponse);
@@ -61,9 +66,10 @@ export class UserController {
   UpdateUserPaswordAndEmail = async (req: SessionRequest, res: Response) => {
     try {
       const session = req.session;
-      const oldPassword = req.body.oldPassword;
-      const updatedPassword = req.body.newPassword;
-      const updatedEmail = req.body.newEmail;
+      const userInfo = req.body.userInfo;
+      const oldPassword = userInfo.oldPassword;
+      const updatedPassword = userInfo.newPassword;
+      const updatedEmail = userInfo.newEmail;
       const userId = req.session!.getUserId();
       const updateObject = {
         recipeUserId: session!.getRecipeUserId(),
@@ -106,7 +112,6 @@ export class UserController {
       await req.session!.revokeSession();
 
       res.send("Password and or email updated.");
-
     } catch (error) {
       console.log("Error updating user info: ", error);
     }
@@ -136,5 +141,4 @@ export class UserController {
 
     return loginMethod;
   }
-
 }

@@ -32,6 +32,15 @@ const callAPI = async function () {
       .session()
       .sessionInfo();
 
+    const userId = await Session.getUserId()
+
+    const user = await apiClient
+      .setBearerAuth(accessToken)
+      .users()
+      .userInfo(userId)
+
+
+    console.log(user)
     if (response.status === 401) {
       window.location.assign("/auth");
       return;
