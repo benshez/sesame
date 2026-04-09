@@ -17,6 +17,24 @@ class UserRoutes {
     .get("/get-user-info/:userId", verifySession(), async (req, res) => {
       return await this.controller.GetUserInfo(req, res);
     });
+
+    this
+    .router
+    .get("/get-user-metadata/:userId", verifySession(), async (req, res) => {
+      return await this.controller.GetUserMetadata(req, res);
+    })
+
+    this
+    .router
+    .post("/update-user-metadata", verifySession(), async (req, res) => {
+      return await this.controller.UpdateUserMetadata(req, res);
+    })
+
+    this
+    .router
+    .post("/add-role-to-user", verifySession(), async (req, res) => {
+      return await this.controller.AddRoleToUser(req, res);
+    })
   }  
 }
 

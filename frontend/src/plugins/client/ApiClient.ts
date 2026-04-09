@@ -31,7 +31,10 @@ export class ApiClient extends HttpClient {
 
   users = () => {
     return {
-      userInfo: (userId: string) => this.get(`/users/get-user-info/${userId}`, this.getHeader("Authorization"))
+      userInfo: (userId: string) => this.get(`/users/get-user-info/${userId}`, this.getHeader("Authorization")),
+      addRoleToUser: (role: { role: string }) => this.post("/users/users/add-role-to-user", role, this.getHeader("Authorization")),
+      updateUserMetadata: (userInfo: {}) => this.post("/users/update-user-metadata", { userInfo }, this.getHeader("Authorization")),
+      getUserMetadata: (userId: string) => this.get(`/users/get-user-metadata/${userId}`, this.getHeader("Authorization"))
     }
   }
 

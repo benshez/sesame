@@ -17,11 +17,13 @@ class EmailRoutes {
     .post("/send-verification-email", verifySession(), async (req, res) => {
       return await this.controller.SendVerificationEmail(req, res);
     });
+
     this
     .router
     .post("/verify-email", async (req, res) => {
       return await this.controller.VerifyEmail(req, res);
     });
+    
     this
     .router
     .post("/un-verify-email",async (req, res) => {

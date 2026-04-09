@@ -68,7 +68,7 @@
                     </a>
                   </div>
                 </div>
-                <button class="edit-button" @click="isProfileInfoModal = true">
+                <button class="edit-button" @click="ShowModal">
                   <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -138,31 +138,54 @@ import FormBody from "@/components/Form/FormBody.vue";
 import { useUserStore, useFormStore, useDisplayStore } from "@/store";
 import { ApiClient } from "@/plugins";
 import router from "@/router";
+import type { IElement } from "@/interfaces";
 
 const formStore = useFormStore();
 const userStore = useUserStore();
 const isProfileInfoModal = ref(false);
 const apiClient = new ApiClient();
 
-const SaveProfile = () => {
+const SaveProfile = async () => {
   // Implement save profile logic here
-  console.log('Profile saved')
+
+  const accessToken = await Session.getAccessTokenPayloadSecurely();
+  const metadata = {
+    "name": formStore.getElement("name").value
+  }
+  const upd = await apiClient
+    .setBearerAuth(accessToken)
+    .users()
+    .updateUserMetadata(metadata)
+
+      console.log('Profile saved' + metadata )
+
   isProfileInfoModal.value = false
+}
+
+const ShowModal = async () => {
+
+  isProfileInfoModal.value = true
+
+  const userId = await Session.getUserId();
+
+  const accessToken = await Session.getAccessTokenPayloadSecurely();
+
+  const response = await apiClient
+    .setBearerAuth(accessToken)
+    .users()
+    .getUserMetadata(userId);
+
+
+  console.log("User info fetched successfully:", response);
+  const meta: any = response
+
+  formStore.updateElementState("name", { key: "value", value: meta?.metadata?.name });
+
 }
 
 onMounted(async () => {
   if (await Session.doesSessionExist()) {
-    const userId = await Session.getUserId();
-
-    const accessToken = await Session.getAccessTokenPayloadSecurely();
     try {
-      const response = await apiClient
-        .setBearerAuth(accessToken)
-        .users()
-        .userInfo(userId);
-
-      console.log("User info fetched successfully:", response);
-
       // const sendVerificationEmailResponse = await apiClient
       //   .setBearerAuth(accessToken)
       //   .email()
@@ -170,7 +193,7 @@ onMounted(async () => {
       //     "email": "benshez1@gmail.com",
       //   });
 
-      
+
       //   method: "GET",
       //   headers: {
       //     "Content-Type": "application/json",
@@ -184,6 +207,10 @@ onMounted(async () => {
       router.push("/auth");
       //console.error("Error fetching user info:", error);
     }
+
+
+    //formStore.updateElementState("distance", { key: "value", value: `${travelDistance.toFixed(2)}km` });
+
     //   const userInfo = await supertokens.init().getUser(userId);
 
     //   const userStore = Session..(await Session.getUserId());

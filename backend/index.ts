@@ -4,7 +4,7 @@ import supertokens from "supertokens-node";
 //import { verifySession } from "supertokens-node/recipe/session/framework/express";
 //import { middleware, errorHandler, SessionRequest } from "supertokens-node/framework/express";
 import { middleware, errorHandler } from "supertokens-node/framework/express";
-import { SuperTokensConfig } from "./config";
+import { SuperTokensConfig } from "./src/config/config";
 //import Multitenancy from "supertokens-node/recipe/multitenancy";
 import { useBackendConfig } from "./src/config/useBackendConfig";
 import { UserRoutes, EmailRoutes, SessionRoutes } from "./src/routes";
@@ -19,7 +19,7 @@ app.use(
   cors({
     origin: useBackendConfig().GetWebsiteDomain(),
     allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
-    methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"],
+    methods: ["GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
   })
 );
@@ -33,17 +33,6 @@ app.use(middleware());
 app.get("/hello", async (_req, res) => {
   res.send("hello");
 });
-
-// // An example API that requires session verification
-// app.get("/sessioninfo", verifySession(), async (req: SessionRequest, res) => {
-//   const session = req.session;
-//   res.send({
-//     sessionHandle: session!.getHandle(),
-//     userId: session!.getUserId(),
-//     accessTokenPayload: session!.getAccessTokenPayload(),
-//     tenantId: session!.getTenantId()
-//   });
-// });
 
 // // This API is used by the frontend to create the tenants drop down when the app loads.
 // // Depending on your UX, you can remove this API.

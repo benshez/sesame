@@ -111,26 +111,28 @@ const signIn = async (_: Event) => {
     const userId = await Session.getUserId();
     const token = params.get("token");
     const tenantId = params.get("tenantId");
-    const unVerifyResponse = await apiClient
-      .setBearerAuth(accessToken)
-      .email()
-      .unVerifyEmail({
-        "userId": userId
-      });
+    // const unVerifyResponse = await apiClient
+    //   .setBearerAuth(accessToken)
+    //   .email()
+    //   .unVerifyEmail({
+    //     "userId": userId
+    //   });
 
-    const verifyResponse = await apiClient
-      .setBearerAuth(accessToken)
-      .email()
-      .verifyEmail({
-        "token": token || "",
-        "tenantId": tenantId || "",
-        "userId": userId
-      });
-    router.push("/");
+    try {
+      const verifyResponse = await apiClient
+        .setBearerAuth(accessToken)
+        .email()
+        .verifyEmail({
+          "token": token || "",
+          "tenantId": tenantId || "",
+          "userId": userId
+        });
+    } catch (error) {
+      window.location.assign("/auth");
+    }
   }
 
-  displayStore.UpdateHasSessionState(true);
-  router.push("/");
+  window.location.assign("/");
 };
 
 const updateErrorState = (field: string, values: { key: string, value: boolean | string }) => {

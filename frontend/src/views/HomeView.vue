@@ -25,7 +25,6 @@ const signOut = async () => {
 
 const callAPI = async function () {
   const accessToken = await Session.getAccessTokenPayloadSecurely();
-  let err: any = "";
 
   try {
     const response = await apiClient

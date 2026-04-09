@@ -9,9 +9,10 @@ import MultiFactorAuth from "supertokens-node/recipe/multifactorauth";
 import EmailVerification from "supertokens-node/recipe/emailverification";
 import WebAuthN from "supertokens-node/recipe/webauthn";
 import TOTP from "supertokens-node/recipe/totp";
+import UserMetadata from "supertokens-node/recipe/usermetadata";
 import { SMTPService } from "supertokens-node/recipe/emailverification/emaildelivery";
 import type { TypeInput } from "supertokens-node/types";
-import { useBackendConfig } from "./src/config/useBackendConfig";
+import { useBackendConfig } from "./useBackendConfig";
 
 const backendConfig = useBackendConfig();
 const smtpSettings = backendConfig.GetSMTPConfig();
@@ -96,6 +97,7 @@ export const SuperTokensConfig: TypeInput = {
       },
     }),
     WebAuthN.init(),
+    UserMetadata.init(),
     Session.init()
   ],
 };
