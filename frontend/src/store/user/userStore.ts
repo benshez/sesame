@@ -1,72 +1,84 @@
+import { defineStore } from "pinia";
 import Session from "supertokens-web-js/recipe/session";
 import { ApiClient } from "@/plugins";
-import { useFormStore } from "@/store";
+import type { IUserInfo, IUserMetaData } from "@/interfaces";
 
-export const useUserStore = () => {
-  const apiClient = new ApiClient();
-  const formStore = useFormStore();
+const apiClient = new ApiClient();
 
-  let UserInfo = {
-    emails: []
-  };
+export const useUserStore = defineStore("user", {
+  state: () => ({
+    UserInfoState: {} as IUserInfo,
+    UserMetaDataState: {} as IUserMetaData
+  }),
 
-  let MetaData = {
-    metadata: {
-      name: ""
+  actions: {
+    async GetAccessToken() {
+      return await Session.getAccessTokenPayloadSecurely();
+    },
+
+    async GetUserId() {
+      return await Session.getUserId();
+    },
+
+    async GetUserInfo() {
+      const user = await apiClient
+        .setBearerAuth(await this.GetAccessToken())
+        .users()
+        .userInfo(await this.GetUserId())
+
+      Object.assign(this.$state.UserInfoState, user);
+
+      return this.$state.UserInfoState;
+    },
+
+    async SaveUserMetaData() {
+      const metadata: IUserMetaData = {
+        firstName: "Ben",
+        surname: "v H",
+        displayName: "B",
+        postion: "Engineer",
+        address: {
+          unit: "",
+          streetNumber: 26,
+          streetName: "A Street",
+          suburb: "A Suburb",
+          postalCode: "5555",
+          city: "A City",
+          state: "A State",
+          country: "Australia"
+        }
+      }
+
+      return await apiClient
+        .setBearerAuth(await this.GetAccessToken())
+        .users()
+        .updateUserMetadata(metadata);
+    },
+
+    async GetUserMetaData() {
+      const response: any = await apiClient
+        .setBearerAuth(await this.GetAccessToken())
+        .users()
+        .getUserMetadata(await this.GetUserId());
+
+      Object.assign(this.$state.UserMetaDataState, response.metadata);
+
+      return this.$state.UserMetaDataState;
+    },
+
+    async SendVerificationEmail() {
+      const user = await this.GetUserInfo();
+
+      const response = await apiClient
+        .setBearerAuth(await this.GetAccessToken())
+        .email()
+        .sendVerificationEmail({
+          "email": this.$state.UserInfoState.emails.at(0)?.toString() || ""
+        });
     }
-  };
-
-  const GetAccessToken = async () => {
-    return await Session.getAccessTokenPayloadSecurely();
+  },
+  getters: {
+    UserInfo: (state) => state.UserInfoState,
+    UserMetaData: (state) => state.UserMetaDataState
   }
-
-  const GetUserId = async () => {
-    return await Session.getUserId();
-  }
-
-  const GetUserInfo = async () => {
-    const user = await apiClient
-      .setBearerAuth(await GetAccessToken())
-      .users()
-      .userInfo(await GetUserId())
-
-    return Object.assign(UserInfo, user);;
-  }
-
-  const SaveUserMetaData = async () => {
-    const metadata = {
-      "name": formStore.getElement("name").value
-    }
-    const upd = await apiClient
-      .setBearerAuth(await GetAccessToken())
-      .users()
-      .updateUserMetadata(metadata);
-  }
-
-  const GetUserMetaData = async () => {
-    MetaData = Object.assign(MetaData, await apiClient
-      .setBearerAuth(await GetAccessToken())
-      .users()
-      .getUserMetadata(await GetUserId()));
-
-    formStore.updateElementState("name", { key: "value", value: MetaData?.metadata?.name });
-  }
-
-  const SendVerificationEmail = async () => {
-    const user = await GetUserInfo();
-
-    const sendVerificationEmailResponse = await apiClient
-      .setBearerAuth(await GetAccessToken())
-      .email()
-      .sendVerificationEmail({
-        "email": UserInfo.emails[0]
-      });
-  }
-
-  return {
-    GetUserInfo,
-    SaveUserMetaData,
-    GetUserMetaData,
-    SendVerificationEmail
-  }
-}
+})

@@ -20,18 +20,22 @@ export const useFormStore = defineStore("form", {
         case "register":
           elements = useRegisterView().GetElements();
           break;
-        case "map": 
+        case "map":
           elements = useMapView().GetElements();
       }
 
       this.$state.elementsState = elements as Array<IElement>;
     },
+    
     getElement(key: string): IElement {
       return this.$state.elementsState
         .find((el) => { return el.id === key }) as IElement
     },
+
     updateElementState(key: string, options: { key: string, value: unknown }) {
       const element: IElement = this.getElement(key);
+      
+      if(!element) return;
 
       switch (options.key) {
         case "value":
@@ -48,10 +52,12 @@ export const useFormStore = defineStore("form", {
           break;
       }
     },
+
     handleInput(key: string) {
       this.handleDisplay(key);
       this.handleValidate(key);
     },
+
     handleValidate(key: string) {
       const element: IElement = this.getElement(key);
 
@@ -59,13 +65,14 @@ export const useFormStore = defineStore("form", {
 
       this.updateElementState(key, { key: "isValid", value: isValid });
     },
+
     handleDisplay(key: string) {
-    const element: IElement = this.getElement(key);
-    let display: boolean = element.isVisible || true;
+      const element: IElement = this.getElement(key);
+      let display: boolean = element.isVisible || true;
 
-    this.handleValidate(key);
+      this.handleValidate(key);
 
-    this.updateElementState(key, {key: "isVisible", value: display});
+      this.updateElementState(key, { key: "isVisible", value: display });
     }
   },
   getters: {
