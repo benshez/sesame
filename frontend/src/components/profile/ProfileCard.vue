@@ -22,7 +22,7 @@
                         {{ userStore.UserMetaDataState?.displayName }}
                       </h4>
                       <div class="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
-                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ userStore.UserMetaDataState?.postion }}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ userStore.UserMetaDataState?.position }}</p>
                         <div class="hidden h-3.5 w-px bg-gray-300 dark:bg-gray-700 xl:block">
                         </div>
                         <p class="text-sm text-gray-500 dark:text-gray-400">{{ userStore.UserMetaDataState?.address?.city }}, {{
@@ -89,7 +89,7 @@
     <Modal v-if="isProfileInfoModal" @close="isProfileInfoModal = false">
       <template #body>
         <div class="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white dark:bg-gray-900">
-          <FormBody>
+          <FormBody :view="'profile'" :css-class="'grid grid-cols-2 gap-4'">
             <template v-slot:header>
               <p class="mb-2 font-semibold">
                 Edit Personal Information
@@ -137,7 +137,7 @@ const isProfileInfoModal = ref<boolean>(false);
 
 const SaveProfile = async () => {
   if (await Session.doesSessionExist()) {
-    await userStore.SaveUserMetaData();
+    //await userStore.SaveUserMetaData();
   }
 
   isProfileInfoModal.value = false;

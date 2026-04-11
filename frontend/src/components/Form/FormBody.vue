@@ -12,7 +12,7 @@
         <div class="space-y-6">
           <div>
             <slot name="content">
-              <FormBuilder :elements="elements" />
+              <FormBuilder :elements="elements" :class="props.cssClass"/>
             </slot>
           </div>
         </div>
@@ -27,9 +27,23 @@ import { toRefs } from "vue";
 import FormBuilder from "@/components/Form/FormBuilder.vue";
 import { useFormStore } from "@/store/forms/formStore";
 
+const props = defineProps({
+  view: { 
+    type: String, 
+    required: false,
+    default: ""
+  }, 
+  cssClass: {
+    type: String, 
+    required: false,
+    default: ""  
+  }
+})
+
 const formStore = useFormStore();
 const route = useRoute();
-formStore.getElements(route.name as string)
-const { elements } = toRefs(formStore);
+const routeName: string = props.view?.toString() ? props.view : route.name?.toString() || "";
 
+formStore.getElements(routeName as string);
+const { elements } = toRefs(formStore);
 </script>

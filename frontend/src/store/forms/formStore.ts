@@ -1,6 +1,6 @@
 import { defineStore, } from "pinia";
 import type { IElement } from "@/interfaces";
-import { useRegisterView, useEditView, useLoginView, useMapView } from "@/store"
+import { useRegisterView, useProfileView, usePersonalInfoView, useLoginView, useMapView } from "@/store"
 
 export const useFormStore = defineStore("form", {
   state: () => ({
@@ -11,8 +11,11 @@ export const useFormStore = defineStore("form", {
       let elements: Array<IElement> = [];
 
       switch (route) {
-        case "edit":
-          elements = useEditView().GetElements();
+        case "profile":
+          elements = useProfileView().GetElements();
+          break;
+        case "personalInfo":
+          elements = usePersonalInfoView().GetElements();
           break;
         case "auth":
           elements = useLoginView().GetElements();
@@ -26,7 +29,7 @@ export const useFormStore = defineStore("form", {
 
       this.$state.elementsState = elements as Array<IElement>;
     },
-    
+
     getElement(key: string): IElement {
       return this.$state.elementsState
         .find((el) => { return el.id === key }) as IElement
@@ -34,8 +37,8 @@ export const useFormStore = defineStore("form", {
 
     updateElementState(key: string, options: { key: string, value: unknown }) {
       const element: IElement = this.getElement(key);
-      
-      if(!element) return;
+
+      if (!element) return;
 
       switch (options.key) {
         case "value":
@@ -78,5 +81,4 @@ export const useFormStore = defineStore("form", {
   getters: {
     elements: (state) => state.elementsState
   }
-
 })

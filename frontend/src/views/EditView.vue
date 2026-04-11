@@ -8,9 +8,10 @@
         </slot>
       </div>
       <slot name="subheader"></slot>
-      <Suspense>
+
       <ProfileCard />
-      </Suspense>
+      <PersonalInfoCard />
+
     </div>
   </BaseLayout>
 </template>
@@ -19,11 +20,13 @@
 import { onBeforeMount, ref } from "vue";
 import BaseLayout from "@/layouts/BaseLayout.vue";
 import ProfileCard from "@/components/profile/ProfileCard.vue";
+import PersonalInfoCard from "@/components/profile/PersonalInfoCard.vue"
 import { useUserStore } from "@/store";
 
 const userStore = useUserStore();
 
 onBeforeMount(async () => {
-  await userStore.GetUserMetaData();
+  //const user = await userStore.GetUserMetaData();
+  //await userStore.GetUserInfo();
 });
 </script>

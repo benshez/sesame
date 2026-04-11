@@ -31,28 +31,11 @@ export const useUserStore = defineStore("user", {
       return this.$state.UserInfoState;
     },
 
-    async SaveUserMetaData() {
-      const metadata: IUserMetaData = {
-        firstName: "Ben",
-        surname: "v H",
-        displayName: "B",
-        postion: "Engineer",
-        address: {
-          unit: "",
-          streetNumber: 26,
-          streetName: "A Street",
-          suburb: "A Suburb",
-          postalCode: "5555",
-          city: "A City",
-          state: "A State",
-          country: "Australia"
-        }
-      }
-
+    async SaveUserMetaData(userInfo: IUserMetaData) {
       return await apiClient
         .setBearerAuth(await this.GetAccessToken())
         .users()
-        .updateUserMetadata(metadata);
+        .updateUserMetadata(userInfo);
     },
 
     async GetUserMetaData() {

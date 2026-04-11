@@ -1,15 +1,15 @@
 import type { IElement, IPage } from "@/interfaces";
 
-export const useEditView = () => {
-  const EditView = {
-    "name": "edit",
+export const useProfileView = () => {
+  const ProfileView = {
+    "name": "profile",
     "heading": "Edit",
-    "path": "/edit",
+    "path": "/profile",
     "requiresAuthenticaton": true,
     "elements": [
       {
         "id": "email",
-        "label": "Email",
+        "label": "Current Email",
         "component": "FormInput",
         "value": "",
         "helpText": "Enter your username/email.",
@@ -51,7 +51,24 @@ export const useEditView = () => {
       },
       {
         "id": "password",
-        "label": "Password",
+        "label": "Current Password",
+        "component": "FormInput",
+        "value": "",
+        "helpText": "Enter your password.",
+        "placeholderText": "Password",
+        "isReadonly": false,
+        "isVisible": true,
+        "isVisibleIf": (): boolean => { return true },
+        "isRequired": true,
+        "isValid": true,
+        "isValidIf": (): boolean => { return true; },
+        "type": "password",
+        "cssClass": "w-full pl-3 pr-10 py-2 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300",
+        "labelIcon": "M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"
+      },
+      {
+        "id": "newpassword",
+        "label": "New Password",
         "component": "FormInput",
         "value": "",
         "helpText": "Enter your password.",
@@ -70,7 +87,7 @@ export const useEditView = () => {
   } as IPage
 
   const GetElements = (): Array<IElement> => {
-    return EditView.elements;
+    return ProfileView.elements;
   }
   const GetElement = (key: string): IElement => {
     const element: IElement = GetElements().filter((e: IElement) => { 
@@ -80,7 +97,7 @@ export const useEditView = () => {
     return element;
   }
   return {
-    EditView,
+    ProfileView,
     GetElements
   }
 }

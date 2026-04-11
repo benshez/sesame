@@ -4,6 +4,6 @@ export type IUserMetaData = {
   firstName: string
   surname: string
   displayName: string
-  postion: string
+  position: string
   address: IAddress
 }
