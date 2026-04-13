@@ -1,6 +1,7 @@
 import { defineStore, } from "pinia";
 import type { IElement } from "@/interfaces";
 import { useRegisterView, useProfileView, usePersonalInfoView, useLoginView, useMapView } from "@/store"
+import { useObjectHelper } from "@/utilities";
 
 export const useFormStore = defineStore("form", {
   state: () => ({
@@ -33,6 +34,17 @@ export const useFormStore = defineStore("form", {
     getElement(key: string): IElement {
       return this.$state.elementsState
         .find((el) => { return el.id === key }) as IElement
+    },
+
+    bind(payload: any) {
+      const elements = this.$state.elementsState;
+      const helper = useObjectHelper();
+
+      elements.forEach((element: IElement) => {
+        if (element.id != "") {
+          this.updateElementState(element.id as string, { key: "value", value: helper.GetProperty(payload, element?.id as string) });
+        }
+      })
     },
 
     updateElementState(key: string, options: { key: string, value: unknown }) {

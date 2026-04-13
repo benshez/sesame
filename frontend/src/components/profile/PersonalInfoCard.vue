@@ -6,9 +6,9 @@
           <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div>
               <h4 class="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">Person Information</h4>
-              <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
+              <div class="grid grid-cols-1 gap-0 lg:grid-cols-3 lg:gap-4 2xl:gap-x-32">
                 <div v-for="(summary, summaryIndex) in formData" :key="summaryIndex">
-                  <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">{{ summary.placeholderText }}
+                  <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">{{ summary.key }}
                   </p>
                   <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ summary.value }}</p>
                 </div>
@@ -73,53 +73,28 @@ import * as Session from "supertokens-web-js/recipe/session";
 import Modal from "@/components/profile/Modal.vue";
 import FormBody from "@/components/Form/FormBody.vue";
 import { useUserStore, useFormStore } from "@/store";
-import { usePersonalInfoView } from "@/store"
-import type { IElement, IUserMetaData } from "@/interfaces";
+import type { IUserMetaData } from "@/interfaces";
+import { useObjectHelper } from "@/utilities";
 
 interface IFormData {
-  placeholderText: string,
-  value: any
+  key: string,
+  value: string,
+  description: string;
 }
 const userStore = useUserStore();
 const formStore = useFormStore();
-const personalInfoView = usePersonalInfoView();
 const isPersonalInfofoModal = ref<boolean>(false);
 const formData = ref<Array<IFormData>>([]);
+const helper = useObjectHelper();
 let userInfo = ref<IUserMetaData>({} as IUserMetaData);
 
 
-const Pluck = (o: object, fieldId: string): any => {
-  let response = "";
-
-  Object.entries(o).forEach(([key, value]) => {
-    if (typeof value === "object") {
-      Object.entries(value as object).forEach(([nkey, nvalue]) => {
-        if (fieldId === nkey) {
-          response = nvalue;
-        }
-      })
-    } else {
-      if (fieldId === key) {
-        response = value;
-      };
-    }
-  });
-
-  return response;
-}
-
-const getProperty = (obj: any, keys: string[]): any =>
-  keys.reduce((xs, x) => xs?.[x] ?? null, obj);
-
-const getPropertyByPath = (obj: any, ...paths: string[]): any[] =>
-  paths.map(path => getProperty(obj, path.replace(/\[([^\[\]]*)\]/g, '.$1').split('.').filter(t => t !== '')));
-
-const setProperty = <T>(obj: T, path: string, value: any): T => {
-  const [head, ...rest] = path.split('.');
+const SetProperty = <T>(obj: T, path: string, value: any): T => {
+  const [head, ...rest] = path.split(".");
   return {
     ...obj,
     [head]: rest.length
-      ? setProperty(obj[head as keyof T], rest.join('.'), value)
+      ? SetProperty(obj[head as keyof T], rest.join("."), value)
       : value
   };
 };
@@ -128,64 +103,34 @@ const SaveUserMetaData = async () => {
   if (await Session.doesSessionExist()) {
     let user: IUserMetaData = {} as IUserMetaData;
 
-    Object.entries(userInfo.value).forEach(([key, value]) => {
-      if (typeof value === "object") {
-        Object.entries(value as object).forEach(([nkey, nvalue]) => {
-          formStore.elementsState.forEach((e) => {
-            if (e.id === nkey) {
-              user = setProperty(user, `${key}.${nkey}`, e.value)
-            }
-          })
-        })
-      } else {
-        formStore.elementsState.forEach((e) => {
-          if (e.id === key) {
-            user = setProperty(user, `${key}`, e.value)
-          }
-        })
-      }
-    })
+    formStore.elementsState.forEach((e) => {
+      user = helper.SetProperty(user, e.id?.toString() as string, e.value)
+    });
 
     await userStore.SaveUserMetaData(user);
-    await UpdateSummary();
+    await CreateSummary();
   }
 
   isPersonalInfofoModal.value = false;
 }
 
-const UpdateSummary = async () => {
-  formData.value = [];
+const CreateSummary = async () => {
   userInfo.value = await userStore.GetUserMetaData();
-  personalInfoView.GetElements().forEach((field: IElement) => {
-    if (field.id != "") {
-      formData.value.push({
-        placeholderText: field.placeholderText || "",
-        value: Pluck(userInfo.value, field?.id as string) || ""
-      })
-    }
-  })
-}
-
-const GetModalData = async () => {
-  if (await Session.doesSessionExist()) {
-    if (!userInfo.value) userInfo.value = await userStore.GetUserMetaData();
-
-    personalInfoView.GetElements().forEach((field: IElement) => {
-      if (field.id != "") {
-        formStore.updateElementState(field.id as string, { key: "value", value: Pluck(userInfo.value, field?.id as string) });
-      }
-    })
-  }
+  const user = helper.Flatten(userInfo.value, {});
+  formData.value = helper.ToArray<IFormData>(user);
 }
 
 const ShowPersonalInfoModal = async () => {
   isPersonalInfofoModal.value = true;
 
-  await GetModalData()
+  if (await Session.doesSessionExist()) {
+    if (!userInfo.value) userInfo.value = await userStore.GetUserMetaData();
+    formStore.bind(userInfo.value);
+  }
 }
 
 onBeforeMount(async () => {
-  await UpdateSummary();
+  await CreateSummary();
 })
 
 </script>
