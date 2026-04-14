@@ -44,4 +44,10 @@ export class ApiClient extends HttpClient {
       getDirections: (profile: string, coordinates: Array<Array<number>>) => this.get(`/mapbox/directions/${profile}/${coordinates[0]};${coordinates[1]}`)
     }
   }
+
+  lookup = () => {
+    return {
+      countries: () => this.get("/lookup/get-countries", this.getHeader("Authorization"))
+    }
+  }
 }

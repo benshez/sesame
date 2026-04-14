@@ -92,7 +92,7 @@ export const useRegisterView = () => {
     return RegisterView.elements;
   }
   const GetElement = (key: string): IElement => {
-    const element: IElement = GetElements().filter((e: IElement) => {
+    const element: IElement = GetElements().find((e: IElement) => {
       if (e.id === key) return e as IElement;;
     }) as unknown as IElement;
 

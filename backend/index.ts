@@ -7,7 +7,7 @@ import { middleware, errorHandler } from "supertokens-node/framework/express";
 import { SuperTokensConfig } from "./src/config/config";
 //import Multitenancy from "supertokens-node/recipe/multitenancy";
 import { useBackendConfig } from "./src/config/useBackendConfig";
-import { UserRoutes, EmailRoutes, SessionRoutes } from "./src/routes";
+import { UserRoutes, EmailRoutes, SessionRoutes, LookupRoutes } from "./src/routes";
 
 supertokens.init(SuperTokensConfig);
 
@@ -44,7 +44,8 @@ app.get("/hello", async (_req, res) => {
 app
   .use("/session", SessionRoutes)
   .use("/users", UserRoutes)
-  .use("/emails", EmailRoutes);
+  .use("/emails", EmailRoutes)
+  .use("/lookup", LookupRoutes);
 
 
 // In case of session related errors, this error handler

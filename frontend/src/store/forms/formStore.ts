@@ -70,18 +70,19 @@ export const useFormStore = defineStore("form", {
 
     handleInput(key: string) {
       this.handleDisplay(key);
-      this.handleValidate(key);
+      //this.handleValidate(key);
     },
 
-    handleValidate(key: string) {
+    async handleValidate(key: string) {
       const element: IElement = this.getElement(key);
 
-      const isValid: boolean = element?.isValidIf?.();
+      const isValid: boolean = await element?.isValidIf?.();
+      console.log(isValid)
 
       this.updateElementState(key, { key: "isValid", value: isValid });
     },
 
-    handleDisplay(key: string) {
+    async handleDisplay(key: string) {
       const element: IElement = this.getElement(key);
       let display: boolean = element.isVisible || true;
 
