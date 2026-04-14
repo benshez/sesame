@@ -77,7 +77,6 @@ export const useFormStore = defineStore("form", {
       const element: IElement = this.getElement(key);
 
       const isValid: boolean = await element?.isValidIf?.();
-      console.log(isValid)
 
       this.updateElementState(key, { key: "isValid", value: isValid });
     },
@@ -86,7 +85,7 @@ export const useFormStore = defineStore("form", {
       const element: IElement = this.getElement(key);
       let display: boolean = element.isVisible || true;
 
-      this.handleValidate(key);
+      if(display) this.handleValidate(key);
 
       this.updateElementState(key, { key: "isVisible", value: display });
     }

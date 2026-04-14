@@ -1,9 +1,24 @@
 import type { IElement } from "@/interfaces";
 import { ApiClient } from "@/plugins";
 
-const apiClient = new ApiClient();
-
 export const useValidators = () => {
+  const apiClient = new ApiClient();
+  const stringTag = "[object String]";
+  const isArray = Array.isArray;
+  const objectProto = Object.prototype;
+  const nativeObjectToString = objectProto.toString;
+
+  const ObjectToString = (value: any) => {
+    return nativeObjectToString.call(value);
+  }
+
+  const BaseGetTag = (value: any) => {
+    return ObjectToString(value);
+  }
+
+  const IsObjectLike = (value: any) => {
+    return value != null && typeof value == "object";
+  }
 
   const IsEmpty = (element: IElement): boolean => {
     if (element.isRequired) return element.value === "";
@@ -24,20 +39,27 @@ export const useValidators = () => {
 
     if (isEmpty) return false;
 
-    return typeof element.value === "string";
+    if (typeof element.value !== "string") return false;
+
+    return (!isArray(element.value) && IsObjectLike(element.value) && BaseGetTag(element.value) == stringTag);
   }
 
-  const IsValidCountry = (element: IElement, countries: []): boolean => {
-    let found = false;
-    const x = countries
-    countries.filter((e) => {
-      console.log(e)}
-    )
-    console.log("Z", "");
+  const IsValidCountry = async (element: IElement): Promise<boolean> => {
+    const isEmpty = IsEmpty(element);
+    const isString = IsString(element);
+    const hasTwoCharacters = HasTwoCharacters(element);
 
-    // countries.find((country: string) => {
-    //   if (country === element.value) found = true;
-    // })
+    if (isEmpty || !isString || !hasTwoCharacters) return false;
+
+    let found = false;
+
+    const data: [] = await apiClient
+      .lookup()
+      .countries() as unknown as [];
+
+    data.forEach((place) => {
+      if (place === element.value) found = true;
+    })
 
     return found;
   }
