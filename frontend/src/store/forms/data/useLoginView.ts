@@ -1,6 +1,9 @@
 import type { IElement, IPage } from "@/interfaces";
+import { useValidators } from "@/utilities";
 
 export const useLoginView = () => {
+  const validators = useValidators();
+
   const LoginView = {
     "name": "auth",
     "heading": "Login",
@@ -21,16 +24,8 @@ export const useLoginView = () => {
         "isValid": true,
         "isValidIf": (): boolean => {
           const email: IElement = GetElement("email");
-          const isValidEmail: boolean = email
-            .value?.toString()
-            .toLowerCase()
-            .match(
-              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            ) ? true : false;
 
-          email.isValid = email.value?.toString().length > 0 && isValidEmail ? true : false;
-
-          return email.isValid;
+          return validators.IsValidEmail(email);
         },
         "type": "email",
         "cssClass": "w-full pl-3 pr-10 py-2 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300",
@@ -52,7 +47,8 @@ export const useLoginView = () => {
         "isValid": true,
         "isValidIf": (): boolean => {
           const password: IElement = GetElement("password");
-          return password.value?.toString().length > 7 ? true : false;
+          
+          return validators.IsMinimunCharacterLength(password, 7);
         },
         "type": "password",
         "cssClass": "w-full pl-3 pr-10 py-2 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300",
@@ -65,11 +61,11 @@ export const useLoginView = () => {
     return LoginView.elements;
   }
   const GetElement = (key: string): IElement => {
-    const element: IElement[] = GetElements().find((e: IElement) => {
-      if (e.id === key) return e;
-    }) as unknown as IElement[];
+    const element: IElement = GetElements().find((e: IElement) => {
+      if (e.id === key) return e as IElement;
+    }) as unknown as IElement;
 
-    return element[0];
+    return element;
   }
   return {
     useLoginView,

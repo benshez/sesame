@@ -26,12 +26,12 @@ export const useValidators = () => {
     return true;
   }
 
-  const HasTwoCharacters = (element: IElement): boolean => {
+  const IsMinimunCharacterLength = (element: IElement, count: number = 2): boolean => {
     const isEmpty = IsEmpty(element);
 
     if (isEmpty) return false;
 
-    return element.value.length >= 2;
+    return element.value.length >= count;
   }
 
   const IsString = (element: IElement): boolean => {
@@ -44,10 +44,32 @@ export const useValidators = () => {
     return (!isArray(element.value) && IsObjectLike(element.value) && BaseGetTag(element.value) == stringTag);
   }
 
+  const IsValidEmail = (element: IElement): boolean => {
+    const isEmpty = IsEmpty(element);
+
+    if (isEmpty) return false;
+
+    return element.value
+      ?.toString()
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      ) ? true : false;
+  }
+
+  const MatchesValue = (element: IElement, matchedElement: IElement): boolean => {
+    const isEmpty = IsEmpty(element);
+    const isMatchedElement = IsEmpty(matchedElement);
+
+    if (isEmpty || isMatchedElement) return false;
+
+    return element.value === matchedElement.value;
+  }
+
   const IsValidCountry = async (element: IElement): Promise<boolean> => {
     const isEmpty = IsEmpty(element);
     const isString = IsString(element);
-    const hasTwoCharacters = HasTwoCharacters(element);
+    const hasTwoCharacters = IsMinimunCharacterLength(element);
 
     if (isEmpty || !isString || !hasTwoCharacters) return false;
 
@@ -67,7 +89,9 @@ export const useValidators = () => {
   return {
     IsEmpty,
     IsString,
-    HasTwoCharacters,
+    IsMinimunCharacterLength,
+    IsValidEmail,
+    MatchesValue,
     IsValidCountry
   }
 }
