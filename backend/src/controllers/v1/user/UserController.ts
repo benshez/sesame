@@ -5,7 +5,7 @@ import UserRoles from "supertokens-node/recipe/userroles";
 import EmailPassword from "supertokens-node/recipe/emailpassword";
 import Session from "supertokens-node/recipe/session";
 import UserMetadata from "supertokens-node/recipe/usermetadata";
-import { BaseController } from "../../../core";
+import { BaseController } from "../../../core/routing";
 
 export class UserController extends BaseController {
   public Id: string = "UserController";

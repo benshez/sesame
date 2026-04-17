@@ -1,12 +1,5 @@
-import { UserRoutes, EmailRoutes, SessionRoutes, LookupRoutes } from "../routes/v1";
-
-export interface IRouteMapRoute {
-  version: number,
-  routes: object
-}
-interface IRouteMap {
-  router: Array<IRouteMapRoute>
-}
+import { UserRoutes, EmailRoutes, SessionRoutes, LookupRoutes } from "../../routes/v1";
+import { IRouteMap } from "./";
 
 export const RouteRegistry: IRouteMap = {
   "router": [

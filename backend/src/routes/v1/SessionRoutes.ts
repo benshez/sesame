@@ -1,5 +1,5 @@
 import { verifySession } from "supertokens-node/recipe/session/framework/express";
-import { BaseRoute } from "../../core";
+import { BaseRoute } from "../../core/routing";
 import { SessionController } from "../../controllers";
 
 class SessionRoutes extends BaseRoute<SessionController> {

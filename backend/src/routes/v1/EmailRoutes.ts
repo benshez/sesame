@@ -1,4 +1,4 @@
-import { BaseRoute } from "../../core";
+import { BaseRoute } from "../../core/routing";
 import { verifySession } from "supertokens-node/recipe/session/framework/express";
 import { EmailController } from "../../controllers";
 

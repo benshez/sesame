@@ -8,7 +8,7 @@ import { SuperTokensConfig } from "./src/config/config";
 //import Multitenancy from "supertokens-node/recipe/multitenancy";
 import { useBackendConfig } from "./src/config/useBackendConfig";
 //import { EmailRoutes, SessionRoutes, LookupRoutes } from "./src/routes";
-import { RouteLoader } from "./src/core";
+import { RouteLoader } from "./src/core/routing";
 
 supertokens.init(SuperTokensConfig);
 

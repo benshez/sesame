@@ -1,4 +1,4 @@
-import { BaseRoute } from "../../core"
+import { BaseRoute } from "../../core/routing"
 import { LookupController } from "../../controllers";
 
 class LookupRoutes extends BaseRoute<LookupController> {

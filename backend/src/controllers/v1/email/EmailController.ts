@@ -2,7 +2,7 @@ import EmailVerification from "supertokens-node/recipe/emailverification";
 import { SessionRequest } from "supertokens-node/framework/express";
 import { Response } from "express-serve-static-core";
 import supertokens from "supertokens-node";
-import { BaseController } from "../../../core";
+import { BaseController } from "../../../core/routing";
 
 export class EmailController extends BaseController {
   public Id: string = "EmailController";
