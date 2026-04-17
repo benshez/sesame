@@ -42,9 +42,14 @@ export const useBackendConfig = () => {
     return `${websiteUrl}:${websitePort}`;
   }
 
+  const GetSesameConnectionString = () => {
+    return process.env.PG_CONNECTION_STRING;
+  }
+
   return {
     GetSMTPConfig,
     GetApiDomain,
-    GetWebsiteDomain
+    GetWebsiteDomain,
+    GetSesameConnectionString
   }
 }

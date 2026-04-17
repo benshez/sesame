@@ -158,6 +158,7 @@ COMMENT ON TABLE Event_Ticket_Assignment IS 'Junction table: one attendee many e
 
 
 -- DROP TABLE IF EXISTS public.role_permissions;
+/*
 CREATE TABLE IF NOT EXISTS public.role_permissions
 (
     app_id character varying(64) COLLATE pg_catalog."default" NOT NULL DEFAULT 'public'::character varying,
@@ -168,6 +169,4 @@ CREATE TABLE IF NOT EXISTS public.role_permissions
         REFERENCES public.roles (app_id, role) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE CASCADE
-)
-
-TABLESPACE pg_default;
+)*/

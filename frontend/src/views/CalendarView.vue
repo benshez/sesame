@@ -254,8 +254,6 @@ const calendarOptions = reactive({
 
 
 onMounted(() => {
-  /* @ts-ignore */
-  const myDto = DateTime.local();
   events.value = [
     {
       id: '1',

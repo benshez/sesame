@@ -1,5 +1,5 @@
-import { BaseRoute } from "../../core/routing"
-import { LookupController } from "../../controllers";
+import { BaseRoute } from "../../../core/routing"
+import { LookupController } from "../../../controllers/v1";
 
 class LookupRoutes extends BaseRoute<LookupController> {
   public baseUri = "v1/lookup";

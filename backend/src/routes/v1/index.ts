@@ -1,8 +1,15 @@
-import UserRoutes from "./UserRoutes";
-import EmailRoutes from "./EmailRoutes";
-import SessionRoutes from "./SessionRoutes";
-import LookupRoutes from "./LookupRoutes";
+import UserRoutes from "./user/UserRoutes";
+import EmailRoutes from "./email/EmailRoutes";
+import SessionRoutes from "./session/SessionRoutes";
+import LookupRoutes from "./lookup/LookupRoutes";
+import TenantRoutes from "./tenant/TenantRoutes";
+import CalendarRoutes from "./calendar/CalendarRoutes";
 
-export { UserRoutes, EmailRoutes, SessionRoutes, LookupRoutes };
-
-
+export { 
+  UserRoutes, 
+  EmailRoutes, 
+  SessionRoutes,
+  LookupRoutes, 
+  TenantRoutes, 
+  CalendarRoutes 
+};

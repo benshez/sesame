@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { verifySession } from "supertokens-node/recipe/session/framework/express";
-import { BaseRoute } from "../../core/routing";
-import { UserController } from "../../controllers";
+import { BaseRoute } from "../../../core/routing";
+import { UserController } from "../../../controllers/v1";
 
 class UserRoutes extends BaseRoute<UserController> {
   public baseUri = "v1/users";
@@ -51,5 +51,3 @@ class UserRoutes extends BaseRoute<UserController> {
 }
 
 export default UserRoutes;
-
-//export default new UserRoutes().router;

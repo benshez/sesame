@@ -44,17 +44,10 @@ app.get("/hello", async (_req, res) => {
 
 const Loader = new RouteLoader(app);
 Loader.Load();
-// app
-//   .use("/session", SessionRoutes)
-//   //.use("/users", UserRoutes)
-//   .use("/emails", EmailRoutes)
-//   .use("/lookup", LookupRoutes);
-
 
 // In case of session related errors, this error handler
 // returns 401 to the client.
 app.use(errorHandler());
-
 
 app.listen(3001, () => {
   console.log(`API Server listening on port ${useBackendConfig().GetApiDomain()} || 3001`);

@@ -1,4 +1,11 @@
-import { UserRoutes, EmailRoutes, SessionRoutes, LookupRoutes } from "../../routes/v1";
+import { 
+  UserRoutes, 
+  EmailRoutes, 
+  SessionRoutes, 
+  LookupRoutes, 
+  TenantRoutes, 
+  CalendarRoutes 
+} from "../../routes/v1";
 import { IRouteMap } from "./";
 
 export const RouteRegistry: IRouteMap = {
@@ -17,6 +24,12 @@ export const RouteRegistry: IRouteMap = {
         },
         "lookup": () => {
           return new LookupRoutes()
+        },
+        "tenants": () => {
+          return new TenantRoutes()
+        },
+        "calendar": () => {
+          return new CalendarRoutes()
         }
       }
     }
