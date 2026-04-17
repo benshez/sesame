@@ -4,7 +4,7 @@ export class ApiClient extends HttpClient {
 
   constructor() {
     const apiPort = import.meta.env.VUE_APP_API_PORT || 3001;
-    const apiDomain: string = import.meta.env.VUE_APP_API_URL || `http://localhost:${apiPort}`;
+    const apiDomain: string = import.meta.env.VUE_APP_API_URL || `http://localhost:${apiPort}/api/v1`;
 
     super({
       baseURL: apiDomain,

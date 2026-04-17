@@ -1,7 +1,10 @@
 import { SessionRequest } from "supertokens-node/framework/express";
 import { Response } from "express-serve-static-core";
+import { BaseController } from "../../../core";
 
-export class LookupController {
+export class LookupController extends BaseController {
+  public Id: string = "LookupController";
+
     GetCountries = async (req: SessionRequest, res: Response) => {
     try {
       //const session = req.session;

@@ -1,16 +1,14 @@
-import { Router } from "express";
+import { BaseRoute } from "../../core"
 import { LookupController } from "../../controllers";
 
-
-class LookupRoutes {
-  router = Router();
-  controller = new LookupController();
+class LookupRoutes extends BaseRoute<LookupController> {
+  public baseUri = "v1/lookup";
 
   constructor() {
-    this.InitializeRoutes();
+    super(new LookupController());
   }
 
-  InitializeRoutes() {
+  protected RegisterRoutes(): void {
     this
     .router
     .get("/get-countries", async (req, res) => {
@@ -19,4 +17,4 @@ class LookupRoutes {
   }
 }
 
-export default new LookupRoutes().router;
+export default LookupRoutes;

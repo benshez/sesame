@@ -1,0 +1,29 @@
+{
+  "rules": {
+    "@typescript-eslint/no-this-alias": [
+      "error",
+      {
+        "allowDestructuring": true,
+        "allowedNames": [
+          "self"
+        ]
+      }
+    ],
+    "@typescript-eslint/no-empty-function": [
+      "error",
+      {
+        "allow": [
+          "functions",
+          "getters",
+          "setters",
+          "arrowFunctions",
+          "methods",
+          "constructors"
+        ]
+      }
+    ],
+    "prefer-spread": [
+      "off"
+    ]
+  }
+}

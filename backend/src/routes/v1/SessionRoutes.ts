@@ -1,17 +1,15 @@
-import { Router } from "express";
 import { verifySession } from "supertokens-node/recipe/session/framework/express";
+import { BaseRoute } from "../../core";
 import { SessionController } from "../../controllers";
 
-
-class SessionRoutes {
-  router = Router();
-  controller = new SessionController();
+class SessionRoutes extends BaseRoute<SessionController> {
+  public baseUri = "v1/session";
 
   constructor() {
-    this.InitializeRoutes();
+    super(new SessionController());
   }
 
-  InitializeRoutes() {
+  protected RegisterRoutes(): void {
     this
     .router
     .get("/info", verifySession(), async (req, res) => {
@@ -20,4 +18,4 @@ class SessionRoutes {
   }  
 }
 
-export default new SessionRoutes().router;
+export default SessionRoutes;

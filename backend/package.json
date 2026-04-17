@@ -20,8 +20,7 @@
     "@databases/pg": "^5.5.0",
     "cors": "^2.8.5",
     "express": "^4.21.2",
-    "supertokens-node": "latest",
-    "express-version-route": "^1.2.4"
+    "supertokens-node": "latest"
   },
   "devDependencies": {
     "@databases/pg-migrations": "^5.0.3",
@@ -36,7 +35,7 @@
     "eslint": "^9.16.0",
     "globals": "^15.13.0",
     "typescript-eslint": "^8.18.0",
-    "vite-node": "^2.1.8"
+    "vite-node": "^6.0.0"
   },
   "keywords": [],
   "author": "",

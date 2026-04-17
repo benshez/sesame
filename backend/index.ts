@@ -7,7 +7,8 @@ import { middleware, errorHandler } from "supertokens-node/framework/express";
 import { SuperTokensConfig } from "./src/config/config";
 //import Multitenancy from "supertokens-node/recipe/multitenancy";
 import { useBackendConfig } from "./src/config/useBackendConfig";
-import { UserRoutes, EmailRoutes, SessionRoutes, LookupRoutes } from "./src/routes";
+//import { EmailRoutes, SessionRoutes, LookupRoutes } from "./src/routes";
+import { RouteLoader } from "./src/core";
 
 supertokens.init(SuperTokensConfig);
 
@@ -41,11 +42,13 @@ app.get("/hello", async (_req, res) => {
 //   res.send(tenants);
 // });
 
-app
-  .use("/session", SessionRoutes)
-  .use("/users", UserRoutes)
-  .use("/emails", EmailRoutes)
-  .use("/lookup", LookupRoutes);
+const Loader = new RouteLoader(app);
+Loader.Load();
+// app
+//   .use("/session", SessionRoutes)
+//   //.use("/users", UserRoutes)
+//   .use("/emails", EmailRoutes)
+//   .use("/lookup", LookupRoutes);
 
 
 // In case of session related errors, this error handler

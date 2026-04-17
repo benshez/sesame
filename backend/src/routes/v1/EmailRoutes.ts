@@ -1,17 +1,15 @@
-import { Router } from "express";
+import { BaseRoute } from "../../core";
 import { verifySession } from "supertokens-node/recipe/session/framework/express";
 import { EmailController } from "../../controllers";
 
-
-class EmailRoutes {
-  router = Router();
-  controller = new EmailController();
+class EmailRoutes extends BaseRoute<EmailController> {
+  public baseUri = "v1/email";
 
   constructor() {
-    this.InitializeRoutes();
+    super(new EmailController());
   }
 
-  InitializeRoutes() {
+  protected RegisterRoutes(): void {
     this
     .router
     .post("/send-verification-email", verifySession(), async (req, res) => {
@@ -32,4 +30,4 @@ class EmailRoutes {
   }  
 }
 
-export default new EmailRoutes().router;
+export default EmailRoutes;

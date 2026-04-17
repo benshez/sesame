@@ -5,8 +5,10 @@ import UserRoles from "supertokens-node/recipe/userroles";
 import EmailPassword from "supertokens-node/recipe/emailpassword";
 import Session from "supertokens-node/recipe/session";
 import UserMetadata from "supertokens-node/recipe/usermetadata";
+import { BaseController } from "../../../core";
 
-export class UserController {
+export class UserController extends BaseController {
+  public Id: string = "UserController";
 
   GetUserInfo = async (req: SessionRequest, res: Response) => {
     try {

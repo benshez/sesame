@@ -1,7 +1,9 @@
 import { SessionRequest } from "supertokens-node/framework/express";
 import { Response } from "express-serve-static-core";
+import { BaseController } from "../../../core";
 
-export class SessionController {
+export class SessionController extends BaseController {
+  public Id: string = "SessionController";
 
   GetSessionInfo = async (req: SessionRequest, res: Response) => {
     try {

@@ -2,8 +2,10 @@ import EmailVerification from "supertokens-node/recipe/emailverification";
 import { SessionRequest } from "supertokens-node/framework/express";
 import { Response } from "express-serve-static-core";
 import supertokens from "supertokens-node";
+import { BaseController } from "../../../core";
 
-export class EmailController {
+export class EmailController extends BaseController {
+  public Id: string = "EmailController";
 
   SendVerificationEmail = async (req: SessionRequest, res: Response) => {
     try {
