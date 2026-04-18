@@ -15,7 +15,7 @@ services:
       - -c
       - ssl=off      
     ports:
-      - 5435:5435
+      - ${PGPORT}:${PGPORT}
     networks:
       - sesame-network
     extra_hosts:
