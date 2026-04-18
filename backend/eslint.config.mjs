@@ -7,7 +7,7 @@ export default [
     { files: ["**/*.{js,mjs,cjs,ts}"] },
     {
         languageOptions: { globals: globals.node },
-        basePath: "./src"
+        basePath: "src",
     },
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,

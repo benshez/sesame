@@ -21,14 +21,17 @@ export class CalendarController extends BaseController {
   }
 
   CreateCalenderItem = async (req: SessionRequest, res: Response) => {
-
+    const session = req.session;
+    res.send(session);
   }
 
   UpdateCalenderItem = async (req: SessionRequest, res: Response) => {
-
+    const session = req.session;
+    res.send(session);
   }
 
   DeleteCalenderItem = async (req: SessionRequest, res: Response) => {
-
+    const session = req.session;
+    res.send(session);
   }
 }

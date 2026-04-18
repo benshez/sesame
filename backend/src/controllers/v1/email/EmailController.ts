@@ -38,7 +38,6 @@ export class EmailController extends BaseController {
             .send(verifiedRes);
         }
       }
-
     } catch (err) {
       console.log("Error verifying email: ", err);
       throw err;

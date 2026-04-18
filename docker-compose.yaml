@@ -68,7 +68,7 @@ services:
     ports:
       - 3567:3567
     environment:
-      POSTGRESQL_CONNECTION_URI: "postgresql://sesame_supertokens_user:B3nSh3z*@sesame-db:5435/supertokens"
+      POSTGRESQL_CONNECTION_URI: ""
     networks:
       - sesame-network
     restart: unless-stopped
@@ -80,11 +80,11 @@ services:
       retries: 5
 
   sesame-pgadmin:
-    image: dpage/pgadmin4:9.13
+    image: dpage/pgadmin4:9.14
     container_name: sesame-pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: benshez1@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: B3nSh3z*
+      PGADMIN_DEFAULT_EMAIL: 
+      PGADMIN_DEFAULT_PASSWORD: 
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     ports:
       - "5050:80"

@@ -5,8 +5,6 @@
     "outDir": "./dist",
     "rootDir": "./",
     "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "ignoreDeprecations": "6.0",
     "resolveJsonModule": true,
@@ -14,43 +12,51 @@
       "node"
     ],
     "noEmitOnError": true,
+    "lib": ["esnext", "dom"],
     "module": "ESNext",
     /* Source Map Options */
     "sourceMap": true,
     /* Module Resolution Options */
-    "moduleResolution": "node",
-    "baseUrl": "./src",
+    "baseUrl": "src",
     "paths": {
-      "@/*": [
-        "*"
+      "@/*": ["*"],
+      "@models/*": ["models/*"],
+      "@routes/*": [
+        "routes/*"
       ],
-      "@/models/*": [
-        "models/*"
-      ],
-      "@/routes/*": [
-        "src/routes/*"
-      ],
-      "@/modelTypes/*": [
+      "@modelTypes/*": [
         "model_types/*"
       ],
-      "@/controllers/*": [
+      "@controllers/*": [
         "controllers/*"
       ],
-      "@/utilities/*": [
+      "@utilities/*": [
         "utilities/*"
       ],
+      "@core/*": [
+        "core/*"
+      ],
     },
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    
     /* Additional Checks */
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types"
+    ]
   },
   "include": [
     "**/*.d.ts",
     "**/*.ts",
     "src/config/useBackendConfig.ts",
-    "env.d.ts"
+    "env.d.ts",
+    "src/**/*"
   ],
   "exclude": [
     "node_modules"

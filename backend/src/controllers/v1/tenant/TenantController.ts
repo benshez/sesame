@@ -8,7 +8,8 @@ export class TenantController extends BaseController {
 
   GetTenants = async (req: SessionRequest, res: Response) => {
     try {
-      const tenants = await Multitenancy.listAllTenants();
+      const session = req.session;
+      const tenants = await Multitenancy.listAllTenants(session?.getUserId);
       res.send(tenants);
     } catch (error) {
       console.log("Error fetching tenant info: ", error);
