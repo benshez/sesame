@@ -2,11 +2,13 @@ services:
 
   sesame-db:
     image: "postgres:latest"
+    env_file:
+      - ./backend/environment/.env.development    
     container_name: sesame-db
     environment:
-      POSTGRES_USER: sesame_supertokens_user 
-      POSTGRES_PASSWORD: B3nSh3z* 
-      POSTGRES_DB: supertokens
+      POSTGRES_USER: ${POSTGRES_USER} 
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
       PGPORT: 5435
     command:
       - postgres
@@ -61,6 +63,8 @@ services:
 
   sesame-supertokens:
     image: registry.supertokens.io/supertokens/supertokens-postgresql:latest
+    env_file:
+      - ./backend/environment/.env.development
     container_name: sesame-supertokens
     depends_on:
       sesame-db:
@@ -68,7 +72,7 @@ services:
     ports:
       - 3567:3567
     environment:
-      POSTGRESQL_CONNECTION_URI: ""
+      POSTGRESQL_CONNECTION_URI: ${PG_CONNECTION_STRING_SUPER_TOKENS}
     networks:
       - sesame-network
     restart: unless-stopped
@@ -81,10 +85,12 @@ services:
 
   sesame-pgadmin:
     image: dpage/pgadmin4:9.14
+    env_file:
+      - ./backend/environment/.env.development    
     container_name: sesame-pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: 
-      PGADMIN_DEFAULT_PASSWORD: 
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     ports:
       - "5050:80"
