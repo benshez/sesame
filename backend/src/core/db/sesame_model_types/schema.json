@@ -109,60 +109,13 @@
         "hasDefault": false,
         "typeId": 1043,
         "typeName": "VARCHAR"
-      }
-    ]
-  },
-  {
-    "name": "employee",
-    "columns": [
+      },
       {
-        "name": "email",
+        "name": "tenant_id",
         "isNullable": false,
-        "hasDefault": false,
+        "hasDefault": true,
         "typeId": 1043,
         "typeName": "VARCHAR"
-      },
-      {
-        "name": "employee_id",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      },
-      {
-        "name": "first_name",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 1043,
-        "typeName": "VARCHAR"
-      },
-      {
-        "name": "job_title",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 1043,
-        "typeName": "VARCHAR"
-      },
-      {
-        "name": "last_name",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 1043,
-        "typeName": "VARCHAR"
-      },
-      {
-        "name": "organization_id",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      },
-      {
-        "name": "role_id",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
       }
     ]
   },
@@ -240,6 +193,13 @@
         "typeName": "VARCHAR"
       },
       {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
         "name": "total_expenditure",
         "isNullable": true,
         "hasDefault": false,
@@ -247,58 +207,18 @@
         "typeName": "MONEY"
       },
       {
-        "name": "venue_id",
+        "name": "user_id",
         "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      }
-    ]
-  },
-  {
-    "name": "event_employee",
-    "columns": [
-      {
-        "name": "deadline",
-        "isNullable": true,
-        "hasDefault": false,
-        "typeId": 1082,
-        "typeName": "DATE"
-      },
-      {
-        "name": "employee_id",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      },
-      {
-        "name": "event_id",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      },
-      {
-        "name": "start_date",
-        "isNullable": true,
-        "hasDefault": false,
-        "typeId": 1082,
-        "typeName": "DATE"
-      },
-      {
-        "name": "task",
-        "isNullable": true,
         "hasDefault": false,
         "typeId": 1043,
         "typeName": "VARCHAR"
       },
       {
-        "name": "task_completed",
-        "isNullable": true,
+        "name": "venue_id",
+        "isNullable": false,
         "hasDefault": false,
-        "typeId": 1560,
-        "typeName": "BIT"
+        "typeId": 23,
+        "typeName": "INTEGER"
       }
     ]
   },
@@ -431,6 +351,13 @@
         "hasDefault": false,
         "typeId": 1043,
         "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
       }
     ]
   },
@@ -471,6 +398,13 @@
         "hasDefault": false,
         "typeId": 1043,
         "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
       }
     ]
   },
@@ -504,23 +438,11 @@
         "hasDefault": false,
         "typeId": 1043,
         "typeName": "VARCHAR"
-      }
-    ]
-  },
-  {
-    "name": "roles",
-    "columns": [
-      {
-        "name": "role_id",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
       },
       {
-        "name": "role_name",
+        "name": "tenant_id",
         "isNullable": false,
-        "hasDefault": false,
+        "hasDefault": true,
         "typeId": 1043,
         "typeName": "VARCHAR"
       }
@@ -575,6 +497,13 @@
         "name": "state",
         "isNullable": true,
         "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
         "typeId": 1043,
         "typeName": "VARCHAR"
       },
