@@ -8,7 +8,7 @@ export const useDatabase = () => {
   const config = useBackendConfig();
   const dsn = new URL(config.GetSesameConnectionString()?.toString() || "");
   const db = createConnectionPool(dsn.href);
-  const { organization, event_type, venue, event } = tables<DatabaseSchema>({
+  const { organization, event_type, venue, event, country } = tables<DatabaseSchema>({
 
     //databaseSchema: () => import("../sesame_model_types/schema.json"),
   });
@@ -19,6 +19,7 @@ export const useDatabase = () => {
     organization,
     event_type,
     venue,
-    event
+    event,
+    country
   }
 }

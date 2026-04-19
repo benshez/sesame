@@ -127,6 +127,39 @@
     ]
   },
   {
+    "name": "country",
+    "columns": [
+      {
+        "name": "active",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
+        "name": "country_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "description",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
     "name": "event",
     "columns": [
       {

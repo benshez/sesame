@@ -1,4 +1,2 @@
-/*INSERT INTO Roles (role_name) 
-VALUES ('Admin'),
-    ('Manager'),
-    ('Employee');*/
+INSERT INTO Country (country_id, tenant_id, description, active) 
+VALUES ('RSA', 'public','South Africa', true);

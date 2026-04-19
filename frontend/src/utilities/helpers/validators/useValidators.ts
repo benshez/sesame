@@ -61,7 +61,7 @@ export const useValidators = () => {
     const isEmpty = IsEmpty(element);
     const isMatchedElement = IsEmpty(matchedElement);
 
-    if (isEmpty || isMatchedElement) return false;
+    if (isEmpty || !isMatchedElement) return false;
 
     return element.value === matchedElement.value;
   }
@@ -69,9 +69,9 @@ export const useValidators = () => {
   const IsValidCountry = async (element: IElement): Promise<boolean> => {
     const isEmpty = IsEmpty(element);
     const isString = IsString(element);
-    const hasTwoCharacters = IsMinimunCharacterLength(element);
+    const hasMinimumTwoCharacters = IsMinimunCharacterLength(element);
 
-    if (isEmpty || !isString || !hasTwoCharacters) return false;
+    if (isEmpty || !hasMinimumTwoCharacters) return false;
 
     let found = false;
 
@@ -79,8 +79,8 @@ export const useValidators = () => {
       .lookup()
       .countries() as unknown as [];
 
-    data.forEach((place) => {
-      if (place === element.value) found = true;
+    data.forEach((place: any) => {
+      if (place.description === element.value) found = true;
     })
 
     return found;

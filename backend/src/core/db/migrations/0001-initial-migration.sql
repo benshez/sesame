@@ -1,4 +1,4 @@
---DROP TABLE Event_Type, Organization, Venue, Event, Attendee, Event_Tickets, Partner, Event_Partner, Event_Ticket_Assignment; 
+--DROP TABLE Event_Type, Organization, Venue, Event, Attendee, Event_Tickets, Partner, Event_Partner, Event_Ticket_Assignment, Country; 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE Event_Type 
@@ -162,4 +162,21 @@ CREATE TABLE Event_Ticket_Assignment
 		FOREIGN KEY (event_id) REFERENCES Event(event_id)
 );
 COMMENT ON TABLE Event_Ticket_Assignment IS 'Junction table: one attendee many events, one event many attendees';	
+
+
+--DROP TABLE Country;
+CREATE TABLE Country 
+(
+	  country_id character varying(64) COLLATE pg_catalog."default" NOT NULL DEFAULT 'public'::character varying,
+		tenant_id character varying(64) COLLATE pg_catalog."default" NOT NULL DEFAULT 'public'::character varying,
+	  description VARCHAR(50) NOT NULL,
+		active boolean NOT NULL  
+);
+CREATE INDEX IF NOT EXISTS Country_tenant_id_index
+    ON public.Country USING btree
+    (tenant_id COLLATE pg_catalog."default" ASC NULLS LAST)
+    WITH (fillfactor=100, deduplicate_items=True)
+    TABLESPACE pg_default;
+
+COMMENT ON TABLE Venue IS 'Table to store information about countries';
 
