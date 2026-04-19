@@ -50,4 +50,10 @@ export class ApiClient extends HttpClient {
       countries: () => this.get("/lookup/get-countries", this.getHeader("Authorization"))
     }
   }
+
+  events = () => {
+    return {
+      getEvents: () => this.get("/event/get-events", this.getHeader("Authorization"))
+    }
+  }
 }

@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, onBeforeMount } from "vue";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -99,7 +99,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { DateTime } from "ts-luxon";
 import Modal from "@/components/profile/Modal.vue";
 import BaseLayout from "@/layouts/BaseLayout.vue";
-
+import { ApiClient } from "@/plugins";
 
 interface IEvent {
   id: string,
@@ -275,6 +275,19 @@ onMounted(() => {
       extendedProps: { calendar: 'Primary' },
     },
   ]
+
+
 })
+
+onBeforeMount(async () => {
+  const apiClient = new ApiClient();
+
+    const eve = await apiClient
+        //.setBearerAuth()
+        .events()
+        .getEvents();
+
+        console.log(eve)
+});
 
 </script>

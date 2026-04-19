@@ -46,10 +46,31 @@ export const useBackendConfig = () => {
     return process.env.PG_CONNECTION_STRING;
   }
 
+  const GetDbUser = () => {
+    return process.env.POSTGRES_SESAME_USER;
+  }
+
+  const GetDbUserPassword = () => {
+    return process.env.POSTGRES_SESAME_PASSWORD;
+  }
+
+  const GetDbName = () => {
+    return process.env.POSTGRES_SESAME_DB;
+  }
+
+  const GetDbHost = () => {
+    return process.env.POSTGRES_SESAME_HOST;
+  }
+  
+
   return {
     GetSMTPConfig,
     GetApiDomain,
     GetWebsiteDomain,
-    GetSesameConnectionString
+    GetSesameConnectionString,
+    GetDbUser,
+    GetDbUserPassword,
+    GetDbName,
+    GetDbHost
   }
 }

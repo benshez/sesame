@@ -5,7 +5,7 @@ import { BaseController } from "../../../core/routing";
 export class LookupController extends BaseController {
   public Id: string = "LookupController";
 
-    GetCountries = async (req: SessionRequest, res: Response) => {
+  GetCountries = async (req: SessionRequest, res: Response) => {
     try {
       //const session = req.session;
       const countries = ["Australia", "South Africa"];

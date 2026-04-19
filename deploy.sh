@@ -1,0 +1,1 @@
+ docker-compose --env-file ./backend/environment/.env.development down &&  docker-compose --env-file ./backend/environment/.env.development rm -f &&  docker-compose --env-file ./backend/environment/.env.development pull &&  docker-compose --env-file ./backend/environment/.env.development up -d
