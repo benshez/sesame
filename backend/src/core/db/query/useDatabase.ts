@@ -6,7 +6,7 @@ import { useBackendConfig } from "../../../config/useBackendConfig";
 
 export const useDatabase = () => {
   const config = useBackendConfig();
-  const dsn = new URL(config.GetSesameConnectionString());
+  const dsn = new URL(config.GetSesameConnectionString()?.toString() || "");
   const db = createConnectionPool(dsn.href);
   const { organization, event_type, venue, event } = tables<DatabaseSchema>({
 

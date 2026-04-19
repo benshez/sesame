@@ -1,3 +1,4 @@
+import { verifySession } from "supertokens-node/recipe/session/framework/express";
 import { BaseRoute } from "../../../core/routing"
 import { EventController } from "../../../controllers/v1";
 
@@ -11,7 +12,7 @@ class EventRoutes extends BaseRoute<EventController> {
   protected RegisterRoutes(): void {
     this
       .router
-      .get("/get-events", async (req, res) => {
+      .get("/get-events",verifySession(), async (req, res) => {
         return await this.controller.GetEvents(req, res);
       });
   }

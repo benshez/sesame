@@ -19,6 +19,14 @@ CREATE TABLE Organization
 	  email character varying(256) COLLATE pg_catalog."default" NOT NULL,
 	  phone VARCHAR(25) NULL
 );
+-- DROP INDEX IF EXISTS public.Organization_tenant_id_index;
+
+CREATE INDEX IF NOT EXISTS Organization_tenant_id_index
+    ON public.Organization USING btree
+    (tenant_id COLLATE pg_catalog."default" ASC NULLS LAST)
+    WITH (fillfactor=100, deduplicate_items=True)
+    TABLESPACE pg_default;
+
 COMMENT ON TABLE Organization IS 'Table to store information about organizations';
 
 --DROP TABLE Venue;
@@ -33,6 +41,13 @@ CREATE TABLE Venue
 	  postal_code VARCHAR(15) NULL, 
 	  country VARCHAR(30) NULL
 );
+
+CREATE INDEX IF NOT EXISTS Venue_tenant_id_index
+    ON public.Venue USING btree
+    (tenant_id COLLATE pg_catalog."default" ASC NULLS LAST)
+    WITH (fillfactor=100, deduplicate_items=True)
+    TABLESPACE pg_default;
+
 COMMENT ON TABLE Venue IS 'Table to store information about venues';
 
 --DROP TABLE Event;
@@ -56,6 +71,13 @@ CREATE TABLE Event
 	  FOREIGN KEY (organization_id) REFERENCES Organization(organization_id),
 	  FOREIGN KEY (venue_id) REFERENCES Venue(venue_id)
 );
+
+CREATE INDEX IF NOT EXISTS Event_tenant_id_index
+    ON public.Event USING btree
+    (tenant_id COLLATE pg_catalog."default" ASC NULLS LAST)
+    WITH (fillfactor=100, deduplicate_items=True)
+    TABLESPACE pg_default;
+
 COMMENT ON TABLE Event IS 'Table to store information about events';
 
 
@@ -72,6 +94,13 @@ CREATE TABLE Attendee
 	  email VARCHAR(50) NOT NULL,
 	  phone VARCHAR(25) NULL
 );
+
+CREATE INDEX IF NOT EXISTS Attendee_tenant_id_index
+    ON public.Attendee USING btree
+    (tenant_id COLLATE pg_catalog."default" ASC NULLS LAST)
+    WITH (fillfactor=100, deduplicate_items=True)
+    TABLESPACE pg_default;
+
 COMMENT ON TABLE Attendee IS 'Table to store information about attendees';
 
 --DROP TABLE Event_Tickets; 

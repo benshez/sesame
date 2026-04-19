@@ -10,8 +10,20 @@ export class EventController extends BaseController {
 
   GetEvents = async (req: SessionRequest, res: Response) => {
     try {
-      const events = await database.event(database.db).find().all();
-      res.send(events);
+      const session = req.session;
+      const tenantId = session!.getTenantId();
+      const userId = session!.getUserId();
+
+      const events = await database
+        .event(database.db)
+        .find(
+          {
+            tenant_id: tenantId,
+            user_id: userId
+          })
+        .all();
+
+      res.json(events);
     } catch (error) {
       console.log("Error fetching event info: ", error);
       throw error;
