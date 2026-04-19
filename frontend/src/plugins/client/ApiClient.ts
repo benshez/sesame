@@ -53,7 +53,7 @@ export class ApiClient extends HttpClient {
 
   events = () => {
     return {
-      getEvents: () => this.get("/event/get-events", this.getHeader("Authorization"))
+      getActiveEventsByTenantIdAndUserId: () => this.get("/event/get-active-user-events", this.getHeader("Authorization"))
     }
   }
 }

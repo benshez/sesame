@@ -285,7 +285,7 @@ onBeforeMount(async () => {
     const eve = await apiClient
         //.setBearerAuth()
         .events()
-        .getEvents();
+        .getActiveEventsByTenantIdAndUserId();
 
         console.log(eve)
 });

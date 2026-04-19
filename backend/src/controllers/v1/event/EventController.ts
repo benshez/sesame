@@ -8,7 +8,7 @@ const database = useDatabase();
 export class EventController extends BaseController {
   public Id: string = "EventController";
 
-  GetEvents = async (req: SessionRequest, res: Response) => {
+  GetActiveEventsByTenantIdAndUserId = async (req: SessionRequest, res: Response) => {
     try {
       const session = req.session;
       const tenantId = session!.getTenantId();
@@ -19,7 +19,8 @@ export class EventController extends BaseController {
         .find(
           {
             tenant_id: tenantId,
-            user_id: userId
+            user_id: userId,
+            active: true
           })
         .all();
 

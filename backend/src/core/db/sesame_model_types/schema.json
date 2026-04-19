@@ -76,6 +76,13 @@
     "name": "attendee",
     "columns": [
       {
+        "name": "active",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
         "name": "attendee_id",
         "isNullable": false,
         "hasDefault": false,
@@ -122,6 +129,13 @@
   {
     "name": "event",
     "columns": [
+      {
+        "name": "active",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
       {
         "name": "actual_attendance",
         "isNullable": true,
@@ -226,6 +240,13 @@
     "name": "event_partner",
     "columns": [
       {
+        "name": "active",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
         "name": "event_id",
         "isNullable": false,
         "hasDefault": false,
@@ -238,19 +259,19 @@
         "hasDefault": false,
         "typeId": 23,
         "typeName": "INTEGER"
-      },
-      {
-        "name": "role",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 1043,
-        "typeName": "VARCHAR"
       }
     ]
   },
   {
     "name": "event_ticket_assignment",
     "columns": [
+      {
+        "name": "active",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
       {
         "name": "attendee_id",
         "isNullable": true,
@@ -306,6 +327,13 @@
     "name": "event_tickets",
     "columns": [
       {
+        "name": "active",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
         "name": "event_id",
         "isNullable": false,
         "hasDefault": false,
@@ -339,6 +367,13 @@
     "name": "event_type",
     "columns": [
       {
+        "name": "active",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
         "name": "event_type_id",
         "isNullable": false,
         "hasDefault": false,
@@ -364,6 +399,13 @@
   {
     "name": "organization",
     "columns": [
+      {
+        "name": "active",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
       {
         "name": "contact_person",
         "isNullable": true,
@@ -412,6 +454,13 @@
     "name": "partner",
     "columns": [
       {
+        "name": "active",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
         "name": "email",
         "isNullable": false,
         "hasDefault": false,
@@ -451,6 +500,13 @@
   {
     "name": "venue",
     "columns": [
+      {
+        "name": "active",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
       {
         "name": "address_line",
         "isNullable": true,
