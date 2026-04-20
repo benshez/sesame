@@ -92,6 +92,8 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, onBeforeMount } from "vue";
+import { useRoute } from "vue-router";
+import Session from "supertokens-web-js/recipe/session";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -118,7 +120,7 @@ interface IEventInfo {
   startStr: string;
   endStr: string;
 }
-
+const route = useRoute();
 const calendarRef = ref(null)
 const isOpen = ref(false)
 const selectedEvent = ref<IEvent>();
@@ -281,13 +283,40 @@ onMounted(() => {
 
 onBeforeMount(async () => {
   const apiClient = new ApiClient();
+  const accessToken = await Session.getAccessTokenPayloadSecurely();
+  const userId = await Session.getUserId();
 
-    const eve = await apiClient
-        //.setBearerAuth()
-        .events()
-        .getActiveEventsByTenantIdAndUserId();
+  let Event = {
+    active: true,
+    actual_attendance: 2,
+    budget_estimated: "20",
+    description: "hello world",
+    end_date: DateTime.local().setZone("Australia/Brisbane").plus({ days: 2 }).toISO()?.split("T")[0],
+    estimated_attendance: 200,
+    //event_id: 1,
+    event_type_id: 2,
+    organization_id: 2,
+    start_date: DateTime.local().setZone("Australia/Brisbane").plus({ days: 1 }).toISO()?.split("T")[0],
+    status: "in progress",
+    /**
+     * @default 'public'::character varying
+     */
+    tenant_id: route.params.tenantId,
+    total_expenditure: "500",
+    user_id: userId,
+    venue_id: 1
+  }
+  // const eve = await apiClient
+  //   .setBearerAuth(accessToken)
+  //   .events()
+  //   .createTenenatAndUserEvent(Event);
+  const eve = await apiClient
+    .setBearerAuth(accessToken)
+    .events()
+    .getActiveEventsByTenantIdAndUserId()
 
-        console.log(eve)
+    events.value = []
+  console.log(eve)
 });
 
 </script>

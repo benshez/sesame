@@ -30,4 +30,19 @@ export class EventController extends BaseController {
       throw error;
     }
   }
+
+  CreateEventByTenenantAndUserId = async (req: SessionRequest, res: Response) => {
+    try {
+      const eventInfo = req.body.eventInfo;
+      const event = await database
+        .event(database.db)
+        .insert(eventInfo);
+
+      console.log(event)
+      res.json(event)
+    } catch (error) {
+      console.log("Error creating event info: ", error);
+      throw error;
+    }
+  }
 }

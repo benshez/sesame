@@ -12,8 +12,14 @@ class EventRoutes extends BaseRoute<EventController> {
   protected RegisterRoutes(): void {
     this
       .router
-      .get("/get-active-user-events",verifySession(), async (req, res) => {
+      .get("/get-active-user-events", verifySession(), async (req, res) => {
         return await this.controller.GetActiveEventsByTenantIdAndUserId(req, res);
+      });
+
+    this
+      .router
+      .post("/create-tenant-user-event", verifySession(), async (req, res) => {
+        return await this.controller.CreateEventByTenenantAndUserId(req, res);
       });
   }
 }
