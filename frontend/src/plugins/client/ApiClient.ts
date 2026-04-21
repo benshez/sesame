@@ -47,7 +47,11 @@ export class ApiClient extends HttpClient {
 
   lookup = () => {
     return {
-      countries: () => this.get("/lookup/get-countries", this.getHeader("Authorization"))
+      countries: () => this.get("/lookup/get-countries", this.getHeader("Authorization")),
+      eventTypes: () => this.get("/lookup/get-event-types", this.getHeader("Authorization")),
+      venues: () => this.get("/lookup/gget-venues", this.getHeader("Authorization")),
+      organizations: () => this.get("/lookup/get-organizations", this.getHeader("Authorization")),
+      eventStatuses: () => this.get("/lookup/get-statuses", this.getHeader("Authorization")),
     }
   }
 

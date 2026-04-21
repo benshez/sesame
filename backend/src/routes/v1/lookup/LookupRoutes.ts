@@ -11,10 +11,34 @@ class LookupRoutes extends BaseRoute<LookupController> {
 
   protected RegisterRoutes(): void {
     this
-    .router
-    .get("/get-countries", verifySession(), async (req, res) => {
-      return await this.controller.GetCountries(req, res);
-    });
+      .router
+      .get("/get-countries", verifySession(), async (req, res) => {
+        return await this.controller.GetCountries(req, res);
+      });
+
+    this
+      .router
+      .get("/get-event-types", verifySession(), async (req, res) => {
+        return await this.controller.GetEventTypes(req, res);
+      });
+
+    this
+      .router
+      .get("/get-venues", verifySession(), async (req, res) => {
+        return await this.controller.GetVenues(req, res);
+      });     
+      
+    this
+      .router
+      .get("/get-organizations", verifySession(), async (req, res) => {
+        return await this.controller.GetOrganizations(req, res);
+      });  
+      
+    this
+      .router
+      .get("/get-statuses", verifySession(), async (req, res) => {
+        return await this.controller.GetEventStatuses(req, res);
+      });       
   }
 }
 

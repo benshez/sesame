@@ -9,3 +9,9 @@ VALUES ('public', 'Ben', 'Ben','benshez@gmail.com', true);
 
 INSERT INTO Venue (tenant_id, capacity, address_line, city, state, postal_code, country, active) 
 VALUES ('public', 1000, 'Ben','Meridan Plains', 'QLD', '4551', 'Australia', true);
+
+INSERT INTO Event_Status (tenant_id, name, active) 
+VALUES ('public', 'Danger', true),
+('public', 'Success', true),
+('public', 'Primary', true),
+('public', 'Warning', true);
