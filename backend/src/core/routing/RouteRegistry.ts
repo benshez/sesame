@@ -4,7 +4,6 @@ import {
   SessionRoutes, 
   LookupRoutes, 
   TenantRoutes, 
-  CalendarRoutes,
   EventRoutes
 } from "../../routes/v1";
 import { IRouteMap } from "./";
@@ -28,9 +27,6 @@ export const RouteRegistry: IRouteMap = {
         },
         "tenants": () => {
           return new TenantRoutes()
-        },
-        "calendar": () => {
-          return new CalendarRoutes()
         },
         "events": () => {
           return new EventRoutes()

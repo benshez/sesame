@@ -10,3 +10,4 @@ export type { ILoginMethods } from "@/interfaces/user/ILoginMethods";
 export type { IUserInfo } from "@/interfaces/user/IUserInfo";
 export type { IAddress } from "@/interfaces/user/IAddress";
 export type { IUserMetaData } from "@/interfaces/user/IUserMetaData";
+export type { IEvent } from "@/interfaces/calendar/IEvent";

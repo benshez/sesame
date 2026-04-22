@@ -45,4 +45,27 @@ export class EventController extends BaseController {
       throw error;
     }
   }
+
+  UpdateEventByTenenantAndUserId = async (req: SessionRequest, res: Response) => {
+    try {
+
+      const eventInfo = req.body.eventInfo;
+      const eventId = eventInfo.event_id
+      const event = await database
+        .event(database.db)
+        .update(
+          { event_id: eventId },
+          {
+            start_date: eventInfo.start_date,
+            end_date: eventInfo.end_date,
+            description: eventInfo.description,
+            status_id: eventInfo.status_id
+          });
+
+      res.json(event);
+    } catch (error) {
+      console.log("Error updating event info: ", error);
+      throw error;
+    }
+  }
 }

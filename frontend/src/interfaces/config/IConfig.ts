@@ -1,5 +1,3 @@
-import type { AxiosRequestConfig } from "axios";
-import { type FirebaseOptions } from "firebase/app";
 
 export interface IConfig {
   AppName: string;
@@ -11,7 +9,5 @@ export interface IConfig {
   MapboxToken?: string;
   IsProductionEnvironment: boolean;
   IsDevelopmentEnvironment: boolean;
-  ApiRequestConfig?: AxiosRequestConfig;
-  FirebaseConfig? : FirebaseOptions;
   GetApiHeaderConfiguration(): object;
 }

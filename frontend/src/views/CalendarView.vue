@@ -32,19 +32,19 @@
                 Event Color
               </label>
               <div class="flex flex-wrap items-center gap-4 sm:gap-5">
-                <div v-for="(value, key) in calendarsEvents" :key="key" class="n-chk">
-                  <div :class="`form-check form-check-${value} form-check-inline`">
+                <div v-for="(status, key) in statuses" :key="key" class="n-chk">
+                  <div :class="`form-check form-check-${status.value} form-check-inline`">
                     <label class="flex items-center text-sm text-gray-700 form-check-label dark:text-gray-400"
-                      :for="`modal${key}`">
+                      :for="`modal${status.key}`">
                       <span class="relative">
-                        <input type="radio" :name="'event-level'" :value="key" :id="`modal${key}`" v-model="eventLevel"
-                          class="sr-only form-check-input" />
+                        <input type="radio" :name="'event-level'" :value="status.key" :id="`modal${status.key}`"
+                          v-model="eventLevel" class="sr-only form-check-input" />
                         <span
                           class="flex items-center justify-center w-5 h-5 mr-2 border border-gray-300 rounded-full box dark:border-gray-700">
                           <span class="w-2 h-2 bg-white rounded-full dark:bg-transparent"></span>
                         </span>
                       </span>
-                      {{ key }}
+                      {{ status.value }}
                     </label>
                   </div>
                 </div>
@@ -91,9 +91,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onBeforeMount } from "vue";
+import { ref, reactive, onBeforeMount } from "vue";
 import { useRoute } from "vue-router";
-import Session from "supertokens-web-js/recipe/session";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -101,77 +100,49 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { DateTime } from "ts-luxon";
 import Modal from "@/components/profile/Modal.vue";
 import BaseLayout from "@/layouts/BaseLayout.vue";
+import { useCalendarStore } from "@/store";
+import type { IEvent } from "@/interfaces";
 import { ApiClient } from "@/plugins";
 
-interface IEvent {
-  id: string,
-  title: string,
-  start: string,
-  end?: string,
-  allDay?: boolean,
-  extendedProps?: {
-    calendar: string
-  },
-};
 
-interface IEventInfo {
-  event: IEvent;
-  timeText: string;
-  startStr: string;
-  endStr: string;
+interface IStatus {
+  key: string,
+  value: string
 }
-const route = useRoute();
-const calendarRef = ref(null)
-const isOpen = ref(false)
-const selectedEvent = ref<IEvent>();
-const eventTitle = ref('')
-const eventStartDate = ref<string>()
-const eventEndDate = ref<string>()
-const eventLevel = ref('')
-const events = ref<IEvent[]>([]);
 
-const calendarsEvents = reactive({
-  Danger: "danger",
-  Success: "success",
-  Primary: "primary",
-  Warning: "warning",
-})
+const apiClient = new ApiClient();
+const calenderStore = useCalendarStore();
+const route = useRoute();
+const calendarRef = ref(null);
+const isOpen = ref(false);
+const selectedEvent = ref<IEvent>();
+const eventTitle = ref("");
+const eventStartDate = ref<Date>();
+const eventEndDate = ref<Date>();
+const eventLevel = ref<number>();
+const events = ref<IEvent[]>([]);
+const statuses = ref<Array<IStatus>>([]);
 
 const handleAddOrUpdateEvent = () => {
+  const event: IEvent = {
+    id: "",
+    title: eventTitle.value,
+    start: eventStartDate.value as unknown as string,
+    end: eventEndDate.value as unknown as string,
+    extendedProps: { calendar: eventLevel.value as unknown as string },
+  }
   if (selectedEvent.value) {
-    // Update existing event
-    events.value = events.value.map((event: IEvent) => {
-      if (event.id === selectedEvent?.value?.id) {
-        let start = eventStartDate.value
-        if (start) {
-          start = DateTime.fromSQL(start).setZone("Australia/Brisbane").toISO()?.split("T")[0]
-        }
-        let end = eventEndDate.value
-        if (end) {
-          end = DateTime.fromSQL(end).setZone("Australia/Brisbane").toISO()?.split("T")[0]
-        }
-        return {
-          ...event,
-          title: eventTitle.value,
-          start: start as string,
-          end: end as string,
-          extendedProps: { calendar: eventLevel.value },
-        }
-      } else {
-        return event;
-      }
-    })
+    event.id = selectedEvent.value as unknown as string;
+
+    calenderStore.UpdateEvent(
+      event,
+      route.params.tenantId as string
+    )
   } else {
-    // Add new event
-    const newEvent = {
-      id: Date.now().toString(),
-      title: eventTitle.value,
-      start: eventStartDate.value as string,
-      end: eventEndDate.value as string,
-      allDay: true,
-      extendedProps: { calendar: eventLevel.value },
-    }
-    events.value.push(newEvent)
+    calenderStore.CreateEvent(
+      event,
+      route.params.tenantId as string
+    )
   }
   closeModal();
 }
@@ -190,12 +161,11 @@ const closeModal = () => {
 
 const resetModalFields = () => {
   eventTitle.value = "";
-  eventStartDate.value = "";
-  eventEndDate.value = "";
-  eventLevel.value = "";
+  eventStartDate.value = DateTime.local().setZone("Australia/Brisbane").toISO()?.split("T")[0] as unknown as Date;
+  eventEndDate.value = DateTime.local().setZone("Australia/Brisbane").toISO()?.split("T")[0] as unknown as Date;
+  eventLevel.value = 0;
   selectedEvent.value = undefined;
 }
-
 
 const handleDateSelect = (selectInfo: any) => {
   resetModalFields()
@@ -208,22 +178,30 @@ const handleEventClick = (clickInfo: any) => {
   const event = clickInfo.event;
   selectedEvent.value = event
   eventTitle.value = event.title
-  eventStartDate.value = event.startStr || ""
+  eventStartDate.value = event.startStr.split("T")[0] as Date
   if (event.end) {
-    eventEndDate.value = event.endStr || ""
+    eventEndDate.value = event.endStr.split("T")[0] as Date
   }
   eventLevel.value = event.extendedProps.calendar
   openModal()
 }
 
 const renderEventContent = (eventInfo: any) => {
-  const colorClass = `fc-bg-${eventInfo.event.extendedProps.calendar.toLowerCase()}`
+  const timeText = eventInfo.timeText;
+  const event = eventInfo.event;
+  let status = "Danger";
+  statuses.value.filter((e) => { 
+    if(e.key === event.extendedProps.calendar) status = e.value
+  }) as unknown as string;
+
+  const colorClass = `fc-bg-${status.toLowerCase()}`;
+
   return {
     html: `
       <div class="event-fc-color flex fc-event-main ${colorClass} p-1 rounded-sm">
         <div class="fc-daygrid-event-dot"></div>
-        <div class="fc-event-time">${eventInfo.timeText}</div>
-        <div class="fc-event-title">${eventInfo.event.title}</div>
+        <div class="fc-event-time">${timeText}</div>
+        <div class="fc-event-title">${event.title}</div>
       </div>
     `,
   }
@@ -245,7 +223,7 @@ const calendarOptions = reactive({
   selectable: true,
   select: handleDateSelect,
   eventClick: handleEventClick,
-  eventContent: renderEventContent,
+  eventContent: "",
   customButtons: {
     addEventButton: {
       text: "Add Event +",
@@ -254,69 +232,23 @@ const calendarOptions = reactive({
   },
 })
 
-
-onMounted(() => {
-  events.value = [
-    {
-      id: '1',
-      title: 'Event Conf.',
-      start: DateTime.local().setZone("Australia/Brisbane").toISO()?.split("T")[0] as string,
-      extendedProps: { calendar: 'Danger' },
-    },
-    {
-      id: '2',
-      title: 'Meeting',
-      start: DateTime.local().setZone("Australia/Brisbane").plus({ days: 1 }).toISO()?.split("T")[0] as string,
-      extendedProps: { calendar: 'Success' },
-    },
-    {
-      id: '3',
-      title: 'Workshop',
-      start: DateTime.local().setZone("Australia/Brisbane").plus({ days: 2 }).toISO()?.split("T")[0] as string,
-      end: DateTime.local().setZone("Australia/Brisbane").plus({ days: 3 }).toISO()?.split("T")[0] as string,
-      extendedProps: { calendar: 'Primary' },
-    },
-  ]
-
-
-})
-
 onBeforeMount(async () => {
-  const apiClient = new ApiClient();
-  const accessToken = await Session.getAccessTokenPayloadSecurely();
-  const userId = await Session.getUserId();
+  await calenderStore.GetEvents();
+  events.value = calenderStore.eventState as unknown as Array<IEvent>;
+  const statusResponse: any = await apiClient
+    .lookup()
+    .eventStatuses();
 
-  let Event = {
-    active: true,
-    actual_attendance: 2,
-    budget_estimated: "20",
-    description: "hello world",
-    end_date: DateTime.local().setZone("Australia/Brisbane").plus({ days: 2 }).toISO()?.split("T")[0],
-    estimated_attendance: 200,
-    //event_id: 1,
-    event_type_id: 2,
-    organization_id: 2,
-    start_date: DateTime.local().setZone("Australia/Brisbane").plus({ days: 1 }).toISO()?.split("T")[0],
-    status: "in progress",
-    /**
-     * @default 'public'::character varying
-     */
-    tenant_id: route.params.tenantId,
-    total_expenditure: "500",
-    user_id: userId,
-    venue_id: 1
-  }
-  // const eve = await apiClient
-  //   .setBearerAuth(accessToken)
-  //   .events()
-  //   .createTenenatAndUserEvent(Event);
-  const eve = await apiClient
-    .setBearerAuth(accessToken)
-    .events()
-    .getActiveEventsByTenantIdAndUserId()
+  statusResponse.forEach((status: any) => {
+    statuses.value.push({
+      key: status.status_id,
+      value: status.name
+    })
 
-    events.value = []
-  console.log(eve)
+  });
+
+  calendarOptions.eventContent = renderEventContent as unknown as string;
+
 });
 
 </script>
