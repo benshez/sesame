@@ -101,14 +101,9 @@ import { DateTime } from "ts-luxon";
 import Modal from "@/components/profile/Modal.vue";
 import BaseLayout from "@/layouts/BaseLayout.vue";
 import { useCalendarStore } from "@/store";
-import type { IEvent } from "@/interfaces";
+import type { IEvent, IStatus } from "@/interfaces";
 import { ApiClient } from "@/plugins";
 
-
-interface IStatus {
-  key: string,
-  value: string
-}
 
 const apiClient = new ApiClient();
 const calenderStore = useCalendarStore();
@@ -132,7 +127,7 @@ const handleAddOrUpdateEvent = () => {
     extendedProps: { calendar: eventLevel.value as unknown as string },
   }
   if (selectedEvent.value) {
-    event.id = selectedEvent.value as unknown as string;
+    event.id = selectedEvent.value.id as unknown as string;
 
     calenderStore.UpdateEvent(
       event,
@@ -147,9 +142,10 @@ const handleAddOrUpdateEvent = () => {
   closeModal();
 }
 
-const handleDeleteEvent = () => {
+const handleDeleteEvent = async () => {
   if (selectedEvent.value) {
-    events.value = events.value.filter((event) => event.id !== selectedEvent?.value?.id)
+    await calenderStore.DeleteEvent(selectedEvent.value.id);
+    events.value = calenderStore.eventState as unknown as Array<IEvent>;
     closeModal()
   }
 }
@@ -248,7 +244,6 @@ onBeforeMount(async () => {
   });
 
   calendarOptions.eventContent = renderEventContent as unknown as string;
-
 });
 
 </script>

@@ -20,6 +20,7 @@ export const useCalendarStore = defineStore("calendar", {
 
     async SetupEvent(event: IEvent, tenantId: string) {
       return {
+        event_id: event.id,
         active: true,
         actual_attendance: 0,
         budget_estimated: "10",
@@ -29,7 +30,7 @@ export const useCalendarStore = defineStore("calendar", {
         event_type_id: 1,
         organization_id: 1,
         start_date: event.start,
-        status_id: 3,
+        status_id: event.extendedProps?.calendar,
         tenant_id: tenantId,
         total_expenditure: "10",
         user_id: await this.GetUserId(),
@@ -53,13 +54,14 @@ export const useCalendarStore = defineStore("calendar", {
     },
 
     async GetEvents() {
+      this.$state.eventState = [];
+      
       const events: Array<unknown> = await apiClient
         .setBearerAuth(await this.GetAccessToken())
         .events()
         .getActiveEventsByTenantIdAndUserId() as unknown as unknown[];
 
       events.forEach(async (event: any) => {
-        //const status = await this.GetEventStatusById(event.status_id) as string
 
         const e: IEvent = {
           id: event.event_id,
@@ -88,7 +90,16 @@ export const useCalendarStore = defineStore("calendar", {
       await apiClient
         .setBearerAuth(await this.GetAccessToken())
         .events()
-        .updateTenenatAndUserEvent(event);
+        .updateTenenatAndUserEvent(await this.SetupEvent(event, tenantId));
+
+      this.GetEvents();
+    },
+
+    async DeleteEvent(eventId: string) {
+      await apiClient
+        .setBearerAuth(await this.GetAccessToken())
+        .events()
+        .deleteTenenatAndUserEvent(eventId);
 
       this.GetEvents();
     }

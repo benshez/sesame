@@ -34,11 +34,12 @@ export class EventController extends BaseController {
   CreateEventByTenenantAndUserId = async (req: SessionRequest, res: Response) => {
     try {
       const eventInfo = req.body.eventInfo;
+      delete eventInfo.event_id;
+
       const event = await database
         .event(database.db)
         .insert(eventInfo);
 
-      console.log(event)
       res.json(event)
     } catch (error) {
       console.log("Error creating event info: ", error);
@@ -50,21 +51,43 @@ export class EventController extends BaseController {
     try {
 
       const eventInfo = req.body.eventInfo;
-      const eventId = eventInfo.event_id
+      const eventId = eventInfo.event_id;
+      delete eventInfo.event_id;
+
       const event = await database
         .event(database.db)
         .update(
-          { event_id: eventId },
+          { 
+            event_id: eventId 
+          },
           {
-            start_date: eventInfo.start_date,
-            end_date: eventInfo.end_date,
-            description: eventInfo.description,
-            status_id: eventInfo.status_id
+            ...eventInfo
           });
+
+      res.send(event);
+    } catch (error) {
+      console.log("Error updating event info: ", error);
+      throw error;
+    }
+  }
+
+  DeleteEventByTenenantAndUserId = async (req: SessionRequest, res: Response) => {
+    try {
+      const eventId = req.body.eventId;
+
+      const event = await database
+        .event(database.db)
+        .update(
+          {
+            event_id: eventId
+          },
+          {
+            active: false
+          })
 
       res.json(event);
     } catch (error) {
-      console.log("Error updating event info: ", error);
+      console.log("Error deleting event info: ", error);
       throw error;
     }
   }
