@@ -115,10 +115,9 @@ const eventTitle = ref("");
 const eventStartDate = ref<Date>();
 const eventEndDate = ref<Date>();
 const eventLevel = ref<number>();
-const events = ref<IEvent[]>([]);
 const statuses = ref<Array<IStatus>>([]);
 
-const handleAddOrUpdateEvent = () => {
+const handleAddOrUpdateEvent = async () => {
   const event: IEvent = {
     id: "",
     title: eventTitle.value,
@@ -129,23 +128,24 @@ const handleAddOrUpdateEvent = () => {
   if (selectedEvent.value) {
     event.id = selectedEvent.value.id as unknown as string;
 
-    calenderStore.UpdateEvent(
+    await calenderStore.UpdateEvent(
       event,
       route.params.tenantId as string
     )
   } else {
-    calenderStore.CreateEvent(
+    await calenderStore.CreateEvent(
       event,
       route.params.tenantId as string
     )
   }
+  calendarOptions.events = calenderStore.eventState as unknown as Array<IEvent>;
   closeModal();
 }
 
 const handleDeleteEvent = async () => {
   if (selectedEvent.value) {
     await calenderStore.DeleteEvent(selectedEvent.value.id);
-    events.value = calenderStore.eventState as unknown as Array<IEvent>;
+    calendarOptions.events = calenderStore.eventState as unknown as Array<IEvent>;
     closeModal()
   }
 }
@@ -215,7 +215,7 @@ const calendarOptions = reactive({
     center: "title",
     right: "dayGridMonth,timeGridWeek,timeGridDay",
   },
-  events: events,
+  events: [{}],
   selectable: true,
   select: handleDateSelect,
   eventClick: handleEventClick,
@@ -230,7 +230,8 @@ const calendarOptions = reactive({
 
 onBeforeMount(async () => {
   await calenderStore.GetEvents();
-  events.value = calenderStore.eventState as unknown as Array<IEvent>;
+  calendarOptions.events = calenderStore.eventState as unknown as Array<IEvent>;
+
   const statusResponse: any = await apiClient
     .lookup()
     .eventStatuses();

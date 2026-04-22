@@ -1,7 +1,7 @@
-import { defineStore, } from "pinia";
-import Session from "supertokens-web-js/recipe/session";
+import { defineStore } from "pinia";
 import type { IEvent } from "@/interfaces";
 import { ApiClient } from "@/plugins";
+import { useUserStore } from "@/store";
 
 const apiClient = new ApiClient();
 
@@ -11,11 +11,13 @@ export const useCalendarStore = defineStore("calendar", {
   }),
   actions: {
     async GetAccessToken() {
-      return await Session.getAccessTokenPayloadSecurely();
+      const userStore = useUserStore();
+      return await userStore.GetAccessToken();
     },
 
     async GetUserId() {
-      return await Session.getUserId();
+      const userStore = useUserStore();
+      return await userStore.GetUserId();
     },
 
     async SetupEvent(event: IEvent, tenantId: string) {
