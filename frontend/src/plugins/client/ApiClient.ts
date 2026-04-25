@@ -2,16 +2,19 @@ import { HttpClient } from "@/plugins";
 
 export class ApiClient extends HttpClient {
 
-  constructor() {
-    const apiPort = import.meta.env.VUE_APP_API_PORT || 3001;
-    const apiDomain: string = import.meta.env.VUE_APP_API_URL || `http://localhost:${apiPort}/api/v1`;
+  constructor(url: string = "", header: {} = {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }) {
+    let apiDomain: string = url;
 
+    if (url === "") {
+      const apiPort = import.meta.env.VUE_APP_API_PORT || 3001;
+      apiDomain = import.meta.env.VUE_APP_API_URL || `http://localhost:${apiPort}/api/v1`;
+    }
     super({
       baseURL: apiDomain,
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      }
+      headers: header
     });
   }
 

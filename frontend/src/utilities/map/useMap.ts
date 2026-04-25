@@ -3,7 +3,7 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import { lineString } from "@turf/turf";
 import { configuration } from "@/utilities";
 import { mapboxSearch } from "@/api";
-import type { MapboxDirections } from "@/interfaces";
+import type { IMapboxDirections } from "@/interfaces";
 import { useFormStore } from "@/store/forms/formStore";
 
 export const useMap = () => {
@@ -30,12 +30,32 @@ export const useMap = () => {
       zoom: 12,
       scrollZoom: true,
       boxZoom: true,
-      doubleClickZoom: false
+      doubleClickZoom: false,
+      config: {
+        basemap: {
+          theme: 'monochrome',
+          showPlaceLabels: false,
+          showPointOfInterestLabels: false,
+          showRoadLabels: false,
+          showTransitLabels: false
+        }
+      },
     });
 
     map.resize();
 
     AddMapboxDrawControl();
+
+
+
+    map.on("click", (e) => {
+
+      AddMArker(map, e)
+    })
+
+
+
+    //map.addControl(new mapboxgl.GeolocateControl());
   }
 
   const GetGeolocation = (): LngLatLike => {
@@ -59,11 +79,27 @@ export const useMap = () => {
     return [longitude, latitude];
   }
 
+  const AddMArker = (map: mapboxgl.Map, e) => {
+
+    const el = document.createElement("div");
+    el.className = 'marker';
+    el.style.width = '10px';
+    el.style.height = '10px';
+    el.style.borderRadius = '50%';
+    el.style.backgroundColor = 'blue';
+
+    new mapboxgl.Marker(el)
+      .setLngLat(e.lngLat)
+      .setPopup(new mapboxgl.Popup().setHTML('<h3>Clicked Location</h3>'))
+      .addTo(map);
+
+  }
+
   const GetWayPointsFromDirections = async (drawData: any) => {
     const formStore = useFormStore();
     const firstFeature = drawData.features[0];
     const coordinates: Array<Array<number>> = firstFeature.geometry.coordinates as Array<Array<number>>;
-    const directions: MapboxDirections = await mapboxSearch.GetDirections("driving", coordinates);
+    const directions: IMapboxDirections = await mapboxSearch.GetDirections("driving", coordinates);
     const waypoints: Array<Array<number>> = [];
     const firstRoute = directions?.routes[0];
 
@@ -138,6 +174,16 @@ export const useMap = () => {
         draw.deleteAll();
       }, 0)
     })
+  }
+
+  const AddDirectionsControl = (map: mapboxgl.Map) => {
+    // const directions = new MapboxDirections({
+    //   accessToken: mapboxgl.accessToken,
+    //   unit: 'metric',
+    //   profile: 'mapbox/cycling'
+    // });
+
+    // map.addControl(directions);
   }
 
   return {

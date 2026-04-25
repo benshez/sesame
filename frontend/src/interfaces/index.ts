@@ -5,7 +5,7 @@ export type { IOption } from "@/interfaces/properties/IOption";
 export type { IElementProps } from "@/interfaces/properties/IProperties";
 export type { IValidator } from "@/interfaces/properties/IValidator";
 export type { IPage } from "@/interfaces/properties/IPage";
-export type { MapboxDirections } from "@interfaces/map/IMapboxDirections";
+export type { IMapboxDirections } from "@interfaces/map/IMapboxDirections";
 export type { ILoginMethods } from "@/interfaces/user/ILoginMethods";
 export type { IUserInfo } from "@/interfaces/user/IUserInfo";
 export type { IAddress } from "@/interfaces/user/IAddress";

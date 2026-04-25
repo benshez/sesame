@@ -1,4 +1,4 @@
-export interface MapboxDirections {
+export interface IMapboxDirections {
   code: string
   uuid: string
   waypoints: {
