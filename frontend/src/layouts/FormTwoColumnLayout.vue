@@ -4,7 +4,7 @@
       <slot name="form-body-left"></slot>
     </div>
 
-    <div class="overflow-hidden rounded-2xl border px-5 p-5 col-span-12 xl:col-span-8">
+    <div class="overflow-hidden rounded-2xl border col-span-12 xl:col-span-8">
       <slot name="form-body-right"></slot>
     </div>
   </div>

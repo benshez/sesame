@@ -22,27 +22,32 @@
         </FormBody>
       </template>
       <template v-slot:form-body-right>
-        <div class="map-wrapper">
-          <div id="mapContainer" class="map-container"></div>
-          <div class="map-overlay">
-            <ul class=" flex flex-col gap-2">
-              <li v-if="isDrawing && !canClear">
-                <button id="replay" @click="ToggleDrawingMode"
-                  class="menu-item inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-4 py-3 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300">Creat
-                  markers
+        <div class="fc flex flex-col">
+          <div class="flex lg:flex-row fc-header-toolbar fc-toolbar fc-toolbar-ltr mb-5">
+            <div class="fc-toolbar-chunk">
+              <div class="fc-button-group inline-flex">
+                <button 
+                v-if="isDrawing && !canClear"
+                @click="ToggleDrawingMode"
+                type="button" title="month view" aria-pressed="true"
+                  class="" :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': isDrawing && !canClear, 'fc-dayGridMonth-button fc-button fc-button-primary': !isDrawing && !canClear }">Add Markers
                 </button>
-              </li>
-              <li v-if="!isDrawing && canClear">
-                <button id="clear" @click="ClearMap"
-                  class="menu-item inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-4 py-3 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300">Clear
-                  map</button>
-              </li>
-              <li>
-                <button id="calc" @click="CalculateDistance"
-                  class="menu-item inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-4 py-3 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300">Calculate
-                  distance</button>
-              </li>
-            </ul>
+                <button 
+                v-if="!isDrawing && canClear"
+                @click="ClearMap"
+                type="button" title="week view" aria-pressed="false"
+                  :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': !isDrawing && canClear, 'fc-dayGridMonth-button fc-button fc-button-primary': !isDrawing && !canClear }">Clear Map
+                </button>
+                <button 
+                @click="CalculateDistance"
+                type="button" title="day view" aria-pressed="false"
+                  :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': !isDrawing && !canClear, 'fc-dayGridMonth-button fc-button fc-button-primary': !isDrawing || !canClear }">Calculate Distance
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="map-wrapper fc-view-harness fc-view-harness-active">
+            <div id="mapContainer" class="map-container"></div>
           </div>
         </div>
       </template>
