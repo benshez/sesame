@@ -5,7 +5,7 @@ import { useUserStore } from "@/store";
 
 const apiClient = new ApiClient();
 
-export const useCalendarStore = defineStore("calendar", {
+export const useEventStore = defineStore("events", {
   state: () => ({
     eventState: [] as Array<IEvent>,
   }),
@@ -57,7 +57,7 @@ export const useCalendarStore = defineStore("calendar", {
 
     async GetEvents() {
       this.$state.eventState = [];
-      
+
       const events: Array<unknown> = await apiClient
         .setBearerAuth(await this.GetAccessToken())
         .events()
@@ -77,6 +77,10 @@ export const useCalendarStore = defineStore("calendar", {
 
         this.$state.eventState.push(e);
       })
+    },
+
+    GetEvent(eventId: string): IEvent {
+      return this.$state.eventState.filter(e => e.id.toString() === eventId) as unknown as IEvent;
     },
 
     async CreateEvent(event: IEvent, tenantId: string) {

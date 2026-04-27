@@ -6,4 +6,4 @@ export { usePersonalInfoView } from "@/store/forms/data/usePersonalInfoView";
 export { useLoginView } from "@/store/forms/data/useLoginView";
 export { useRegisterView } from "@/store/forms/data/useRegisterView";
 export { useMapView } from "@/store/forms/data/useMapView";
-export { useCalendarStore } from "@/store/calendar/useCalendatStore";
+export { useEventStore } from "@/store/events/useEventStore";

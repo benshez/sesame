@@ -41,13 +41,13 @@
                 <button 
                 @click="CalculateDistance"
                 type="button" title="day view" aria-pressed="false"
-                  :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': !isDrawing && !canClear, 'fc-dayGridMonth-button fc-button fc-button-primary': !isDrawing || !canClear }">Calculate Distance
+                  :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': !isDrawing && canClear, 'fc-dayGridMonth-button fc-button fc-button-primary': !isDrawing || !canClear }">Calculate Distance
                 </button>
               </div>
             </div>
           </div>
           <div class="map-wrapper fc-view-harness fc-view-harness-active">
-            <div id="mapContainer" class="map-container"></div>
+            <div id="mapContainer" class="map-container border-t border-gray-100 dark:border-gray-800"></div>
           </div>
         </div>
       </template>
@@ -59,12 +59,16 @@
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useMap } from "@/utilities";
-import { useFormStore } from "@/store/forms/formStore";
-import type { IElement } from "@/interfaces";
+import { useEventStore, useFormStore } from "@/store";
+import type { IElement, IEvent, IStatus } from "@/interfaces";
 import FormBody from "@/components/Form/FormBody.vue";
 import FormTwoColumnLayout from "@/layouts/FormTwoColumnLayout.vue";
 import BaseLayout from "@/layouts/BaseLayout.vue";
+import { ApiClient } from "@/plugins";
 
+
+const apiClient = new ApiClient();
+const eventStore = useEventStore;
 const formStore = useFormStore();
 const map = useMap();
 const isDrawing = ref<boolean>(true);
@@ -93,7 +97,11 @@ const ToggleDrawingMode = () => {
   isDrawing.value = false;
 }
 
-onMounted(() => {
+onMounted(async () => {
   map.MapboxInit();
+  await eventStore().GetEvents();
+  const event = eventStore().GetEvent(route.params.eventId as string);
+console.log(event)
+
 })
 </script>

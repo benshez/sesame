@@ -100,13 +100,13 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { DateTime } from "ts-luxon";
 import Modal from "@/components/profile/Modal.vue";
 import BaseLayout from "@/layouts/BaseLayout.vue";
-import { useCalendarStore } from "@/store";
+import { useEventStore } from "@/store";
 import type { IEvent, IStatus } from "@/interfaces";
 import { ApiClient } from "@/plugins";
 
 
 const apiClient = new ApiClient();
-const calenderStore = useCalendarStore();
+const calenderStore = useEventStore();
 const route = useRoute();
 const router = useRouter();
 const calendarRef = ref(null);

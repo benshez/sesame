@@ -29,7 +29,7 @@ export const useMap = () => {
       center: GetGeolocation(),
       style: `mapbox://styles/mapbox/${layerId}`,
       zoom: 12,
-      scrollZoom: true,
+      scrollZoom: false,
       boxZoom: true,
       doubleClickZoom: false,
       config: {
