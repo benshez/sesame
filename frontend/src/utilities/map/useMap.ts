@@ -1,5 +1,4 @@
 import mapboxgl, { type LngLatLike } from "mapbox-gl";
-import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import { lineString } from "@turf/turf";
 import { configuration } from "@/utilities";
 import { mapboxSearch } from "@/api";
@@ -11,6 +10,9 @@ export const useMap = () => {
   const layerId: string = "light-v11";
   let mapbox: unknown;
   let map: mapboxgl.Map;
+  let isDrawing: boolean = false;
+  let coordinates: Array<Array<number>> = [];
+  let mapMarkers: Array<mapboxgl.Marker> = [];
 
   const MapboxInit = () => {
     const container: HTMLDivElement = document.getElementById("mapContainer") as HTMLDivElement;
@@ -43,19 +45,6 @@ export const useMap = () => {
     });
 
     map.resize();
-
-    AddMapboxDrawControl();
-
-
-
-    map.on("click", (e) => {
-
-      AddMArker(map, e)
-    })
-
-
-
-    //map.addControl(new mapboxgl.GeolocateControl());
   }
 
   const GetGeolocation = (): LngLatLike => {
@@ -79,27 +68,21 @@ export const useMap = () => {
     return [longitude, latitude];
   }
 
-  const AddMArker = (map: mapboxgl.Map, e) => {
+  const AddMarker = (map: mapboxgl.Map, e) => {
 
     const el = document.createElement("div");
-    el.className = 'marker';
-    el.style.width = '10px';
-    el.style.height = '10px';
-    el.style.borderRadius = '50%';
-    el.style.backgroundColor = 'blue';
+    el.className = "marker";
 
-    new mapboxgl.Marker(el)
+    const marker = new mapboxgl.Marker(el)
       .setLngLat(e.lngLat)
-      .setPopup(new mapboxgl.Popup().setHTML('<h3>Clicked Location</h3>'))
       .addTo(map);
 
+    mapMarkers.push(marker);
   }
 
-  const GetWayPointsFromDirections = async (drawData: any) => {
+  const GetWayPointsFromDirections = async (drawData: Array<Array<number>>) => {
     const formStore = useFormStore();
-    const firstFeature = drawData.features[0];
-    const coordinates: Array<Array<number>> = firstFeature.geometry.coordinates as Array<Array<number>>;
-    const directions: IMapboxDirections = await mapboxSearch.GetDirections("driving", coordinates);
+    const directions: IMapboxDirections = await mapboxSearch.GetDirections("driving", drawData);
     const waypoints: Array<Array<number>> = [];
     const firstRoute = directions?.routes[0];
 
@@ -115,78 +98,72 @@ export const useMap = () => {
     return waypoints;
   }
 
-  const AddMapboxDrawControl = () => {
-    const draw = new MapboxDraw({
-      keybindings: true,           // Enable keyboard shortcuts
-      boxSelect: true,             // Enable shift+click to select features
-      clickBuffer: 2,              // Pixels around click to register feature
-      touchEnabled: true,          // Enable touch interactions
-      touchBuffer: 25,             // Pixels around touch to register feature
-      displayControlsDefault: true,// Show default control buttons
-      userProperties: false,
-      controls: { line_string: true, trash: true },
-      defaultMode: "simple_select"
-    });
 
-    onDeleteDrawing(map, draw);
+  const onCreateDrawing = async (map: mapboxgl.Map, drawData: Array<Array<number>>) => {
+    if (drawData.length > 0) {
+      map.addSource("route", {
+        type: "geojson",
+        data: lineString(await GetWayPointsFromDirections(drawData))
+      });
 
-    onCreateDrawing(map, draw);
-
-    map.addControl(draw);
+      map.addLayer({
+        id: "route",
+        type: "line",
+        source: "route",
+        layout: {
+          "line-join": "round",
+          "line-cap": "round"
+        },
+        paint: {
+          "line-color": "#888",
+          "line-width": 8
+        }
+      });
+    }
   }
 
-  const onCreateDrawing = (map: mapboxgl.Map, draw: MapboxDraw) => {
-    map.on("draw.create", async (e) => {
-      const drawData = draw.getAll();
+  const onDeleteDrawing = (map: mapboxgl.Map, drawData: Array<Array<number>>) => {
+    const formStore = useFormStore();
+    
+    if (drawData.length !== 0 && map.getLayer("route")) {
+      map.removeLayer("route");
+      map.removeSource("route");
+    }
 
-      if (drawData.features.length > 0) {
-        map.addSource("route", {
-          type: "geojson",
-          data: lineString(await GetWayPointsFromDirections(drawData))
-        });
+    mapMarkers.forEach((marker) => marker.remove());
+    coordinates = [];
 
-        map.addLayer({
-          id: "route",
-          type: "line",
-          source: "route",
-          layout: {
-            "line-join": "round",
-            "line-cap": "round"
-          },
-          paint: {
-            "line-color": "#888",
-            "line-width": 8
-          }
-        });
-      }
-    })
+    formStore.updateElementState("distance", { key: "value", value: "" });
   }
 
-  const onDeleteDrawing = (map: mapboxgl.Map, draw: MapboxDraw) => {
-    map.on("draw.delete", async (e) => {
-      const data = draw.getAll();
-      if (data.features.length === 0) {
-        map.removeLayer("route");
-        map.removeSource("route");
-      }
+  const ToggleIsDrawing = (draw: boolean) => {
+    isDrawing = draw;
 
-      setTimeout(() => {
-        draw.deleteAll();
-      }, 0)
-    })
+    map.off("click", OnMapClicked);
+
+    if (isDrawing) {
+      map.on("click", OnMapClicked)
+    } 
   }
 
-  const AddDirectionsControl = (map: mapboxgl.Map) => {
-    // const directions = new MapboxDirections({
-    //   accessToken: mapboxgl.accessToken,
-    //   unit: 'metric',
-    //   profile: 'mapbox/cycling'
-    // });
+  const OnClearMapClick = () => {
+    onDeleteDrawing(map, coordinates);
+  }
 
-    // map.addControl(directions);
+  const OnMapClicked = (e) => {
+    coordinates.push([e.lngLat.lng, e.lngLat.lat]);
+    AddMarker(map, e);
+  }
+
+  const OnCalculateDistanceClick = () => {
+    map.off("click", OnMapClicked);
+    onCreateDrawing(map, coordinates);
   }
 
   return {
-    MapboxInit
+    MapboxInit,
+    ToggleIsDrawing,
+    OnCalculateDistanceClick,
+    OnClearMapClick
   }
 }
