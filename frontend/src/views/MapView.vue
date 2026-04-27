@@ -52,6 +52,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { useMap } from "@/utilities";
 import { useFormStore } from "@/store/forms/formStore";
 import type { IElement } from "@/interfaces";
@@ -63,9 +64,12 @@ const formStore = useFormStore();
 const map = useMap();
 const isDrawing = ref<boolean>(true);
 const canClear = ref<boolean>(false);
+const route = useRoute();
+const router = useRouter();
 
 const saveTrip = (elements: Array<IElement>) => {
 
+  router.push(`/calendar/${route.params.tenantId}/${route.params.userId}`);
 }
 
 const CalculateDistance = () => {

@@ -1,7 +1,6 @@
 import mapboxgl, { type LngLatLike } from "mapbox-gl";
 import { lineString } from "@turf/turf";
 import { configuration } from "@/utilities";
-import { mapboxSearch } from "@/api";
 import type { IMapboxDirections } from "@/interfaces";
 import { useFormStore } from "@/store/forms/formStore";
 
@@ -47,6 +46,12 @@ export const useMap = () => {
     map.resize();
   }
 
+  const GetDirections = async (profile: string, coordinates: Array<Array<number>>): Promise<IMapboxDirections> => {
+    const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/${profile}/${coordinates[0]};${coordinates[1]}?steps=true&geometries=geojson&access_token=${configuration.GetMapboxToken()}`);
+
+    return await response.json() as IMapboxDirections;
+  }
+
   const GetGeolocation = (): LngLatLike => {
     let latitude = -29.85260156155084;
     let longitude = 31.009960218027402;
@@ -68,21 +73,29 @@ export const useMap = () => {
     return [longitude, latitude];
   }
 
-  const AddMarker = (map: mapboxgl.Map, e) => {
+  const AddMarker = (map: mapboxgl.Map, e: any) => {
 
     const el = document.createElement("div");
     el.className = "marker";
 
+    /*
+      const popup = new mapboxgl
+      .Popup({ offset: 25 })
+      .setText(e.lngLat);
+    */
+
     const marker = new mapboxgl.Marker(el)
       .setLngLat(e.lngLat)
+      //.setPopup(popup)
       .addTo(map);
 
+    marker._element.style.transform = `${marker._element.style.transform} rotate(-45deg)`;
     mapMarkers.push(marker);
   }
 
   const GetWayPointsFromDirections = async (drawData: Array<Array<number>>) => {
     const formStore = useFormStore();
-    const directions: IMapboxDirections = await mapboxSearch.GetDirections("driving", drawData);
+    const directions: IMapboxDirections = await GetDirections("driving", drawData);
     const waypoints: Array<Array<number>> = [];
     const firstRoute = directions?.routes[0];
 
@@ -124,7 +137,7 @@ export const useMap = () => {
 
   const onDeleteDrawing = (map: mapboxgl.Map, drawData: Array<Array<number>>) => {
     const formStore = useFormStore();
-    
+
     if (drawData.length !== 0 && map.getLayer("route")) {
       map.removeLayer("route");
       map.removeSource("route");
@@ -143,14 +156,14 @@ export const useMap = () => {
 
     if (isDrawing) {
       map.on("click", OnMapClicked)
-    } 
+    }
   }
 
   const OnClearMapClick = () => {
     onDeleteDrawing(map, coordinates);
   }
 
-  const OnMapClicked = (e) => {
+  const OnMapClicked = (e: any) => {
     coordinates.push([e.lngLat.lng, e.lngLat.lat]);
     AddMarker(map, e);
   }

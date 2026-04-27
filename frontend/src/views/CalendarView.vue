@@ -92,7 +92,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onBeforeMount } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -108,6 +108,7 @@ import { ApiClient } from "@/plugins";
 const apiClient = new ApiClient();
 const calenderStore = useCalendarStore();
 const route = useRoute();
+const router = useRouter();
 const calendarRef = ref(null);
 const isOpen = ref(false);
 const selectedEvent = ref<IEvent>();
@@ -167,7 +168,7 @@ const handleDateSelect = (selectInfo: any) => {
   resetModalFields()
   eventStartDate.value = selectInfo.startStr
   eventEndDate.value = selectInfo.endStr || selectInfo.startStr
-  openModal()
+  openModal(selectInfo.id)
 }
 
 const handleEventClick = (clickInfo: any) => {
@@ -179,7 +180,7 @@ const handleEventClick = (clickInfo: any) => {
     eventEndDate.value = event.endStr.split("T")[0] as Date
   }
   eventLevel.value = event.extendedProps.calendar
-  openModal()
+  openModal(event.id)
 }
 
 const renderEventContent = (eventInfo: any) => {
@@ -203,8 +204,10 @@ const renderEventContent = (eventInfo: any) => {
   }
 }
 
-const openModal = () => {
-  isOpen.value = true;
+const openModal = (eventId: string = "new") => {
+  //if(typeof eventId === "object") eventId = "new"
+  router.push(`/map/${route.params.tenantId}/${route.params.userId}/${eventId}`)
+  //isOpen.value = true;
 }
 
 const calendarOptions = reactive({

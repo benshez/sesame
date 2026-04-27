@@ -8,22 +8,18 @@ export const useMapView = () => {
     "requiresAuthenticaton": true,
     "elements": [
       {
-        "id": "supplier",
-        "label": "Supplier",
+        "id": "organisation",
+        "label": "Customer",
         "component": "FormDropdown",
         "value": "",
-        "helpText": "Enter a supplier.",
-        "placeholderText": "Supplier",
+        "helpText": "Select a Customer.",
+        "placeholderText": "Customer",
         "isReadonly": false,
         "isVisible": true,
         "isVisibleIf": [],
         "isRequired": true,
         "isValid": true,
         "isValidIf": (): boolean => {
-          //const email: IElement = getElementsById("login", "email");
-          //email.isValid = email.value !== "";
-
-          //return email.isValid;
           return true;
         },
         "options": [
@@ -37,6 +33,85 @@ export const useMapView = () => {
         "labelIcon": "m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"
       },
       {
+        "id": "progress",
+        "label": "Progress",
+        "component": "FormDropdown",
+        "value": "",
+        "helpText": "Select Progress.",
+        "placeholderText": "Progress",
+        "isReadonly": false,
+        "isVisible": true,
+        "isVisibleIf": [],
+        "isRequired": true,
+        "isValid": true,
+        "isValidIf": (): boolean => {
+          return true;
+        },
+        "options": [
+          {
+            "key": "1",
+            "value": "Danger"
+          },
+          {
+            "key": "2",
+            "value": "Success"
+          },
+          {
+            "key": "3",
+            "value": "Primary"
+          },
+          {
+            "key": "4",
+            "value": "Warning"
+          }
+        ],
+        "type": "email",
+        "cssClass": "appearance-none w-full pl-3 pr-10 py-2 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300e",
+        "labelIcon": "m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"
+      },  
+      {
+        "id": "startDate",
+        "label": "Start date",
+        "component": "FormInput",
+        "value": "",
+        "helpText": "Enter Start Date.",
+        "placeholderText": "Start Date",
+        "isReadonly": false,
+        "isVisible": true,
+        "isVisibleIf": (): boolean => {
+          return true;
+        },
+        "isRequired": true,
+        "isValid": true,
+        "isValidIf": (): boolean => { 
+          return true; 
+        },
+        "type": "date",
+        "cssClass": "w-full pl-3 pr-10 py-2 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300",
+        "labelIcon": "M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"
+      },
+      {
+        "id": "endDate",
+        "label": "End date",
+        "component": "FormInput",
+        "value": "",
+        "helpText": "Enter End Date.",
+        "placeholderText": "End Date",
+        "isReadonly": false,
+        "isVisible": true,
+        "isVisibleIf": (): boolean => {
+          return true;
+        },
+        "isRequired": true,
+        "isValid": true,
+        "isValidIf": (): boolean => { 
+          return true; 
+        },
+        "type": "date",
+        "cssClass": "w-full pl-3 pr-10 py-2 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300",
+        "labelIcon": "M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"
+      },      
+      {
         "id": "distance",
         "label": "Distance",
         "component": "FormInput",
@@ -46,20 +121,13 @@ export const useMapView = () => {
         "isReadonly": false,
         "isVisible": true,
         "isVisibleIf": (): boolean => {
-          //const email: IElement = getElementsById("login", "email");
-          //const query = email?.isValidIf || null;
-          //let visible: boolean = true;
-
-          //if (typeof query === "function") {
-          //  if (visible) visible = query();
-          //}
-
-          //return visible;
           return true;
         },
         "isRequired": true,
         "isValid": true,
-        "isValidIf": (): boolean => { return true; },
+        "isValidIf": (): boolean => { 
+          return true; 
+        },
         "type": "text",
         "cssClass": "w-full pl-3 pr-10 py-2 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300",
         "labelIcon": "M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"
