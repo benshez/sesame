@@ -80,7 +80,7 @@ export const useEventStore = defineStore("events", {
     },
 
     GetEvent(eventId: string): IEvent {
-      return this.$state.eventState.filter(e => e.id.toString() === eventId) as unknown as IEvent;
+      return this.$state.eventState.filter(e => e.id.toString() === eventId)[0] as unknown as IEvent;
     },
 
     async CreateEvent(event: IEvent, tenantId: string) {

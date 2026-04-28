@@ -5,5 +5,5 @@ export { useProfileView } from "@/store/forms/data/useProfileView";
 export { usePersonalInfoView } from "@/store/forms/data/usePersonalInfoView";
 export { useLoginView } from "@/store/forms/data/useLoginView";
 export { useRegisterView } from "@/store/forms/data/useRegisterView";
-export { useMapView } from "@/store/forms/data/useMapView";
+export { useEventView } from "@/store/forms/data/useEventView";
 export { useEventStore } from "@/store/events/useEventStore";

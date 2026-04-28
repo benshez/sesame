@@ -94,6 +94,7 @@
 import { ref, reactive, onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import FullCalendar from "@fullcalendar/vue3";
+import type { CalendarOptions } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -210,7 +211,7 @@ const openModal = (eventId: string = "new") => {
   //isOpen.value = true;
 }
 
-const calendarOptions = reactive({
+const calendarOptions: CalendarOptions = reactive({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
   initialView: "dayGridMonth",
   headerToolbar: {
@@ -229,7 +230,7 @@ const calendarOptions = reactive({
       click: openModal,
     },
   },
-})
+}) as unknown as CalendarOptions;
 
 onBeforeMount(async () => {
   await calenderStore.GetEvents();

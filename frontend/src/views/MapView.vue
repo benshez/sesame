@@ -58,6 +58,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { DateTime } from "ts-luxon";
 import { useMap } from "@/utilities";
 import { useEventStore, useFormStore } from "@/store";
 import type { IElement, IEvent, IStatus } from "@/interfaces";
@@ -101,7 +102,9 @@ onMounted(async () => {
   map.MapboxInit();
   await eventStore().GetEvents();
   const event = eventStore().GetEvent(route.params.eventId as string);
-console.log(event)
 
+  formStore.updateElementState("endDate", { key: "value", value: event.end?.toString().split("T")[0] });
+  formStore.updateElementState("startDate", { key: "value", value: event.start?.toString().split("T")[0] });
+  formStore.updateElementState("progress", { key: "value", value: event.extendedProps?.calendar});
 })
 </script>

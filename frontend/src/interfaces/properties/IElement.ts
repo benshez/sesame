@@ -7,7 +7,7 @@ export interface IElement {
   value: string;
   helpText?: string;
   placeholderText?: string;
-  options?: Array<IOption>;
+  options?: Function | Array<IOption>;
   isRequired?: boolean;
   isValid?:  boolean;
   isValidIf?: Function;

@@ -5,7 +5,7 @@
       <div class="relative mt-1 w-full">
         <select v-if="element.component" v-model="element.value" :id="element.id" :class="element.cssClass"
           @change="handleInput(element.id as string)">
-          <option v-if="element.options" v-for="(option, optionIndex) in element.options" :key="optionIndex"
+          <option v-if="element.options" v-for="(option, optionIndex) in options" :key="optionIndex"
             :value="option.key">{{ option.value }}</option>
         </select>
         <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none" fill="none"
@@ -19,15 +19,25 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, onBeforeMount } from "vue";
 import { useRoute } from "vue-router";
 import { ElementProps } from "@/components/Form/props/Props";
 import FormElement from "@/components/Form/FromElement.vue";
 import { useFormStore } from "@/store/forms/formStore";
+import type { IOption } from "@/interfaces";
 
 const route = useRoute();
 const props = defineProps({
   ...ElementProps
 });
-
+const options = ref<Array<IOption>>([]);
 const { handleInput } = useFormStore();
+
+onBeforeMount(async () => {
+  if (typeof props.element.options === "function") {
+    options.value = await props.element.options();
+  } else {
+    options.value = props.element.options as unknown as Array<IOption>;
+  }
+})
 </script>
