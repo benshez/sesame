@@ -8,7 +8,8 @@
 <script lang="ts" setup>
 import { useRoute } from "vue-router";
 import FormInput from "@/components/Form/FormInput.vue";
-import FormDropdown from "@/components/Form/FormDropdown.vue"
+import FormDropdown from "@/components/Form/FormDropdown.vue";
+import FormRadioList from "@/components/Form/FormRadioList.vue";
 import type { IElement } from "@/interfaces";
 
 const props = defineProps({
@@ -25,6 +26,9 @@ const comp = (element: IElement): any => {
     case "FormDropdown": 
       component = FormDropdown;
       break;
+    case "FormRadioList": 
+      component = FormRadioList;
+      break;      
   }
 
   return component;

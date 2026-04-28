@@ -106,5 +106,6 @@ onMounted(async () => {
   formStore.updateElementState("endDate", { key: "value", value: event.end?.toString().split("T")[0] });
   formStore.updateElementState("startDate", { key: "value", value: event.start?.toString().split("T")[0] });
   formStore.updateElementState("progress", { key: "value", value: event.extendedProps?.calendar});
+  formStore.updateElementState("organisation", { key: "value", value: event.organisationId});
 })
 </script>

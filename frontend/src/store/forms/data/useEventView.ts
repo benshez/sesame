@@ -25,12 +25,21 @@ export const useEventView = () => {
         "isValidIf": (): boolean => {
           return true;
         },
-        "options": [
-          {
-            "key": "1",
-            "value": "Abc"
-          }
-        ],
+        "options": async () => {
+          let options: Array<IOption> = [];
+          const response: any = await apiClient
+            .lookup()
+            .organizations();
+
+          response.forEach((organization: any) => {
+            options.push({
+              key: organization.organization_id,
+              value: organization.name
+            })
+          });
+
+          return options;
+        },
         "type": "email",
         "cssClass": "appearance-none w-full pl-3 pr-10 py-2 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300e",
         "labelIcon": "m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"
@@ -38,7 +47,7 @@ export const useEventView = () => {
       {
         "id": "progress",
         "label": "Progress",
-        "component": "FormDropdown",
+        "component": "FormRadioList",
         "value": "",
         "helpText": "Select Progress.",
         "placeholderText": "Progress",

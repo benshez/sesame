@@ -70,6 +70,7 @@ export const useEventStore = defineStore("events", {
           start: event.start_date,
           end: event.end_date,
           title: event.description,
+          organisationId: event.organization_id,
           extendedProps: {
             calendar: event.status_id
           }
