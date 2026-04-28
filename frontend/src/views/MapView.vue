@@ -103,8 +103,8 @@ onMounted(async () => {
   await eventStore().GetEvents();
   const event = eventStore().GetEvent(route.params.eventId as string);
 
-  formStore.updateElementState("endDate", { key: "value", value: event.end?.toString().split("T")[0] });
-  formStore.updateElementState("startDate", { key: "value", value: event.start?.toString().split("T")[0] });
+  formStore.updateElementState("endDate", { key: "value", value: event.end?.toString().split(".")[0] });
+  formStore.updateElementState("startDate", { key: "value", value: event.start?.toString().split(".")[0] });
   formStore.updateElementState("progress", { key: "value", value: event.extendedProps?.calendar});
   formStore.updateElementState("organisation", { key: "value", value: event.organisationId});
 })

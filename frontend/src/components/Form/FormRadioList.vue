@@ -1,6 +1,8 @@
 <template>
   <FormElement :element="element">
-    <template v-slot:label></template>
+    <template v-slot:label>
+      <label v-if="element.label" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"> {{ element.label }} </label>
+    </template>
     <template v-slot:component>
       <div class="relative mt-1 w-full">
         <div v-if="element.component" :id="element.id"
@@ -8,9 +10,9 @@
           <div v-if="element.options" v-for="(option, optionIndex) in options" :key="optionIndex" class="n-chk">
             <div :class="`form-check form-check-${option.value} form-check-inline`">
               <label class="flex items-center text-sm text-gray-700 form-check-label dark:text-gray-400"
-                :for="`id-${element.id}-${option.key.toString()}`">
+                :for="`${element.id}-${optionIndex}`">
                 <span class="relative">
-                  <input type="radio" :name="`name-${element.id}-${option.key.toString()}`" v-model="element.value" :value="option.key" :id="`id-${element.id}-${option.key.toString()}`"
+                  <input type="radio" :name="`${element.id}-${optionIndex}`" v-model="element.value" :value="option.key" :id="`${element.id}-${optionIndex}`"
                     class="sr-only form-check-input" />
                   <span
                     class="flex items-center justify-center w-5 h-5 mr-2 border border-gray-300 rounded-full box dark:border-gray-700">
