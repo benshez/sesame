@@ -1,8 +1,10 @@
 import type { IElement, IOption, IPage } from "@/interfaces";
+import { useValidators } from "@/utilities";
 import { ApiClient } from "@/plugins";
 
 export const useEventView = () => {
   const apiClient = new ApiClient();
+  const validators = useValidators();
 
   const MapView = {
     "name": "map",
@@ -10,6 +12,29 @@ export const useEventView = () => {
     "path": "/map",
     "requiresAuthenticaton": true,
     "elements": [
+      {
+        "id": "description",
+        "label": "Description",
+        "component": "FormInput",
+        "value": "",
+        "helpText": "Enter Description.",
+        "placeholderText": "Description",
+        "isReadonly": false,
+        "isVisible": true,
+        "isVisibleIf": (): boolean => {
+          return true;
+        },
+        "isRequired": true,
+        "isValid": true,
+        "isValidIf": (): boolean => {
+          const description: IElement = GetElement("description");
+
+          return validators.IsMinimunCharacterLength(description, 3);
+        },
+        "type": "text",
+        "cssClass": "w-full pl-3 pr-10 py-2 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300",
+        "labelIcon": "M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"
+      },
       {
         "id": "organisation",
         "label": "Customer",

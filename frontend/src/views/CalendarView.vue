@@ -125,6 +125,7 @@ const handleAddOrUpdateEvent = async () => {
     title: eventTitle.value,
     start: eventStartDate.value as unknown as string,
     end: eventEndDate.value as unknown as string,
+    estimatedAttendance: 0,
     extendedProps: { calendar: eventLevel.value as unknown as string },
   }
   if (selectedEvent.value) {
@@ -206,7 +207,7 @@ const renderEventContent = (eventInfo: any) => {
 }
 
 const openModal = (eventId: string = "new") => {
-  //if(typeof eventId === "object") eventId = "new"
+  if(typeof eventId === "object") eventId = "new"
   router.push(`/map/${route.params.tenantId}/${route.params.userId}/${eventId}`)
   //isOpen.value = true;
 }

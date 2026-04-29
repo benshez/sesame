@@ -28,9 +28,9 @@ export const useEventStore = defineStore("events", {
         budget_estimated: "10",
         description: event.title,
         end_date: event.end,
-        estimated_attendance: 0,
+        estimated_attendance: event.estimatedAttendance,
         event_type_id: 1,
-        organization_id: 1,
+        organization_id: event.organisationId,
         start_date: event.start,
         status_id: event.extendedProps?.calendar,
         tenant_id: tenantId,
@@ -71,6 +71,7 @@ export const useEventStore = defineStore("events", {
           end: event.end_date,
           title: event.description,
           organisationId: event.organization_id,
+          estimatedAttendance: event.estimated_attendance,
           extendedProps: {
             calendar: event.status_id
           }
@@ -80,7 +81,7 @@ export const useEventStore = defineStore("events", {
       })
     },
 
-    GetEvent(eventId: string): IEvent {
+    GetEventByEventId(eventId: string): IEvent {
       return this.$state.eventState.filter(e => e.id.toString() === eventId)[0] as unknown as IEvent;
     },
 

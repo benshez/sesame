@@ -68,6 +68,14 @@ export const useFormStore = defineStore("form", {
       }
     },
 
+    getElementValue(key: string): string | number {
+      const element: IElement = this.getElement(key);
+
+      if (!element) return "";
+
+      return element.value;
+    },
+
     handleInput(key: string) {
       this.handleDisplay(key);
       //this.handleValidate(key);

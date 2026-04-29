@@ -5,6 +5,7 @@ export interface IEvent {
   end?: string,
   allDay?: boolean,
   organisationId?: string | number,
+  estimatedAttendance: number| string,
   extendedProps?: {
     calendar: string
   },
