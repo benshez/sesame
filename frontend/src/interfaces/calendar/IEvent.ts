@@ -1,12 +1,28 @@
+import type { DateTime } from "ts-luxon";
+
 export interface IEvent {
-  id: string,
-  title: string,
-  start: string,
-  end?: string,
   allDay?: boolean,
-  organisationId?: string | number,
-  estimatedAttendance: number| string,
+  allow?: boolean | string,
+  backgroundColor?: string,
+  classNames?: [],
+  constraints?: string,
+  display?: string,
+  durationEditable?: boolean | string,
+  end?: Date,
+  endStr?: string,
   extendedProps?: {
-    calendar: string
+    calendar: string,
+    organisationId?: string | number,
+    estimatedAttendance: number | string,
   },
+  groupId?: string,
+  id: string,
+  overlap?: string,
+  source?: string,
+  start: Date,
+  startEditable?: boolean | string,
+  startStr?: string,
+  textColor?: string,
+  title: string,
+  url?: string
 }

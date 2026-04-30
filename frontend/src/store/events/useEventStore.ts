@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import type { IEvent } from "@/interfaces";
 import { ApiClient } from "@/plugins";
 import { useUserStore } from "@/store";
+import { DateTime } from "ts-luxon";
 
 const apiClient = new ApiClient();
 
@@ -28,9 +29,9 @@ export const useEventStore = defineStore("events", {
         budget_estimated: "10",
         description: event.title,
         end_date: event.end,
-        estimated_attendance: event.estimatedAttendance,
+        estimated_attendance: event.extendedProps?.estimatedAttendance,
         event_type_id: 1,
-        organization_id: event.organisationId,
+        organization_id: event.extendedProps?.organisationId,
         start_date: event.start,
         status_id: event.extendedProps?.calendar,
         tenant_id: tenantId,
@@ -67,13 +68,13 @@ export const useEventStore = defineStore("events", {
 
         const e: IEvent = {
           id: event.event_id,
-          start: event.start_date,
-          end: event.end_date,
+          start: event.start_date.toString().split("Z")[0],
+          end: event.end_date.toString().split("Z")[0],
           title: event.description,
-          organisationId: event.organization_id,
-          estimatedAttendance: event.estimated_attendance,
           extendedProps: {
-            calendar: event.status_id
+            calendar: event.status_id,
+            organisationId: event.organization_id,
+            estimatedAttendance: event.estimated_attendance,
           }
         }
 

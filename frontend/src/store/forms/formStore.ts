@@ -2,6 +2,7 @@ import { defineStore, } from "pinia";
 import type { IElement } from "@/interfaces";
 import { useRegisterView, useProfileView, usePersonalInfoView, useLoginView, useEventView } from "@/store"
 import { useObjectHelper } from "@/utilities";
+import type { DateTime } from "ts-luxon";
 
 export const useFormStore = defineStore("form", {
   state: () => ({
@@ -68,7 +69,7 @@ export const useFormStore = defineStore("form", {
       }
     },
 
-    getElementValue(key: string): string | number {
+    getElementValue(key: string): string | number | DateTime {
       const element: IElement = this.getElement(key);
 
       if (!element) return "";

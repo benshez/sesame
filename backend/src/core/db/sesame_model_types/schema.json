@@ -192,10 +192,10 @@
       },
       {
         "name": "end_date",
-        "isNullable": true,
+        "isNullable": false,
         "hasDefault": false,
-        "typeId": 1082,
-        "typeName": "DATE"
+        "typeId": 1184,
+        "typeName": "TIMESTAMPTZ"
       },
       {
         "name": "estimated_attendance",
@@ -229,8 +229,8 @@
         "name": "start_date",
         "isNullable": false,
         "hasDefault": false,
-        "typeId": 1082,
-        "typeName": "DATE"
+        "typeId": 1184,
+        "typeName": "TIMESTAMPTZ"
       },
       {
         "name": "status_id",

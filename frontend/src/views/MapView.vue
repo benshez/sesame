@@ -65,6 +65,7 @@ import type { IEvent } from "@/interfaces";
 import FormBody from "@/components/Form/FormBody.vue";
 import FormTwoColumnLayout from "@/layouts/FormTwoColumnLayout.vue";
 import BaseLayout from "@/layouts/BaseLayout.vue";
+import type { DateTime } from "ts-luxon";
 
 const eventStore = useEventStore();
 const formStore = useFormStore();
@@ -79,11 +80,13 @@ const CurrentEvent = (): IEvent => {
   return {
     id: "",
     title: formStore.getElementValue("description") as string,
-    start: formStore.getElementValue("startDate") as string,
-    end: formStore.getElementValue("endDate") as string,
-    organisationId: formStore.getElementValue("organisation") as string,
-    estimatedAttendance: formStore.getElementValue("distance").toString().replace("km", "").replace(".", "") as unknown as number,
-    extendedProps: { calendar: formStore.getElementValue("progress") as string },
+    start: formStore.getElementValue("startDate") as unknown as Date,
+    end: formStore.getElementValue("endDate") as unknown as Date,
+    extendedProps: {
+      calendar: formStore.getElementValue("progress") as string,
+      organisationId: formStore.getElementValue("organisation") as string,
+      estimatedAttendance: formStore.getElementValue("distance").toString().replace("km", "").replace(".", "") as unknown as number,
+    },
   }
 }
 
@@ -139,9 +142,9 @@ onMounted(async () => {
     formStore.updateElementState("endDate", { key: "value", value: event.end?.toString().split(".")[0] });
     formStore.updateElementState("startDate", { key: "value", value: event.start?.toString().split(".")[0] });
     formStore.updateElementState("progress", { key: "value", value: event.extendedProps?.calendar });
-    formStore.updateElementState("organisation", { key: "value", value: event.organisationId });
+    formStore.updateElementState("organisation", { key: "value", value: event.extendedProps?.organisationId });
     formStore.updateElementState("description", { key: "value", value: event.title });
-    formStore.updateElementState("distance", { key: "value", value: `${(event.estimatedAttendance as number / 100)}km` });
+    formStore.updateElementState("distance", { key: "value", value: `${(event.extendedProps?.estimatedAttendance as number / 100)}km` });
   }
 })
 </script>

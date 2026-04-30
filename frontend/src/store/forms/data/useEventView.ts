@@ -160,7 +160,10 @@ export const useEventView = () => {
         "isRequired": true,
         "isValid": true,
         "isValidIf": (): boolean => {
-          return true;
+          const distance: IElement = GetElement("distance");
+          const traveled = distance.value.replace("km","");
+
+          return validators.IsMinimunCharacterLength(distance, 3);
         },
         "type": "text",
         "cssClass": "w-full pl-3 pr-10 py-2 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300",

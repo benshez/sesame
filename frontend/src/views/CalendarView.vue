@@ -123,10 +123,12 @@ const handleAddOrUpdateEvent = async () => {
   const event: IEvent = {
     id: "",
     title: eventTitle.value,
-    start: eventStartDate.value as unknown as string,
-    end: eventEndDate.value as unknown as string,
-    estimatedAttendance: 0,
-    extendedProps: { calendar: eventLevel.value as unknown as string },
+    start: eventStartDate.value as unknown as Date,
+    end: eventEndDate.value as unknown as Date, 
+    extendedProps: {
+      calendar: eventLevel.value as unknown as string,
+      estimatedAttendance: 0,
+    },
   }
   if (selectedEvent.value) {
     event.id = selectedEvent.value.id as unknown as string;
@@ -141,14 +143,14 @@ const handleAddOrUpdateEvent = async () => {
       route.params.tenantId as string
     )
   }
-  calendarOptions.events = calenderStore.eventState as unknown as Array<IEvent>;
+  calendarOptions.events = calenderStore.eventState as unknown as any;
   closeModal();
 }
 
 const handleDeleteEvent = async () => {
   if (selectedEvent.value) {
     await calenderStore.DeleteEvent(selectedEvent.value.id);
-    calendarOptions.events = calenderStore.eventState as unknown as Array<IEvent>;
+    calendarOptions.events = calenderStore.eventState as unknown as any;
     closeModal()
   }
 }
@@ -189,8 +191,8 @@ const renderEventContent = (eventInfo: any) => {
   const timeText = eventInfo.timeText;
   const event = eventInfo.event;
   let status = "Danger";
-  statuses.value.filter((e) => { 
-    if(e.key === event.extendedProps.calendar) status = e.value
+  statuses.value.filter((e) => {
+    if (e.key === event.extendedProps.calendar) status = e.value
   }) as unknown as string;
 
   const colorClass = `fc-bg-${status.toLowerCase()}`;
@@ -224,7 +226,7 @@ const calendarOptions: CalendarOptions = reactive({
   selectable: true,
   select: handleDateSelect,
   eventClick: handleEventClick,
-  eventContent: "",
+  eventContent: "vcxvxc",
   customButtons: {
     addEventButton: {
       text: "Add Event +",
@@ -235,7 +237,7 @@ const calendarOptions: CalendarOptions = reactive({
 
 onBeforeMount(async () => {
   await calenderStore.GetEvents();
-  calendarOptions.events = calenderStore.eventState as unknown as Array<IEvent>;
+  calendarOptions.events = calenderStore.eventState as unknown as any;
 
   const statusResponse: any = await apiClient
     .lookup()
