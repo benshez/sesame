@@ -3,12 +3,14 @@ import cors from "cors";
 import supertokens from "supertokens-node";
 //import { verifySession } from "supertokens-node/recipe/session/framework/express";
 //import { middleware, errorHandler, SessionRequest } from "supertokens-node/framework/express";
-import { middleware, errorHandler } from "supertokens-node/framework/express";
+import { middleware } from "supertokens-node/framework/express";
 import { SuperTokensConfig } from "./src/config/config";
 //import Multitenancy from "supertokens-node/recipe/multitenancy";
 import { useBackendConfig } from "./src/config/useBackendConfig";
 //import { EmailRoutes, SessionRoutes, LookupRoutes } from "./src/routes";
 import { RouteLoader } from "./src/core/routing";
+import { errorHandler } from "./src/core/error";
+import "express-async-errors";
 
 supertokens.init(SuperTokensConfig);
 
@@ -47,7 +49,7 @@ Loader.Load();
 
 // In case of session related errors, this error handler
 // returns 401 to the client.
-app.use(errorHandler());
+app.use(errorHandler);
 
 app.listen(3001, () => {
   console.log(`API Server listening on port ${useBackendConfig().GetApiDomain()} || 3001`);

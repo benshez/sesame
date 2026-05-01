@@ -2,6 +2,7 @@ import { SessionRequest } from "supertokens-node/framework/express";
 import { Response } from "express-serve-static-core";
 import { BaseController } from "../../../core/routing";
 import { useDatabase } from "../../../core/db/query/useDatabase";
+import { BadRequestError } from "../../../core/error"
 
 const database = useDatabase();
 
@@ -52,22 +53,24 @@ export class EventController extends BaseController {
 
       const eventInfo = req.body.eventInfo;
       const eventId = eventInfo.event_id;
+      if(!eventId || eventId === "") {
+        throw new BadRequestError({ code: 400, message: "EventId is required!", logging: true });
+      }
       delete eventInfo.event_id;
 
       const event = await database
         .event(database.db)
         .update(
-          { 
-            event_id: eventId 
+          {
+            event_id: eventId
           },
           {
             ...eventInfo
           });
 
-      res.send(event);
-    } catch (error) {
-      console.log("Error updating event info: ", error);
-      throw error;
+      return res.status(200).json(event);
+    } catch (error: unknown) {
+      throw new BadRequestError({ message: "Name is required!", logging: true, context: error as undefined });
     }
   }
 
