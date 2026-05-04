@@ -4,6 +4,7 @@
   "description": "",
   "main": "./src/index.js",
   "scripts": {
+    "debug": "cd frontend && npm run debug",
     "start:frontend": "cd frontend && npm run dev",
     "start:frontend-live-demo-app": "cd frontend && npx serve -s build",
     "start:backend": "cd backend && npm run start",

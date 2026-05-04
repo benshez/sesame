@@ -76,29 +76,27 @@ const eventId = ref<string>("NEW");
 const route = useRoute();
 const router = useRouter();
 
-const CurrentEvent = (): IEvent => {
-  return {
-    id: "",
-    title: formStore.getElementValue("description") as string,
-    start: formStore.getElementValue("startDate") as unknown as Date,
-    end: formStore.getElementValue("endDate") as unknown as Date,
-    extendedProps: {
-      calendar: formStore.getElementValue("progress") as string,
-      organisationId: formStore.getElementValue("organisation") as string,
-      estimatedAttendance: formStore.getElementValue("distance").toString().replace("km", "").replace(".", "") as unknown as number,
-    },
+const CurrentEvent: IEvent = {
+  id: "",
+  title: formStore.getElementValue("description") as string,
+  start: formStore.getElementValue("startDate") as unknown as Date,
+  end: formStore.getElementValue("endDate") as unknown as Date,
+  extendedProps: {
+    calendar: formStore.getElementValue("progress") as string,
+    organisationId: formStore.getElementValue("organisation") as string,
+    estimatedAttendance: formStore.getElementValue("distance").toString().replace("km", "").replace(".", "") as unknown as number,
   }
 }
 
 const onSaveEvent = async () => {
   if (eventId.value !== "NEW") {
     await eventStore.UpdateEvent(
-      CurrentEvent(),
+      CurrentEvent,
       route.params.tenantId as string
     )
   } else {
     await eventStore.CreateEvent(
-      CurrentEvent(),
+      CurrentEvent,
       route.params.tenantId as string
     )
   }
@@ -132,7 +130,7 @@ const onToggleDrawingMode = () => {
 
 onMounted(async () => {
   eventId.value = route.params.eventId.toString().toUpperCase();
-  CurrentEvent().id = eventId.value;
+  CurrentEvent.id = eventId.value;
   map.MapboxInit();
 
   if (eventId.value !== "NEW") {

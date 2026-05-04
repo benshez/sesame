@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "debug": "vite --port 3000 --host",
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "build-only": "vite build",

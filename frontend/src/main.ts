@@ -17,7 +17,7 @@ export const apiDomain = import.meta.env.VUE_APP_API_URL || `http://localhost:${
 
 SuperTokens.init({
     appInfo: {
-        appName: "SuperTokens Vue ThirdPartyEmailPassword Example",
+        appName: "Sesame",
         apiDomain,
     },
     recipeList: [EmailPassword.init(), ThirdParty.init(), Session.init()],

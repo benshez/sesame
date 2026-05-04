@@ -12,6 +12,7 @@ export const errorHandler = (err: Error, req: Request, res: Response) => {
             code: err.statusCode,
             errors: err.errors,
             stack: err.stack,
+            message: `${err.name}${err.message}`
           }, null, 2));
         }
         return res.status(statusCode).send({ errors });

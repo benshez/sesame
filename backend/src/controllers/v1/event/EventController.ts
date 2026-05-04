@@ -2,14 +2,15 @@ import { SessionRequest } from "supertokens-node/framework/express";
 import { Response } from "express-serve-static-core";
 import { BaseController } from "../../../core/routing";
 import { useDatabase } from "../../../core/db/query/useDatabase";
-import { BadRequestError } from "../../../core/error"
+import { BadRequestError, ValidationError } from "../../../core/error"
+import { NextFunction } from "supertokens-node/lib/build/framework/custom/framework";
 
 const database = useDatabase();
 
 export class EventController extends BaseController {
   public Id: string = "EventController";
 
-  GetActiveEventsByTenantIdAndUserId = async (req: SessionRequest, res: Response) => {
+  GetActiveEventsByTenantIdAndUserId = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const session = req.session;
       const tenantId = session!.getTenantId();
@@ -25,14 +26,13 @@ export class EventController extends BaseController {
           })
         .all();
 
-      res.json(events);
+      res.status(200).json(events);
     } catch (error) {
-      console.log("Error fetching event info: ", error);
-      throw error;
+      next(new BadRequestError({ message: `Error fetching event info ${error}`, logging: true }));
     }
   }
 
-  CreateEventByTenenantAndUserId = async (req: SessionRequest, res: Response) => {
+  CreateEventByTenenantAndUserId = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const eventInfo = req.body.eventInfo;
       delete eventInfo.event_id;
@@ -41,20 +41,19 @@ export class EventController extends BaseController {
         .event(database.db)
         .insert(eventInfo);
 
-      res.json(event)
+      res.status(200).json(event)
     } catch (error) {
-      console.log("Error creating event info: ", error);
-      throw error;
+      next(new BadRequestError({ message: `Error creating event info ${error}`, logging: true }));
     }
   }
 
-  UpdateEventByTenenantAndUserId = async (req: SessionRequest, res: Response) => {
+  UpdateEventByTenenantAndUserId = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
 
       const eventInfo = req.body.eventInfo;
       const eventId = eventInfo.event_id;
-      if(!eventId || eventId === "") {
-        throw new BadRequestError({ code: 400, message: "EventId is required!", logging: true });
+      if (!eventId || eventId === "") {
+        next(new ValidationError({ code: 400, context: "Event Id is required" as unknown as undefined, logging: true }));
       }
       delete eventInfo.event_id;
 
@@ -68,16 +67,18 @@ export class EventController extends BaseController {
             ...eventInfo
           });
 
-      return res.status(200).json(event);
+      res.status(200).json(event);
     } catch (error: unknown) {
-      throw new BadRequestError({ message: "Name is required!", logging: true, context: error as undefined });
+      next(new BadRequestError({ context: `Error updating event info ${error}` as unknown as undefined, logging: true }))
     }
   }
 
-  DeleteEventByTenenantAndUserId = async (req: SessionRequest, res: Response) => {
+  DeleteEventByTenenantAndUserId = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const eventId = req.body.eventId;
-
+      if (!eventId || eventId === "") {
+        next(new ValidationError({ code: 400, context: "Event Id is required" as unknown as undefined, logging: true }));
+      }
       const event = await database
         .event(database.db)
         .update(
@@ -88,10 +89,9 @@ export class EventController extends BaseController {
             active: false
           })
 
-      res.json(event);
+      res.status(200).json(event);
     } catch (error) {
-      console.log("Error deleting event info: ", error);
-      throw error;
+      next(new BadRequestError({ context: `Error deleting event info ${error}` as unknown as undefined, logging: true }));
     }
   }
 }

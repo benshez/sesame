@@ -1,7 +1,7 @@
 import { CustomError } from "./index";
 
-export default class BadRequestError extends CustomError {
-  private static readonly _statusCode = 400;
+export default class DatabaseError  extends CustomError {
+  private static readonly _statusCode = 500;
   private readonly _code: number;
   private readonly _logging: boolean;
   private readonly _context: { [key: string]: unknown };
@@ -9,14 +9,14 @@ export default class BadRequestError extends CustomError {
   constructor(params?: { code?: number, message?: string, logging?: boolean, context?: { [key: string]: unknown } }) {
     const { code, message, logging } = params || {};
 
-    super(message || "Bad request");
-    this._code = code || BadRequestError._statusCode;
+    super(message || "Database error");
+    this._code = code || DatabaseError._statusCode;
     this._logging = logging || false;
     this._context = params?.context || {};
-    this.name = "BadRequestError";
+    this.name = "DatabaseError";
 
     // Only because we are extending a built in class
-    Object.setPrototypeOf(this, BadRequestError.prototype);
+    Object.setPrototypeOf(this, DatabaseError.prototype);
   }
 
   get errors() {

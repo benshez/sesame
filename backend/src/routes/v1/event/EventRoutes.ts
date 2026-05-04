@@ -12,26 +12,26 @@ class EventRoutes extends BaseRoute<EventController> {
   protected RegisterRoutes(): void {
     this
       .router
-      .get("/get-active-user-events", verifySession(), async (req, res) => {
-        return await this.controller.GetActiveEventsByTenantIdAndUserId(req, res);
+      .get("/get-active-user-events", verifySession(), async (req, res, next) => {
+        return await this.controller.GetActiveEventsByTenantIdAndUserId(req, res, next);
       });
 
     this
       .router
-      .post("/create-tenant-user-event", verifySession(), async (req, res) => {
-        return await this.controller.CreateEventByTenenantAndUserId(req, res);
+      .post("/create-tenant-user-event", verifySession(), async (req, res, next) => {
+        return await this.controller.CreateEventByTenenantAndUserId(req, res, next);
       });
 
     this
       .router
-      .post("/update-tenant-user-event", verifySession(), async (req, res) => {
-        return await this.controller.UpdateEventByTenenantAndUserId(req, res);
+      .post("/update-tenant-user-event", verifySession(), async (req, res, next) => {
+        return await this.controller.UpdateEventByTenenantAndUserId(req, res, next);
       });
 
     this
       .router
-      .patch("/delete-tenenat-user-event", verifySession(), async (req, res) => {
-        return await this.controller.DeleteEventByTenenantAndUserId(req, res);
+      .patch("/delete-tenenat-user-event", verifySession(), async (req, res, next) => {
+        return await this.controller.DeleteEventByTenenantAndUserId(req, res, next);
       })
   }
 }
