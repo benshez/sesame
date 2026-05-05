@@ -12,7 +12,7 @@ export const useMap = () => {
   let isDrawing: boolean = false;
   let coordinates: Array<Array<number>> = [];
   let mapMarkers: Array<mapboxgl.Marker> = [];
-  let eventCoordinates: ICoordinates = { start: {} as ILongLat, end: {} as ILongLat };
+  let eventCoordinates: ICoordinates = { start: {} as ILongLat, end: {} as ILongLat, distance: 0 };
 
   const MapboxInit = () => {
     const container: HTMLDivElement = document.getElementById("mapContainer") as HTMLDivElement;
@@ -107,6 +107,7 @@ export const useMap = () => {
     if (firstRoute) {
       const travelDistance = (firstRoute.distance / 1000);
       formStore.updateElementState("distance", { key: "value", value: `${travelDistance.toFixed(2)}km` });
+      eventCoordinates.distance = firstRoute.distance;
     }
 
     return waypoints;
@@ -146,7 +147,7 @@ export const useMap = () => {
 
     mapMarkers.forEach((marker) => marker.remove());
     coordinates = [];
-    eventCoordinates = { start: {} as ILongLat, end: {} as ILongLat };
+    eventCoordinates = { start: {} as ILongLat, end: {} as ILongLat, distance: 0 };
     formStore.updateElementState("distance", { key: "value", value: "" });
   }
 
@@ -166,10 +167,6 @@ export const useMap = () => {
 
   const OnMapClicked = (e: any) => {
     coordinates.push([e.lngLat.lng, e.lngLat.lat]);
-    let cords: ILongLat = {
-      latitude: e.lngLat.lat,
-      longitude: e.lngLat.lng
-    }
 
     if(Object.keys(eventCoordinates.start).length === 0) {
       eventCoordinates.start.longitude = e.lngLat.lng;
@@ -191,11 +188,20 @@ export const useMap = () => {
     return eventCoordinates;
   }
 
+  const OnCreateSavedMap = (data: ICoordinates) => {
+    coordinates.push([data.start.longitude, data.start.latitude], [data.end.longitude, data.end.latitude]);
+    eventCoordinates = data;
+    AddMarker(map, {lngLat: [data.start.longitude, data.start.latitude] });
+    AddMarker(map, {lngLat: [data.end.longitude, data.end.latitude] });
+    onCreateDrawing(map, coordinates);
+  }
+
   return {
     MapboxInit,
     ToggleIsDrawing,
     OnCalculateDistanceClick,
     OnClearMapClick,
-    GetEventCoordinates
+    GetEventCoordinates,
+    OnCreateSavedMap
   }
 }

@@ -6,4 +6,5 @@ export interface ILongLat {
 export interface ICoordinates {
   start: ILongLat,
   end: ILongLat,
+  distance: number
 }

@@ -61,7 +61,7 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useMap } from "@/utilities";
 import { useEventStore, useFormStore } from "@/store";
-import type { IEvent } from "@/interfaces";
+import type { ICoordinates, IEvent } from "@/interfaces";
 import FormBody from "@/components/Form/FormBody.vue";
 import FormTwoColumnLayout from "@/layouts/FormTwoColumnLayout.vue";
 import BaseLayout from "@/layouts/BaseLayout.vue";
@@ -97,7 +97,6 @@ const onSaveEvent = async () => {
   calendar: formStore.getElementValue("progress") as string,
   organisationId: formStore.getElementValue("organisation") as string,
   locations: map.GetEventCoordinates()
-    //locations: formStore.getElementValue("distance").toString().replace("km", "").replace(".", "") as unknown as number,
   }
 
   if (eventId.value !== "NEW") {
@@ -153,7 +152,8 @@ onMounted(async () => {
     formStore.updateElementState("progress", { key: "value", value: event.extendedProps?.calendar });
     formStore.updateElementState("organisation", { key: "value", value: event.extendedProps?.organisationId });
     formStore.updateElementState("description", { key: "value", value: event.title });
-    //formStore.updateElementState("distance", { key: "value", value: `${(event.extendedProps?.estimatedAttendance as number / 100)}km` });
+
+    map.OnCreateSavedMap(event.extendedProps?.locations as unknown as ICoordinates);
   }
 })
 </script>
