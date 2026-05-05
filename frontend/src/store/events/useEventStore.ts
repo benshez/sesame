@@ -29,7 +29,7 @@ export const useEventStore = defineStore("events", {
         budget_estimated: "10",
         description: event.title,
         end_date: event.end,
-        estimated_attendance: event.extendedProps?.estimatedAttendance,
+        locations: event.extendedProps?.locations,
         event_type_id: 1,
         organization_id: event.extendedProps?.organisationId,
         start_date: event.start,
@@ -74,7 +74,7 @@ export const useEventStore = defineStore("events", {
           extendedProps: {
             calendar: event.status_id,
             organisationId: event.organization_id,
-            estimatedAttendance: event.estimated_attendance,
+            locations: event.locations,
           }
         }
 

@@ -1,7 +1,7 @@
 import mapboxgl, { type LngLatLike } from "mapbox-gl";
 import { lineString } from "@turf/turf";
 import { configuration } from "@/utilities";
-import type { IMapboxDirections } from "@/interfaces";
+import type { IMapboxDirections, ILongLat, ICoordinates } from "@/interfaces";
 import { useFormStore } from "@/store/forms/formStore";
 
 export const useMap = () => {
@@ -12,6 +12,7 @@ export const useMap = () => {
   let isDrawing: boolean = false;
   let coordinates: Array<Array<number>> = [];
   let mapMarkers: Array<mapboxgl.Marker> = [];
+  let eventCoordinates: ICoordinates = { start: {} as ILongLat, end: {} as ILongLat };
 
   const MapboxInit = () => {
     const container: HTMLDivElement = document.getElementById("mapContainer") as HTMLDivElement;
@@ -145,7 +146,7 @@ export const useMap = () => {
 
     mapMarkers.forEach((marker) => marker.remove());
     coordinates = [];
-
+    eventCoordinates = { start: {} as ILongLat, end: {} as ILongLat };
     formStore.updateElementState("distance", { key: "value", value: "" });
   }
 
@@ -165,6 +166,19 @@ export const useMap = () => {
 
   const OnMapClicked = (e: any) => {
     coordinates.push([e.lngLat.lng, e.lngLat.lat]);
+    let cords: ILongLat = {
+      latitude: e.lngLat.lat,
+      longitude: e.lngLat.lng
+    }
+
+    if(Object.keys(eventCoordinates.start).length === 0) {
+      eventCoordinates.start.longitude = e.lngLat.lng;
+      eventCoordinates.start.latitude = e.lngLat.lat
+    } else {
+      eventCoordinates.end.longitude = e.lngLat.lng;
+      eventCoordinates.end.latitude = e.lngLat.lat
+    }
+    
     AddMarker(map, e);
   }
 
@@ -173,10 +187,15 @@ export const useMap = () => {
     onCreateDrawing(map, coordinates);
   }
 
+  const GetEventCoordinates = (): ICoordinates => {
+    return eventCoordinates;
+  }
+
   return {
     MapboxInit,
     ToggleIsDrawing,
     OnCalculateDistanceClick,
-    OnClearMapClick
+    OnClearMapClick,
+    GetEventCoordinates
   }
 }

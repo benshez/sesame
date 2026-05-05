@@ -13,7 +13,7 @@ export interface IEvent {
   extendedProps?: {
     calendar: string,
     organisationId?: string | number,
-    estimatedAttendance: number | string,
+    locations: object | string,
   },
   groupId?: string,
   id: string,

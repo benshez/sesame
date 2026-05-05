@@ -84,11 +84,22 @@ const CurrentEvent: IEvent = {
   extendedProps: {
     calendar: formStore.getElementValue("progress") as string,
     organisationId: formStore.getElementValue("organisation") as string,
-    estimatedAttendance: formStore.getElementValue("distance").toString().replace("km", "").replace(".", "") as unknown as number,
+    locations: map.GetEventCoordinates()
+    //locations: formStore.getElementValue("distance").toString().replace("km", "").replace(".", "") as unknown as number,
   }
 }
 
 const onSaveEvent = async () => {
+  CurrentEvent.title = formStore.getElementValue("description") as string,
+  CurrentEvent.start = formStore.getElementValue("startDate") as unknown as Date,
+  CurrentEvent.end = formStore.getElementValue("endDate") as unknown as Date,
+  CurrentEvent.extendedProps = {
+  calendar: formStore.getElementValue("progress") as string,
+  organisationId: formStore.getElementValue("organisation") as string,
+  locations: map.GetEventCoordinates()
+    //locations: formStore.getElementValue("distance").toString().replace("km", "").replace(".", "") as unknown as number,
+  }
+
   if (eventId.value !== "NEW") {
     await eventStore.UpdateEvent(
       CurrentEvent,
@@ -142,7 +153,7 @@ onMounted(async () => {
     formStore.updateElementState("progress", { key: "value", value: event.extendedProps?.calendar });
     formStore.updateElementState("organisation", { key: "value", value: event.extendedProps?.organisationId });
     formStore.updateElementState("description", { key: "value", value: event.title });
-    formStore.updateElementState("distance", { key: "value", value: `${(event.extendedProps?.estimatedAttendance as number / 100)}km` });
+    //formStore.updateElementState("distance", { key: "value", value: `${(event.extendedProps?.estimatedAttendance as number / 100)}km` });
   }
 })
 </script>

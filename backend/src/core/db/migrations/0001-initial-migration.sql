@@ -101,6 +101,7 @@ CREATE TABLE Event
 	  total_expenditure MONEY NULL,
 	  description TEXT NULL,
 	  estimated_attendance INT NULL,
+		locations json NULL,
 	  actual_attendance INT NULL,
 		active boolean NOT NULL,
 	  FOREIGN KEY (event_Type_id) REFERENCES Event_Type(event_Type_id),

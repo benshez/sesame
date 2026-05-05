@@ -219,6 +219,13 @@
         "typeName": "INTEGER"
       },
       {
+        "name": "locations",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 114,
+        "typeName": "JSON"
+      },
+      {
         "name": "organization_id",
         "isNullable": false,
         "hasDefault": false,
