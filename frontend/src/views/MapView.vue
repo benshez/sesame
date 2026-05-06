@@ -30,18 +30,18 @@
           <div class="flex lg:flex-row fc-header-toolbar fc-toolbar fc-toolbar-ltr mb-5">
             <div class="fc-toolbar-chunk">
               <div class="fc-button-group inline-flex">
-                <button v-if="isDrawing && !canClear" @click="onToggleDrawingMode" type="button" title="month view"
-                  aria-pressed="true" class=""
-                  :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': isDrawing && !canClear, 'fc-dayGridMonth-button fc-button fc-button-primary': !isDrawing && !canClear }">Add
+                <button v-if="!displayStore.canClearMapState" @click="onToggleDrawingMode" type="button"
+                  title="month view" aria-pressed="false"
+                  :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': displayStore.canAddMapMarker, 'fc-dayGridMonth-button fc-button fc-button-primary': !displayStore.canAddMapMarker }">Add
                   Markers
                 </button>
-                <button v-if="!isDrawing && canClear" @click="onClearMap" type="button" title="week view"
+                <button v-if="displayStore.canClearMapState" @click="onClearMap" type="button" title="week view"
                   aria-pressed="false"
-                  :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': !isDrawing && canClear, 'fc-dayGridMonth-button fc-button fc-button-primary': !isDrawing && !canClear }">Clear
+                  :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': displayStore.canClearMapState, 'fc-dayGridMonth-button fc-button fc-button-primary': !displayStore.canClearMapState }">Clear
                   Map
                 </button>
                 <button @click="CalculateDistance" type="button" title="day view" aria-pressed="false"
-                  :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': !isDrawing && canClear, 'fc-dayGridMonth-button fc-button fc-button-primary': !isDrawing || !canClear }">Calculate
+                  :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': displayStore.canAddMapMarker && displayStore.canClearMapState, 'fc-dayGridMonth-button fc-button fc-button-primary': !displayStore.canAddMapMarker || !displayStore.canClearMapState }">Calculate
                   Distance
                 </button>
               </div>
@@ -60,18 +60,16 @@
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useMap } from "@/utilities";
-import { useEventStore, useFormStore } from "@/store";
+import { useEventStore, useFormStore, useDisplayStore } from "@/store";
 import type { ICoordinates, IEvent } from "@/interfaces";
 import FormBody from "@/components/Form/FormBody.vue";
 import FormTwoColumnLayout from "@/layouts/FormTwoColumnLayout.vue";
 import BaseLayout from "@/layouts/BaseLayout.vue";
-import type { DateTime } from "ts-luxon";
 
 const eventStore = useEventStore();
 const formStore = useFormStore();
+const displayStore = useDisplayStore();
 const map = useMap();
-const isDrawing = ref<boolean>(true);
-const canClear = ref<boolean>(false);
 const eventId = ref<string>("NEW");
 const route = useRoute();
 const router = useRouter();
@@ -85,19 +83,18 @@ const CurrentEvent: IEvent = {
     calendar: formStore.getElementValue("progress") as string,
     organisationId: formStore.getElementValue("organisation") as string,
     locations: map.GetEventCoordinates()
-    //locations: formStore.getElementValue("distance").toString().replace("km", "").replace(".", "") as unknown as number,
   }
 }
 
 const onSaveEvent = async () => {
   CurrentEvent.title = formStore.getElementValue("description") as string,
-  CurrentEvent.start = formStore.getElementValue("startDate") as unknown as Date,
-  CurrentEvent.end = formStore.getElementValue("endDate") as unknown as Date,
-  CurrentEvent.extendedProps = {
-  calendar: formStore.getElementValue("progress") as string,
-  organisationId: formStore.getElementValue("organisation") as string,
-  locations: map.GetEventCoordinates()
-  }
+    CurrentEvent.start = formStore.getElementValue("startDate") as unknown as Date,
+    CurrentEvent.end = formStore.getElementValue("endDate") as unknown as Date,
+    CurrentEvent.extendedProps = {
+      calendar: formStore.getElementValue("progress") as string,
+      organisationId: formStore.getElementValue("organisation") as string,
+      locations: map.GetEventCoordinates()
+    }
 
   if (eventId.value !== "NEW") {
     await eventStore.UpdateEvent(
@@ -123,22 +120,31 @@ const onDeleteEvent = async () => {
 }
 
 const CalculateDistance = () => {
+  UpdateDisplay(true);
+  map.ToggleIsDrawing();
   map.OnCalculateDistanceClick();
+}
+
+const UpdateDisplay = (show: boolean) => {
+  displayStore.UpdateCanAddMapMarkerState(!show);
+  displayStore.UpdateCanClearMap(show);
 }
 
 const onClearMap = () => {
   map.OnClearMapClick();
-  isDrawing.value = true;
-  canClear.value = false;
+  displayStore.UpdateCanAddMapMarkerState(false);
+  map.ToggleIsDrawing();
+  UpdateDisplay(false);
 }
 
 const onToggleDrawingMode = () => {
-  canClear.value = true;
-  map.ToggleIsDrawing(isDrawing.value);
-  isDrawing.value = false;
+  displayStore.UpdateCanClearMap(true);
+  displayStore.UpdateCanAddMapMarkerState(true);
+  map.ToggleIsDrawing();
 }
 
 onMounted(async () => {
+  displayStore.UpdateCanAddMapMarkerState(true);
   eventId.value = route.params.eventId.toString().toUpperCase();
   CurrentEvent.id = eventId.value;
   map.MapboxInit();
@@ -152,7 +158,7 @@ onMounted(async () => {
     formStore.updateElementState("progress", { key: "value", value: event.extendedProps?.calendar });
     formStore.updateElementState("organisation", { key: "value", value: event.extendedProps?.organisationId });
     formStore.updateElementState("description", { key: "value", value: event.title });
-
+    UpdateDisplay(true);
     map.OnCreateSavedMap(event.extendedProps?.locations as unknown as ICoordinates);
   }
 })

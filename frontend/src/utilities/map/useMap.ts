@@ -2,14 +2,13 @@ import mapboxgl, { type LngLatLike } from "mapbox-gl";
 import { lineString } from "@turf/turf";
 import { configuration } from "@/utilities";
 import type { IMapboxDirections, ILongLat, ICoordinates } from "@/interfaces";
-import { useFormStore } from "@/store/forms/formStore";
+import { useFormStore, useDisplayStore } from "@/store";
 
 export const useMap = () => {
-
+  const displayStore = useDisplayStore();
   const layerId: string = "light-v11";
   let mapbox: unknown;
   let map: mapboxgl.Map;
-  let isDrawing: boolean = false;
   let coordinates: Array<Array<number>> = [];
   let mapMarkers: Array<mapboxgl.Marker> = [];
   let eventCoordinates: ICoordinates = { start: {} as ILongLat, end: {} as ILongLat, distance: 0 };
@@ -151,12 +150,10 @@ export const useMap = () => {
     formStore.updateElementState("distance", { key: "value", value: "" });
   }
 
-  const ToggleIsDrawing = (draw: boolean) => {
-    isDrawing = draw;
-
+  const ToggleIsDrawing = () => {
     map.off("click", OnMapClicked);
 
-    if (isDrawing) {
+    if (displayStore.canAddMapMarker) {
       map.on("click", OnMapClicked)
     }
   }
