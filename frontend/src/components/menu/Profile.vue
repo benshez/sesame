@@ -48,9 +48,6 @@ import SVGButton from "@/components/svg/SVGButton.vue";
 import * as Session from "supertokens-web-js/recipe/session";
 import { useDisplayStore } from "@/store";
 
-//import { useUserStore } from "@/store";
-
-//const userStore = useUserStore();
 const displayStore = useDisplayStore();
 const router = useRouter();
 const userId = ref<string | null>(null);

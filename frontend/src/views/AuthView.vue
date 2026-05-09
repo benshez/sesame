@@ -12,7 +12,7 @@
             </div>
           </template>
           <template v-slot:content>
-            <FormBuilder :elements="formStore.elements" />
+            <FormBuilder :elements="formStore.formState.elements" />
           </template>
           <template v-slot:footer="elements">
             <div class="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">

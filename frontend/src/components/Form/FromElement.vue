@@ -24,7 +24,7 @@ const props = defineProps({
 })
 
 const validationCssClass = (element: IElement) => {
-  if (formStore.formIsValid) {
+  if (formStore.formState.formIsValid) {
     return "mt-1.5 text-theme-xs text-gray-500";
   } else {
     return element.isValid ? "mt-1.5 text-theme-xs text-success-500" : "mt-1.5 text-theme-xs text-error-500";

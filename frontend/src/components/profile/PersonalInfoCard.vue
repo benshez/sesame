@@ -91,12 +91,12 @@ const SetProperty = <T>(obj: T, path: string, value: any): T => {
 };
 
 const SaveUserMetaData = async () => {
-  if (!formStore.formIsValid) return;
+  if (!formStore.formState.formIsValid) return;
   
   if (await Session.doesSessionExist()) {
     let user: IUserMetaData = {} as IUserMetaData;
 
-    formStore.elementsState.forEach((e) => {
+    formStore.formState.elements.forEach((e) => {
       user = helper.SetProperty(user, e.id?.toString() as string, e.value)
     });
 

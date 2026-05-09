@@ -45,5 +45,5 @@ const route = useRoute();
 const routeName: string = props.view?.toString() ? props.view : route.name?.toString() || "";
 
 formStore.getElements(routeName as string);
-const { elements } = toRefs(formStore);
+const { elements } = toRefs(formStore.formState);
 </script>

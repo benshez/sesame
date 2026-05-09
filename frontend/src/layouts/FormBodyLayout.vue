@@ -11,6 +11,6 @@ import { useFormStore } from "@/store/forms/formStore";
 const formStore = useFormStore();
 const route = useRoute();
 formStore.getElements(route.name as string)
-const { elements } = toRefs(formStore);
+const { elements } = toRefs(formStore.formState);
 
 </script>

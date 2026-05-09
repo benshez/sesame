@@ -1,67 +1,72 @@
 import { defineStore } from "pinia";
+import { ref } from "vue";
 import Session from "supertokens-web-js/recipe/session";
 import { ApiClient } from "@/plugins";
 import type { IUserInfo, IUserMetaData } from "@/interfaces";
 
-const apiClient = new ApiClient();
 
-export const useUserStore = defineStore("user", {
-  state: () => ({
-    UserInfoState: {} as IUserInfo,
-    UserMetaDataState: {} as IUserMetaData
-  }),
+export const useUserStore = defineStore("user", () => {
+  const apiClient = new ApiClient();
+  const userState = ref({
+    UserInfo: {} as IUserInfo,
+    UserMetaData: {} as IUserMetaData
+  });
 
-  actions: {
-    async GetAccessToken() {
-      return await Session.getAccessTokenPayloadSecurely();
-    },
+  const GetAccessToken = async () => {
+    return await Session.getAccessTokenPayloadSecurely();
+  }
 
-    async GetUserId() {
-      return await Session.getUserId();
-    },
+  const GetUserId = async () => {
+    return await Session.getUserId();
+  }
 
-    async GetUserInfo() {
-      const user = await apiClient
-        .setBearerAuth(await this.GetAccessToken())
-        .users()
-        .userInfo(await this.GetUserId())
+  const GetUserInfo = async () => {
+    const user = await apiClient
+      .setBearerAuth(await GetAccessToken())
+      .users()
+      .userInfo(await GetUserId())
 
-      Object.assign(this.$state.UserInfoState, user);
+    Object.assign(userState.value.UserInfo, user);
 
-      return this.$state.UserInfoState;
-    },
+    return userState.value.UserInfo;
+  }
 
-    async SaveUserMetaData(userInfo: IUserMetaData) {
-      return await apiClient
-        .setBearerAuth(await this.GetAccessToken())
-        .users()
-        .updateUserMetadata(userInfo);
-    },
+  const SaveUserMetaData = async (userInfo: IUserMetaData) => {
+    return await apiClient
+      .setBearerAuth(await GetAccessToken())
+      .users()
+      .updateUserMetadata(userInfo);
+  }
 
-    async GetUserMetaData() {
-      const response: any = await apiClient
-        .setBearerAuth(await this.GetAccessToken())
-        .users()
-        .getUserMetadata(await this.GetUserId());
+  const GetUserMetaData = async () => {
+    const response: any = await apiClient
+      .setBearerAuth(await GetAccessToken())
+      .users()
+      .getUserMetadata(await GetUserId());
 
-      Object.assign(this.$state.UserMetaDataState, response.metadata);
+    Object.assign(userState.value.UserMetaData, response.metadata);
 
-      return this.$state.UserMetaDataState;
-    },
+    return userState.value.UserMetaData;
+  }
 
-    async SendVerificationEmail() {
-      const user = await this.GetUserInfo();
+  const SendVerificationEmail = async () => {
+    const user = await GetUserInfo();
 
-      const response = await apiClient
-        .setBearerAuth(await this.GetAccessToken())
-        .email()
-        .sendVerificationEmail({
-          "email": this.$state.UserInfoState.emails.at(0)?.toString() || ""
-        });
-    }
-  },
-  getters: {
-    UserInfo: (state) => state.UserInfoState,
-    UserMetaData: (state) => state.UserMetaDataState
+    const response = await apiClient
+      .setBearerAuth(await GetAccessToken())
+      .email()
+      .sendVerificationEmail({
+        "email": userState.value.UserInfo.emails.at(0)?.toString() || ""
+      });
+  }
+
+  return {
+    userState,
+    GetUserInfo,
+    GetUserMetaData,
+    SaveUserMetaData,
+    SendVerificationEmail,
+    GetAccessToken,
+    GetUserId
   }
 })

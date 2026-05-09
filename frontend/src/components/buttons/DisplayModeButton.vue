@@ -20,6 +20,10 @@ const displayStore = useDisplayStore();
 
 const OnDarkModeShowing = () => {
   displayStore.UpdateDarkModeState(!displayStore.displayState.darkMode);
+  OnSetDisplayMode();
+}
+
+const OnSetDisplayMode = () => {
   if (displayStore.displayState.darkMode) {
     document.body.classList.add("dark");
   } else {
@@ -28,11 +32,7 @@ const OnDarkModeShowing = () => {
 }
 
 onMounted(() => {
-  if (displayStore.displayState.darkMode) {
-    document.body.classList.add("dark");
-  } else {
-    document.body.classList.remove("dark");
-  }
+  OnSetDisplayMode();
 });
 
 </script>

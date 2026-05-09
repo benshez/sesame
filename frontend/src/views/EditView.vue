@@ -17,16 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from "vue";
 import BaseLayout from "@/layouts/BaseLayout.vue";
 import ProfileCard from "@/components/profile/ProfileCard.vue";
 import PersonalInfoCard from "@/components/profile/PersonalInfoCard.vue"
-import { useUserStore } from "@/store";
 
-const userStore = useUserStore();
-
-onBeforeMount(async () => {
-  //const user = await userStore.GetUserMetaData();
-  //await userStore.GetUserInfo();
-});
 </script>
