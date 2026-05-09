@@ -13,3 +13,4 @@ export type { IUserMetaData } from "@/interfaces/user/IUserMetaData";
 export type { IEvent } from "@/interfaces/calendar/IEvent";
 export type { IStatus } from "@/interfaces/calendar/IStatus";
 export type { ILongLat, ICoordinates } from "@/interfaces/map/ILongLat";
+export type { IResources } from "@/interfaces/resources/IResources";

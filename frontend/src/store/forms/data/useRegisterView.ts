@@ -8,6 +8,7 @@ export const useRegisterView = () => {
     "name": "register",
     "heading": "Register",
     "path": "/register",
+    "hasValidationErrors": false,
     "requiresAuthenticaton": true,
     "elements": [
       {

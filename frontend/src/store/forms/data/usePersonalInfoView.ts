@@ -10,6 +10,7 @@ export const usePersonalInfoView = () => {
     "name": "personalInfo",
     "heading": "Personal Information",
     "path": "/personalInfo",
+    "hasValidationErrors": false,
     "requiresAuthenticaton": true,
     "elements": [
       {

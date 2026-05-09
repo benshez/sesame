@@ -8,6 +8,7 @@ export const useLoginView = () => {
     "name": "auth",
     "heading": "Login",
     "path": "/auth",
+    "hasValidationErrors": false,
     "requiresAuthenticaton": true,
     "elements": [
       {

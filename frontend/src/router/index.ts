@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useDisplayStore } from "@/store"
-import HomeView from "../views/HomeView.vue";
-import Session from "supertokens-web-js/recipe/session";
 import { configuration } from "@/utilities";
 import { useRoutes } from "@/router/useRoutes";
 

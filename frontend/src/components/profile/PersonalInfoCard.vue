@@ -91,6 +91,8 @@ const SetProperty = <T>(obj: T, path: string, value: any): T => {
 };
 
 const SaveUserMetaData = async () => {
+  if (!formStore.formIsValid) return;
+  
   if (await Session.doesSessionExist()) {
     let user: IUserMetaData = {} as IUserMetaData;
 

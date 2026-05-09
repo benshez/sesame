@@ -5,6 +5,7 @@ export const useProfileView = () => {
     "name": "profile",
     "heading": "Edit",
     "path": "/profile",
+    "hasValidationErrors": false,
     "requiresAuthenticaton": true,
     "elements": [
       {

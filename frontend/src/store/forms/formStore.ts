@@ -6,6 +6,7 @@ import type { DateTime } from "ts-luxon";
 
 export const useFormStore = defineStore("form", {
   state: () => ({
+    validationState: true,
     elementsState: [] as Array<IElement>
   }),
   actions: {
@@ -87,6 +88,8 @@ export const useFormStore = defineStore("form", {
 
       const isValid: boolean = await element?.isValidIf?.();
 
+      this.$state.validationState = isValid;
+
       this.updateElementState(key, { key: "isValid", value: isValid });
     },
 
@@ -100,6 +103,7 @@ export const useFormStore = defineStore("form", {
     }
   },
   getters: {
-    elements: (state) => state.elementsState
+    elements: (state) => state.elementsState,
+    formIsValid: (state) => state.validationState
   }
 })

@@ -55,7 +55,7 @@ export class UserController extends BaseController {
     try {
       const session = req.session;
       const roleId = req.body.roleId;
-      
+
       const roleResponse = await UserRoles.addRoleToUser(session!.getTenantId(), session!.getUserId(), roleId);
 
       res.send(roleResponse);
@@ -65,7 +65,39 @@ export class UserController extends BaseController {
     }
   }
 
-  UpdateUserPaswordAndEmail = async (req: SessionRequest, res: Response) => {
+  UserHasRole = async (req: SessionRequest, res: Response) => {
+    try {
+      const roleId = req.body.roleId;
+      const session = await Session.getSession(req, res, {
+        overrideGlobalClaimValidators: async (globalValidators) => [
+          ...globalValidators,
+          UserRoles.UserRoleClaim.validators.includes(roleId)
+        ]
+      });
+
+      const userId = session.getUserId();
+    } catch (error) {
+      console.log("Error fetching user info: ", error);
+    }
+  }
+
+  UserHasClaim = async (req: SessionRequest, res: Response) => {
+    try {
+      const claimId = req.body.claimId;
+      const session = await Session.getSession(req, res, {
+        overrideGlobalClaimValidators: async (globalValidators) => [
+          ...globalValidators,
+          UserRoles.PermissionClaim.validators.includes(claimId)
+        ]
+      });
+
+      const userId = session.getUserId();
+    } catch (error) {
+      console.log("Error fetching user info: ", error);
+    }
+  }
+
+  UpdateUserPasswordAndEmail = async (req: SessionRequest, res: Response) => {
     try {
       const session = req.session;
       const userInfo = req.body.userInfo;

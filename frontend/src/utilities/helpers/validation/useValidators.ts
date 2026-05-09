@@ -1,27 +1,12 @@
+import validator from "validator";
 import type { IElement } from "@/interfaces";
 import { ApiClient } from "@/plugins";
 
 export const useValidators = () => {
   const apiClient = new ApiClient();
-  const stringTag = "[object String]";
-  const isArray = Array.isArray;
-  const objectProto = Object.prototype;
-  const nativeObjectToString = objectProto.toString;
-
-  const ObjectToString = (value: any) => {
-    return nativeObjectToString.call(value);
-  }
-
-  const BaseGetTag = (value: any) => {
-    return ObjectToString(value);
-  }
-
-  const IsObjectLike = (value: any) => {
-    return value != null && typeof value == "object";
-  }
 
   const IsEmpty = (element: IElement): boolean => {
-    if (element.isRequired) return element.value === "";
+    if (element.isRequired) return validator.isEmpty(element.value);
 
     return true;
   }
@@ -41,7 +26,7 @@ export const useValidators = () => {
 
     if (typeof element.value !== "string") return false;
 
-    return (!isArray(element.value) && IsObjectLike(element.value) && BaseGetTag(element.value) == stringTag);
+    return (!validator.isNumeric(element.value) && !validator.isBoolean(element.value as string));
   }
 
   const IsValidEmail = (element: IElement): boolean => {
@@ -49,12 +34,7 @@ export const useValidators = () => {
 
     if (isEmpty) return false;
 
-    return element.value
-      ?.toString()
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      ) ? true : false;
+    return validator.isEmail(element.value);
   }
 
   const MatchesValue = (element: IElement, matchedElement: IElement): boolean => {
@@ -68,7 +48,6 @@ export const useValidators = () => {
 
   const IsValidCountry = async (element: IElement): Promise<boolean> => {
     const isEmpty = IsEmpty(element);
-    const isString = IsString(element);
     const hasMinimumTwoCharacters = IsMinimunCharacterLength(element);
 
     if (isEmpty || !hasMinimumTwoCharacters) return false;
@@ -80,7 +59,7 @@ export const useValidators = () => {
       .countries() as unknown as [];
 
     data.forEach((place: any) => {
-      if (place.description === element.value) found = true;
+      if (place.description.toLowerCase() === element.value.toLowerCase()) found = true;
     })
 
     return found;

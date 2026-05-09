@@ -10,6 +10,7 @@ export const useEventView = () => {
     "name": "map",
     "heading": "Map",
     "path": "/map",
+    "hasValidationErrors": false,
     "requiresAuthenticaton": true,
     "elements": [
       {

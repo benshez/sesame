@@ -5,5 +5,6 @@ export interface IPage {
   heading: string;
   path: string;
   elements: Array<IElement>;
+  hasValidationErrors?: boolean;
   requiresAuthenticaton: boolean;
 }
