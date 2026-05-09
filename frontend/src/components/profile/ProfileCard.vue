@@ -88,6 +88,8 @@ const formStore = useFormStore();
 const isProfileInfoModal = ref<boolean>(false);
 
 const SaveProfile = async () => {
+  if(!formStore.formIsValid) return;
+  
   if (await Session.doesSessionExist()) {
     //await userStore.SaveUserMetaData();
   }

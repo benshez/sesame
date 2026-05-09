@@ -37,6 +37,21 @@ export const useValidators = () => {
     return validator.isEmail(element.value);
   }
 
+  const IsStrongPassword = (element: IElement, matchedElement: IElement = {} as IElement): boolean => {
+    const isEmpty = IsEmpty(element);
+    const isMatchedElement = !matchedElement.id ? true : MatchesValue(element, matchedElement);
+
+    if (isEmpty || !isMatchedElement) return false;
+
+    return validator.isStrongPassword(element.value, {
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1
+    });
+  }
+
   const MatchesValue = (element: IElement, matchedElement: IElement): boolean => {
     const isEmpty = IsEmpty(element);
     const isMatchedElement = IsEmpty(matchedElement);
@@ -70,6 +85,7 @@ export const useValidators = () => {
     IsString,
     IsMinimunCharacterLength,
     IsValidEmail,
+    IsStrongPassword,
     MatchesValue,
     IsValidCountry
   }

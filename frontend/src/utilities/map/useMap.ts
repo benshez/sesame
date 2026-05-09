@@ -153,7 +153,7 @@ export const useMap = () => {
   const ToggleIsDrawing = () => {
     map.off("click", OnMapClicked);
 
-    if (displayStore.canAddMapMarker) {
+    if (displayStore.displayState.canAddMapMarker) {
       map.on("click", OnMapClicked)
     }
   }

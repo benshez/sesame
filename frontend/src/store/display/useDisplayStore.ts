@@ -1,60 +1,63 @@
+import { ref } from "vue";
 import { defineStore, } from "pinia";
+import { useLocalStorage } from "@vueuse/core";
 
-export const useDisplayStore = defineStore("auth", {
-  state: () => ({
-    loaderShowingState: false as boolean,
-    sidebarShowingState: false as boolean,
-    menuShowingState: false as  boolean,
-    profileListShowingState: false as  boolean,
-    darkModeState: false as boolean,
-    hasSessionState: false as boolean,
-    authActionTextState: "Sign In" as string,
-    canAddMapMarkerState: false as boolean,
-    canCalculateMapDistanceState: false as boolean,
-    canClearMapState: false as boolean
-  }),
-  actions: {
-    UpdateLoaderShowingState(show: boolean) {
-      this.$state.loaderShowingState = show;
-    },
-    UpdateSidebarShowingState(show: boolean) {
-      this.$state.sidebarShowingState = show;
-    },
-    UpdateMenuShowingState(show: boolean) {
-      this.$state.menuShowingState = show;
-    },
-    UpdateProfileShowingState(show: boolean) {
-      this.$state.profileListShowingState = show;
-    },    
-    UpdateDarkModeState(show: boolean) {
-      this.$state.darkModeState = show;
-    },    
-    UpdateHasSessionState(show: boolean) {
-      this.$state.hasSessionState = show;
-    },
-    UpdateCanAddMapMarkerState(show: boolean) {
-      this.$state.canAddMapMarkerState = show;
-    },
-    UpdateCanCalculateMapDistanceState(show: boolean) {
-      this.$state.canCalculateMapDistanceState = show;
-    },
-    UpdateCanClearMap(show: boolean) {
-      this.$state.canClearMapState = show;
-    },            
-    UpdateActionTextState(text: string) {
-      this.$state.authActionTextState = text;
-    }  
-  },
-  getters: {
-    loaderShowing: (state) => state.loaderShowingState,
-    sidebarShowing: (state) => state.sidebarShowingState,
-    menuShowing: (state) => state.menuShowingState,
-    profileListShowing: (state) => state.profileListShowingState,
-    darkMode: (state) => state.darkModeState,
-    hasSession: (state) => state.hasSessionState,
-    authActionText: (state) => state.authActionTextState,
-    canAddMapMarker: (state) => state.canAddMapMarkerState,
-    canCalculateMapDistance: (state) => state.canCalculateMapDistanceState,
-    canClearMap: (state) => state.canClearMapState
+export const useDisplayStore = defineStore("auth", () => {
+  const displayState = ref(useLocalStorage("sesame.display.state", {
+    loaderShowing: false,
+    sidebarShowing: false,
+    menuShowing: false,
+    profileListShowing: false,
+    darkMode: false,
+    hasSession: false,
+    authActionText: "Sign In",
+    canAddMapMarker: false,
+    canCalculateMapDistance: false,
+    canClearMap: false,
+  }));
+
+  const UpdateLoaderShowingState = (show: boolean) => {
+    displayState.value.loaderShowing = show;
+  };
+  const UpdateSidebarShowingState = (show: boolean) => {
+    displayState.value.sidebarShowing = show;
+  };
+  const UpdateMenuShowingState = (show: boolean) => {
+    displayState.value.menuShowing = show;
+  };
+  const UpdateProfileShowingState = (show: boolean) => {
+    displayState.value.profileListShowing = show;
+  };
+  const UpdateDarkModeState = (show: boolean) => {
+    displayState.value.darkMode = show;
+  };
+  const UpdateHasSessionState = (show: boolean) => {
+    displayState.value.hasSession = show;
+  };
+  const UpdateCanAddMapMarkerState = (show: boolean) => {
+    displayState.value.canAddMapMarker = show;
+  };
+  const UpdateCanCalculateMapDistanceState = (show: boolean) => {
+    displayState.value.canCalculateMapDistance = show;
+  };
+  const UpdateCanClearMap = (show: boolean) => {
+    displayState.value.canClearMap = show;
+  };
+  const UpdateActionTextState = (text: string) => {
+    displayState.value.authActionText = text;
+  };
+
+  return {
+    displayState,
+    UpdateLoaderShowingState,
+    UpdateSidebarShowingState,
+    UpdateMenuShowingState,
+    UpdateProfileShowingState,
+    UpdateDarkModeState,
+    UpdateHasSessionState,
+    UpdateActionTextState,
+    UpdateCanAddMapMarkerState,
+    UpdateCanCalculateMapDistanceState,
+    UpdateCanClearMap
   }
 })

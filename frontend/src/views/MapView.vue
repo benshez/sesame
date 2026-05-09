@@ -30,18 +30,18 @@
           <div class="flex lg:flex-row fc-header-toolbar fc-toolbar fc-toolbar-ltr mb-5">
             <div class="fc-toolbar-chunk">
               <div class="fc-button-group inline-flex">
-                <button v-if="!displayStore.canClearMapState" @click="onToggleDrawingMode" type="button"
+                <button v-if="!displayStore.displayState.canClearMap" @click="onToggleDrawingMode" type="button"
                   title="month view" aria-pressed="false"
-                  :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': displayStore.canAddMapMarker, 'fc-dayGridMonth-button fc-button fc-button-primary': !displayStore.canAddMapMarker }">Add
+                  :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': displayStore.displayState.canAddMapMarker, 'fc-dayGridMonth-button fc-button fc-button-primary': !displayStore.displayState.canAddMapMarker }">Add
                   Markers
                 </button>
-                <button v-if="displayStore.canClearMapState" @click="onClearMap" type="button" title="week view"
+                <button v-if="displayStore.displayState.canClearMap" @click="onClearMap" type="button" title="week view"
                   aria-pressed="false"
-                  :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': displayStore.canClearMapState, 'fc-dayGridMonth-button fc-button fc-button-primary': !displayStore.canClearMapState }">Clear
+                  :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': displayStore.displayState.canClearMap, 'fc-dayGridMonth-button fc-button fc-button-primary': !displayStore.displayState.canClearMap }">Clear
                   Map
                 </button>
                 <button @click="CalculateDistance" type="button" title="day view" aria-pressed="false"
-                  :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': displayStore.canAddMapMarker && displayStore.canClearMapState, 'fc-dayGridMonth-button fc-button fc-button-primary': !displayStore.canAddMapMarker || !displayStore.canClearMapState }">Calculate
+                  :class="{ 'fc-dayGridMonth-button fc-button fc-button-primary fc-button-active': displayStore.displayState.canAddMapMarker && displayStore.displayState.canClearMap, 'fc-dayGridMonth-button fc-button fc-button-primary': !displayStore.displayState.canAddMapMarker || !displayStore.displayState.canClearMap }">Calculate
                   Distance
                 </button>
               </div>

@@ -12,7 +12,7 @@ import { useDisplayStore } from "@/store";
 const displayStore = useDisplayStore();
 
 const OnMenuShowing = () => {
-  displayStore.UpdateMenuShowingState(!displayStore.menuShowing);
+  displayStore.UpdateMenuShowingState(!displayStore.displayState.menuShowing);
 }
 
 </script>
