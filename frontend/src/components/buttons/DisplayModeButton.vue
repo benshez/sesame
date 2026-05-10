@@ -26,8 +26,10 @@ const OnDarkModeShowing = () => {
 const OnSetDisplayMode = () => {
   if (displayStore.displayState.darkMode) {
     document.body.classList.add("dark");
+    document.body.classList.remove("base");
   } else {
     document.body.classList.remove("dark");
+    document.body.classList.add("base");
   }
 }
 

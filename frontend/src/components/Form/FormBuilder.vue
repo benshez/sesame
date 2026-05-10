@@ -10,6 +10,7 @@ import { useRoute } from "vue-router";
 import FormInput from "@/components/Form/FormInput.vue";
 import FormDropdown from "@/components/Form/FormDropdown.vue";
 import FormRadioList from "@/components/Form/FormRadioList.vue";
+import FormCalendar from "@/components/Form/FormCalendar.vue";
 import type { IElement } from "@/interfaces";
 
 const props = defineProps({
@@ -29,6 +30,9 @@ const comp = (element: IElement): any => {
     case "FormRadioList": 
       component = FormRadioList;
       break;      
+    case "FormCalendar": 
+      component = FormCalendar;
+      break;
   }
 
   return component;
