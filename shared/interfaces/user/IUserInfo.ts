@@ -1,5 +1,5 @@
 
-import type { ILoginMethods } from "@/interfaces";
+import type { ILoginMethods } from "../";
 
 export type IUserInfo = {
   id: string,

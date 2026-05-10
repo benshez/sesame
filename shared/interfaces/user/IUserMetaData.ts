@@ -1,4 +1,4 @@
-import type { IAddress } from "@/interfaces";
+import type { IAddress } from "../";
 
 export type IUserMetaData = {
   firstName: string

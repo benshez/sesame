@@ -96,13 +96,14 @@ export const useFormStore = defineStore("form", () => {
     const isValid: boolean = await element?.isValidIf?.();
 
     formState.value.formIsValid = isValid;
-
+    element.cssClass = element.cssClass?.replaceAll(" theme-form-error", "");
+    element.cssClass = element.cssClass?.replaceAll(" theme-form-success", "");
     if (!isValid) {
       document.body.classList.add("invalid");
       element.cssClass = element.cssClass?.concat(" theme-form-error");
     } else {
       document.body.classList.remove("invalid");
-      element.cssClass = element.cssClass?.replaceAll(" theme-form-error","");
+      element.cssClass = element.cssClass?.concat(" theme-form-success");
     }
 
     updateElementState(key, { key: "isValid", value: isValid });

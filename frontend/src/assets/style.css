@@ -1,5 +1,6 @@
 @import url('https://api.mapbox.com/mapbox-gl-js/v3.21.0/mapbox-gl.css');
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap')
+
 layer(base);
 
 @import 'tailwindcss';
@@ -179,46 +180,45 @@ layer(base);
 
 @layer base {
   *,
+  aside,
+  #sub-navbar,
+  .sticky, .top-0,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+    border-color: var(--color-gray-300);
+    background-color: var(--color-white);
+    @apply dark:border-gray-800;
+    @apply text-gray-500;
   }
 
-
-  button:not(:disabled),
-  [role='button']:not(:disabled) {
-    cursor: pointer;
+  
+    @layer dark {
+    *, 
+    aside,
+    #sub-navbar,
+    .sticky, .top-0,    
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+      border-color: var(--color-gray-800);
+      @apply dark:bg-gray-dark!;
+      @apply text-gray-400;
+    }
   }
-
-  .sticky, .top-0 {
-    background-color: #fff;
-  }
-
-  .body.dark .sticky, .body.dark .top-0 {
-    @apply dark:bg-gray-dark 
-  }
-
-  aside, #sub-navbar {
-    background-color: #fff;
-  }
-
-  .body.dark aside, .body.dark#sub-navbar   {
-    @apply dark:bg-gray-dark 
-  }
-
-  .body.dark [class*="border"] {
-    @apply text-gray-500 border-gray-200 dark:border-gray-800 dark:text-gray-400;
-  }
-
-  .body.dark input::-webkit-datetime-edit-text {
-    @apply text-gray-500 border-gray-200 dark:border-gray-800 dark:text-gray-400;
-  }
-
-
+  
   .theme-form-error {
-    @apply border border-error-600! bg-transparent!;
+    @apply border border-error-700!;
+  }
+
+  .theme-form-success {
+    @apply border border-success-700! focus:border-success-700!;
+  }
+
+  .dark\:bg-gray-900:is(.dark *) {
+    background-color: var(--color-gray-900);
   }
 
   .body.dark input::-webkit-datetime-edit-fields-wrapper {
