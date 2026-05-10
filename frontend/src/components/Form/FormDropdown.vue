@@ -2,7 +2,7 @@
   <FormElement :element="element">
     <template v-slot:label></template>
     <template v-slot:component>
-      <div class="relative mt-1 w-full">
+      <div class="relative mt-1 w-full theme-form-input">
         <select v-if="element.component" v-model="element.value" :id="element.id" :class="element.cssClass"
           @change="handleInput(element.id as string)">
           <option v-if="element.options" v-for="(option, optionIndex) in options" :key="optionIndex"

@@ -1,7 +1,13 @@
 import { ref } from "vue";
 import { defineStore, } from "pinia";
 import type { IElement } from "@/interfaces";
-import { useRegisterView, useProfileView, usePersonalInfoView, useLoginView, useEventView } from "@/store"
+import {
+  useRegisterView,
+  useProfileView,
+  usePersonalInfoView,
+  useLoginView,
+  useEventView
+} from "@/store"
 import { useObjectHelper } from "@/utilities";
 import type { DateTime } from "ts-luxon";
 import { useLocalStorage } from "@vueuse/core";
@@ -90,6 +96,14 @@ export const useFormStore = defineStore("form", () => {
     const isValid: boolean = await element?.isValidIf?.();
 
     formState.value.formIsValid = isValid;
+
+    if (!isValid) {
+      document.body.classList.add("invalid");
+      element.cssClass = element.cssClass?.concat(" theme-form-error");
+    } else {
+      document.body.classList.remove("invalid");
+      element.cssClass = element.cssClass?.replaceAll(" theme-form-error","");
+    }
 
     updateElementState(key, { key: "isValid", value: isValid });
   }
