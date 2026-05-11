@@ -188,6 +188,9 @@ layer(base);
   .border-r,
   .border-l,  
   .top-0,
+  .flatpickr-calendar.static,
+  .flatpickr-am-pm,
+  .flatpickr-time input,
   ::after,
   ::before,
   ::backdrop,
@@ -220,6 +223,9 @@ layer(base);
   .border-t,
   .border-r,
   .border-l,
+  .flatpickr-calendar.static,
+  .flatpickr-am-pm,
+  .flatpickr-time input,
   ::after,
   ::before,
   ::backdrop,
@@ -229,7 +235,9 @@ layer(base);
     @apply base:bg-white;
   }
   .fc-next-button::before,
-  .fc-prev-button::before {
+  .fc-prev-button::before  
+  .flatpickr-am-pm,
+  .flatpickr-time input  {
     @apply base:bg-white;
   }  
 }
@@ -334,7 +342,7 @@ layer(base);
   }
   
   .flatpickr-calendar.static {
-    @apply absolute !top-9 !left-0;
+    @apply absolute !top-9 !left-0 custom-scrollbar;
   }
 
   .sesame-start {

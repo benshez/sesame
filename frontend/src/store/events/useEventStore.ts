@@ -57,27 +57,12 @@ export const useEventStore = defineStore("events", () => {
   const GetEvents = async () => {
     eventState.value = [];
 
-    const events: Array<unknown> = await apiClient
+    const events: Array<IEvent> = await apiClient
       .setBearerAuth(await GetAccessToken())
       .events()
-      .getActiveEventsByTenantIdAndUserId() as unknown as unknown[];
+      .getActiveEventsByTenantIdAndUserId() as unknown as Array<IEvent>;
 
-    events.forEach(async (event: any) => {
-
-      const e: IEvent = {
-        id: event.event_id,
-        start: event.start_date.toString().split("Z")[0],
-        end: event.end_date.toString().split("Z")[0],
-        title: event.description,
-        extendedProps: {
-          calendar: event.status_id,
-          organisationId: event.organization_id,
-          locations: event.locations,
-        }
-      }
-
-      eventState.value.push(e);
-    })
+      eventState.value = events as Array<IEvent>;
   }
 
   const GetEventByEventId = (eventId: string): IEvent => {

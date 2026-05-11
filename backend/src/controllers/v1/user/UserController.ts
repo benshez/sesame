@@ -7,7 +7,7 @@ import Session from "supertokens-node/recipe/session";
 import UserMetadata from "supertokens-node/recipe/usermetadata";
 import { BaseController } from "../../../core/routing";
 
-export class UserController extends BaseController {
+export class UserController extends BaseController<null, null> {
   public Id: string = "UserController";
 
   GetUserInfo = async (req: SessionRequest, res: Response) => {

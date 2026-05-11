@@ -6,8 +6,13 @@ export type { IElementProps } from "@/interfaces/properties/IProperties";
 export type { IValidator } from "@/interfaces/properties/IValidator";
 export type { IPage } from "@/interfaces/properties/IPage";
 export type { IMapboxDirections } from "@interfaces/map/IMapboxDirections";
-export type { IEvent } from "@/interfaces/calendar/IEvent";
-export type { IStatus } from "@/interfaces/calendar/IStatus";
 export type { ILongLat, ICoordinates } from "@/interfaces/map/ILongLat";
 export type { IResources } from "@/interfaces/resources/IResources";
-export type { ILoginMethods, IUserInfo, IAddress, IUserMetaData } from "../../../shared/interfaces";
+export type { 
+  ILoginMethods, 
+  IUserInfo, 
+  IAddress, 
+  IUserMetaData, 
+  IEvent, 
+  IStatus 
+} from "../../../shared/interfaces";

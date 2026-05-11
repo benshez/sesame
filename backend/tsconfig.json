@@ -3,7 +3,7 @@
     /* Basic Options */
     "target": "ES2022",
     "outDir": "./dist",
-    "rootDir": "./",
+    "rootDir": "../",
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "ignoreDeprecations": "6.0",

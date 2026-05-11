@@ -6,3 +6,5 @@ export { RouteRegistry } from "./RouteRegistry";
 export { RouteLoader } from "./RouteLoader";
 export { type IRouteMapRoute } from "./IRouteMapRoute";
 export { type IRouteMap } from "./IRouteMap";
+export { type IControllerRequest } from "./IControllerRequest";
+export { type IControllerResponse } from "./IControllerResponse";

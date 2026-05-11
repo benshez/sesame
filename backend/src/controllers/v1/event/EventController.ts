@@ -5,6 +5,7 @@ import { useDatabase } from "../../../core/db/query/useDatabase";
 import { BadRequestError, ValidationError } from "../../../core/error"
 import { NextFunction } from "supertokens-node/lib/build/framework/custom/framework";
 
+
 const database = useDatabase();
 
 export class EventController extends BaseController {
@@ -25,8 +26,8 @@ export class EventController extends BaseController {
             active: true
           })
         .all();
-
-      res.status(200).json(events);
+        
+      res.status(200).json(this.ControllerResponse.GetResponse(events));
     } catch (error) {
       next(new BadRequestError({ message: `Error fetching event info ${error}`, logging: true }));
     }

@@ -21,7 +21,7 @@ export const useMap = () => {
     while (container.firstChild) {
       container.firstChild.remove();
     }
-
+    mapboxgl.clearStorage();
     mapboxgl.accessToken = configuration.GetMapboxToken();
     mapbox = mapboxgl;
     map = new mapboxgl.Map({

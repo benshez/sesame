@@ -1,3 +1,6 @@
-export interface IController {
-  Id?: string
+
+export interface IController<TRequest = unknown, TResponse = unknown> {
+  Id?: string,
+  ControllerRequest?: TRequest;
+  ControllerResponse?: TResponse;
 }

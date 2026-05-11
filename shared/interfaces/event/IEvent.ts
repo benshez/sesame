@@ -1,5 +1,3 @@
-import type { DateTime } from "ts-luxon";
-
 export interface IEvent {
   allDay?: boolean,
   allow?: boolean | string,
