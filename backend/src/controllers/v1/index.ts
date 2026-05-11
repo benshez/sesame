@@ -4,3 +4,7 @@ export { SessionController } from "./session/SessionController";
 export { LookupController } from "./lookup/LookupController";
 export { TenantController } from "./tenant/TenantController";
 export { EventController } from "./event/EventController";
+export { EventRequest } from "./event/EventRequest";
+export { EventResponse } from "./event/EventResponse";
+export { EventService } from "./event/EventService";
+export { IEventService } from "./event/IEventService";

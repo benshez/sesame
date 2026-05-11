@@ -1,14 +1,14 @@
 import type Event from "../../../core/db/sesame_model_types/event";
 import type { IEvent } from "../../../../../shared/interfaces";
-import { IControllerResponse } from "@/core/routing/IControllerResponse";
 
-export class EventResponse implements IControllerResponse {
+export class EventResponse {
 
-  GetResponse(events: Array<Event>): Array<IEvent>  {
-    const response: Array<IEvent> = [];
+  public static response: Array<IEvent> = [] as Array<IEvent>;
+
+  static CreateResponse(events: Array<Event>): Array<IEvent> {
 
     events.forEach((event) => {
-      response.push({
+      this.response.push({
         id: event.event_id.toString(),
         start: event.start_date,
         end: event.end_date,
@@ -21,6 +21,6 @@ export class EventResponse implements IControllerResponse {
       });
     });
 
-    return response;
+    return this.response;
   }
 }

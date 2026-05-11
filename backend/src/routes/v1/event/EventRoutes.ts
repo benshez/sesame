@@ -1,14 +1,17 @@
 import { verifySession } from "supertokens-node/recipe/session/framework/express";
 import { BaseRoute } from "../../../core/routing"
-import { EventController } from "../../../controllers/v1";
-import { EventRequest } from "../../../controllers/v1/event/EventRequest";
-import { EventResponse } from "../../../controllers/v1/event/EventResponse";
+import { 
+  EventController, 
+  EventService, 
+  IEventService 
+} from "../../../controllers/v1";
 
 class EventRoutes extends BaseRoute<EventController> {
   public baseUri = "v1/event";
 
   constructor() {
-    super(new EventController(new EventRequest(), new EventResponse()));
+    const service: IEventService = new EventService();
+    super(new EventController(service));
   }
 
   protected RegisterRoutes(): void {

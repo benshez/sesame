@@ -4,30 +4,24 @@ import { BaseController } from "../../../core/routing";
 import { useDatabase } from "../../../core/db/query/useDatabase";
 import { BadRequestError, ValidationError } from "../../../core/error"
 import { NextFunction } from "supertokens-node/lib/build/framework/custom/framework";
+import { IEventService } from "./IEventService";
 
 
 const database = useDatabase();
 
-export class EventController extends BaseController {
+export class EventController extends BaseController<IEventService> {
+  
   public Id: string = "EventController";
 
   GetActiveEventsByTenantIdAndUserId = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
+
       const session = req.session;
       const tenantId = session!.getTenantId();
       const userId = session!.getUserId();
 
-      const events = await database
-        .event(database.db)
-        .find(
-          {
-            tenant_id: tenantId,
-            user_id: userId,
-            active: true
-          })
-        .all();
-        
-      res.status(200).json(this.ControllerResponse.GetResponse(events));
+      res.status(200).json(await this.ControllerService.GetActiveItemsByTenantIdAndUserId(userId, tenantId));
+
     } catch (error) {
       next(new BadRequestError({ message: `Error fetching event info ${error}`, logging: true }));
     }

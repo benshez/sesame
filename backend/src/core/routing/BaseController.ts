@@ -1,11 +1,10 @@
-import { IController, IControllerRequest, IControllerResponse } from "./";
+import { IController } from ".";
 
-export abstract class BaseController implements IController {
-  public ControllerRequest: IControllerRequest;
-  public ControllerResponse: IControllerResponse;
+export abstract class BaseController<TService = unknown> implements IController<TService> {
+  
+  public ControllerService: TService;
 
-  constructor(request?: IControllerRequest, response?: IControllerResponse) {
-    this.ControllerRequest = request || null as unknown as IControllerRequest;
-    this.ControllerResponse = response || null as unknown as IControllerResponse;
+  constructor(service: TService) {
+    this.ControllerService = service;
   }
 }
