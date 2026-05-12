@@ -1,10 +1,11 @@
+import type Event from "../../../core/db/sesame_model_types/event";
 import { IEvent } from "../../../../../shared/interfaces";
 import { useDatabase } from "../../../core/db/query/useDatabase";
 import { EventResponse } from "./EventResponse";
 import { IEventService } from "./IEventService";
 
 export class EventService implements IEventService {
-  
+
   private database = useDatabase();
 
   async GetActiveItemsByTenantIdAndUserId(userId: string, tenantId: string): Promise<IEvent[]> {
@@ -19,14 +20,45 @@ export class EventService implements IEventService {
         })
       .all();
 
-    return EventResponse.CreateResponse(events) as unknown as IEvent[];
+    return EventResponse.CreateArrayResponse(events) as unknown as IEvent[];
   }
 
-  // DeleteData(...args: unknown[]): unknown {
-  //   throw new Error("Method not implemented");
-  // }
+  async CreateEventByTenenantAndUserId(event: Event): Promise<IEvent> {
 
-  // UpdateData(...args: unknown[]): unknown {
-  //   throw new Error("Method not implemented");
-  // }
+    const response = await this.database
+      .event(this.database.db)
+      .insert(event);
+
+    return EventResponse.CreateArrayResponse(response) as unknown as IEvent;
+  }
+
+  async UpdateEventById(event: Event, eventId: number): Promise<IEvent> {
+
+    const response = await this.database
+      .event(this.database.db)
+      .update(
+        {
+          event_id: eventId
+        },
+        {
+          ...event
+        });
+
+    return EventResponse.CreateArrayResponse(response) as unknown as IEvent;
+  }
+
+  async DeleteEventById(eventId: number): Promise<IEvent> {
+
+    const response = await this.database
+      .event(this.database.db)
+      .update(
+        {
+          event_id: eventId
+        },
+        {
+          active: false
+        })
+
+    return EventResponse.CreateArrayResponse(response) as unknown as IEvent;
+  }
 }

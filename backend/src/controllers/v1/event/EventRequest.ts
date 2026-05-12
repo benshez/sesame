@@ -1,22 +1,25 @@
 import type Event from "../../../core/db/sesame_model_types/event";
 import type { IEvent } from "../../../../../shared/interfaces";
 
-export class EventRequest  {
+export class EventRequest {
 
   public request: Event = {} as Event;
 
-  CreateRequest(event: IEvent, userId: string, tenantId: string): Event {
+  CreateRequest(event: IEvent, userId: string = "", tenantId: string = ""): Event {
     this.request.active = true;
     this.request.actual_attendance = 0;
     this.request.budget_estimated = "10";
     this.request.event_type_id = 1;
-    this.request.tenant_id = tenantId;
     this.request.total_expenditure = "10";
-    this.request.user_id = userId;
     this.request.venue_id = 1;
     this.request.estimated_attendance = 0;
 
-
+    if (userId !== "") {
+      this.request.user_id = userId;
+    }
+    if (tenantId !== "") {
+      this.request.tenant_id = tenantId;
+    }
     if (event.id) {
       this.request.event_id = parseInt(event.id);
     }

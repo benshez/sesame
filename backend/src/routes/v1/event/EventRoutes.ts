@@ -30,13 +30,13 @@ class EventRoutes extends BaseRoute<EventController> {
     this
       .router
       .post("/update-tenant-user-event", verifySession(), async (req, res, next) => {
-        return await this.controller.UpdateEventByTenenantAndUserId(req, res, next);
+        return await this.controller.UpdateEventById(req, res, next);
       });
 
     this
       .router
       .patch("/delete-tenenat-user-event", verifySession(), async (req, res, next) => {
-        return await this.controller.DeleteEventByTenenantAndUserId(req, res, next);
+        return await this.controller.DeleteEventById(req, res, next);
       })
   }
 }

@@ -73,7 +73,7 @@ export const useEventStore = defineStore("events", () => {
     await apiClient
       .setBearerAuth(await GetAccessToken())
       .events()
-      .createTenenatAndUserEvent(await SetupEvent(event, tenantId));
+      .createTenenatAndUserEvent(event);
 
     await GetEvents();
   }
@@ -82,7 +82,7 @@ export const useEventStore = defineStore("events", () => {
     await apiClient
       .setBearerAuth(await GetAccessToken())
       .events()
-      .updateTenenatAndUserEvent(await SetupEvent(event, tenantId));
+      .updateTenenatAndUserEvent(event);
 
     await GetEvents();
   }

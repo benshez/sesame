@@ -1,16 +1,15 @@
 import { SessionRequest } from "supertokens-node/framework/express";
+import type Event from "../../../core/db/sesame_model_types/event";
 import { Response } from "express-serve-static-core";
 import { BaseController } from "../../../core/routing";
-import { useDatabase } from "../../../core/db/query/useDatabase";
 import { BadRequestError, ValidationError } from "../../../core/error"
 import { NextFunction } from "supertokens-node/lib/build/framework/custom/framework";
 import { IEventService } from "./IEventService";
+import { EventRequest } from "./EventRequest";
 
-
-const database = useDatabase();
 
 export class EventController extends BaseController<IEventService> {
-  
+
   public Id: string = "EventController";
 
   GetActiveEventsByTenantIdAndUserId = async (req: SessionRequest, res: Response, next: NextFunction) => {
@@ -29,62 +28,54 @@ export class EventController extends BaseController<IEventService> {
 
   CreateEventByTenenantAndUserId = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
+
+      const session = req.session;
       const eventInfo = req.body.eventInfo;
-      delete eventInfo.event_id;
+      const tenantId = session!.getTenantId();
+      const userId = session!.getUserId();
+      delete eventInfo.id;
+      const request: Event = new EventRequest().CreateRequest(eventInfo, userId, tenantId);
 
-      const event = await database
-        .event(database.db)
-        .insert(eventInfo);
+      res.status(200).json(await this.ControllerService.CreateEventByTenenantAndUserId(request));
 
-      res.status(200).json(event)
     } catch (error) {
       next(new BadRequestError({ message: `Error creating event info ${error}`, logging: true }));
     }
   }
 
-  UpdateEventByTenenantAndUserId = async (req: SessionRequest, res: Response, next: NextFunction) => {
+  UpdateEventById = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
 
+      const session = req.session;
       const eventInfo = req.body.eventInfo;
-      const eventId = eventInfo.event_id;
+      const eventId = eventInfo.id;
+      delete eventInfo.id;
+      const tenantId = session!.getTenantId();
+      const userId = session!.getUserId();
+
       if (!eventId || eventId === "") {
         next(new ValidationError({ code: 400, context: "Event Id is required" as unknown as undefined, logging: true }));
       }
-      delete eventInfo.event_id;
 
-      const event = await database
-        .event(database.db)
-        .update(
-          {
-            event_id: eventId
-          },
-          {
-            ...eventInfo
-          });
+      const request: Event = new EventRequest().CreateRequest(eventInfo, userId ,tenantId);
 
-      res.status(200).json(event);
+      res.status(200).json(await this.ControllerService.UpdateEventById(request, eventId));
+
     } catch (error: unknown) {
       next(new BadRequestError({ context: `Error updating event info ${error}` as unknown as undefined, logging: true }))
     }
   }
 
-  DeleteEventByTenenantAndUserId = async (req: SessionRequest, res: Response, next: NextFunction) => {
+  DeleteEventById = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const eventId = req.body.eventId;
+
       if (!eventId || eventId === "") {
         next(new ValidationError({ code: 400, context: "Event Id is required" as unknown as undefined, logging: true }));
       }
-      const event = await database
-        .event(database.db)
-        .update(
-          {
-            event_id: eventId
-          },
-          {
-            active: false
-          })
 
-      res.status(200).json(event);
+      res.status(200).json(await this.ControllerService.DeleteEventById(eventId));
+
     } catch (error) {
       next(new BadRequestError({ context: `Error deleting event info ${error}` as unknown as undefined, logging: true }));
     }
