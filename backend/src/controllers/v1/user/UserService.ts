@@ -1,0 +1,120 @@
+import supertokens, { User } from "supertokens-node";
+import UserMetadata from "supertokens-node/recipe/usermetadata";
+import UserRoles from "supertokens-node/recipe/userroles";
+import EmailPassword from "supertokens-node/recipe/emailpassword";
+import { IUserService } from "../";
+import { IUserRequest } from "../";
+import { IUserInfo } from "../../../../../shared/interfaces";
+
+export class UserService implements IUserService {
+  GetUserInfo = async (request: IUserRequest): Promise<User | undefined> => {
+
+    const response = await supertokens.getUser(request.baseRequest.userId);
+
+    return response;
+  }
+
+  GetUseMetaData = async (request: IUserRequest): Promise<{
+    status: "OK";
+    metadata: unknown;
+  }> => {
+
+    const response = await UserMetadata.getUserMetadata(request.baseRequest.userId);
+
+    return response;
+  }
+
+  UpdateUserMetadata = async (request: IUserRequest): Promise<{
+    status: "OK";
+    metadata: UserMetadata.JSONObject;
+  }> => {
+    const response = await UserMetadata.updateUserMetadata(request.baseRequest.userId, request.userInfo as IUserInfo);
+
+    return response;
+  }
+
+  AddRoleToUser = async (request: IUserRequest): Promise<{
+    status: "OK";
+    didUserAlreadyHaveRole: boolean;
+  } | {
+    status: "UNKNOWN_ROLE_ERROR";
+  }> => {
+    const response = await UserRoles.addRoleToUser(request.baseRequest.tenantId, request.baseRequest.userId, request.roleId as string);
+
+    return response;
+  }
+
+  UpdateUserPasswordAndEmail = async (request: IUserRequest): Promise<{
+    status: string;
+    metadata: string;
+  }> => {
+    const UpdatedObject = Object.assign({}, request.UpdateObject);
+
+    if (request.password !== "" && request.newPassword !== "") {
+      const loginMethod = await this.GetUserLoginMetod(request);
+
+      if (loginMethod === undefined) {
+        return {
+          status: "ERROR",
+          metadata: "Not Updated!"
+        }
+      }
+
+      const email = loginMethod.email!;
+      const isPasswordValid = await this.IsValidPassword(request.baseRequest.tenantId, email, request?.password as string);
+
+      if (!isPasswordValid) {
+        return {
+          status: "ERROR",
+          metadata: "Not Updated!"
+        }
+      }
+
+      Object.assign(UpdatedObject, { password: request.newPassword });
+    }
+
+    if (request.newEmail !== "" && this.IsValidEmail(request.newEmail as string)) {
+      Object.assign(UpdatedObject, { email: request.newEmail });
+    }
+
+    const response = await EmailPassword.updateEmailOrPassword(UpdatedObject);
+
+    if (response.status === "PASSWORD_POLICY_VIOLATED_ERROR") {
+        return {
+          status: "ERROR",
+          metadata: "Not Updated!"
+        }
+    }
+
+    return {
+      status: "OK",
+      metadata: "Password and or email updated."
+    }
+  }
+
+  GetUserLoginMetod = async (request: IUserRequest) => {
+    const userInfo = await supertokens.getUser(request.baseRequest.userId);
+
+    if (userInfo === undefined) {
+      throw new Error("Should never come here");
+    }
+
+    const loginMethod = userInfo.loginMethods.find((lM) => lM.recipeUserId.getAsString() === request.baseRequest.recipeUserId && lM.recipeId === "emailpassword");
+
+    return loginMethod;
+  }
+
+  IsValidEmail = (email: string): boolean => {
+    const regexp = new RegExp(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+
+    return regexp.test(email);
+  }
+
+  IsValidPassword = async (tenantId: string, email: string, password: string) => {
+    const isPasswordValid = await EmailPassword.verifyCredentials(tenantId, email, password);
+
+    return isPasswordValid.status !== "OK"
+  }
+}

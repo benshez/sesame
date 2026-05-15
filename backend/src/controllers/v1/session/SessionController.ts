@@ -8,12 +8,13 @@ export class SessionController extends BaseController {
   GetSessionInfo = async (req: SessionRequest, res: Response) => {
     try {
       const session = req.session;
-      res.send({
-        sessionHandle: session!.getHandle(),
-        userId: session!.getUserId(),
-        accessTokenPayload: session!.getAccessTokenPayload(),
-        tenantId: session!.getTenantId()
-      });
+      res
+        .json({
+          sessionHandle: session!.getHandle(),
+          userId: session!.getUserId(),
+          accessTokenPayload: session!.getAccessTokenPayload(),
+          tenantId: session!.getTenantId()
+        });
     } catch (err) {
       console.log("Error fetching user info: ", err);
       throw err;

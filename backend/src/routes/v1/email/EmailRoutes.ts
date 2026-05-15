@@ -1,12 +1,13 @@
 import { BaseRoute } from "../../../core/routing";
 import { verifySession } from "supertokens-node/recipe/session/framework/express";
-import { EmailController } from "../../../controllers/v1";
+import { EmailController, IEmailService, EmailService } from "../../../controllers/v1";
 
 class EmailRoutes extends BaseRoute<EmailController> {
   public baseUri = "v1/email";
 
   constructor() {
-    super(new EmailController());
+    const service: IEmailService = new EmailService();
+    super(new EmailController(service));
   }
 
   protected RegisterRoutes(): void {

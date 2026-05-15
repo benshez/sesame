@@ -1,13 +1,14 @@
 import { Router } from "express";
 import { verifySession } from "supertokens-node/recipe/session/framework/express";
 import { BaseRoute } from "../../../core/routing";
-import { UserController } from "../../../controllers/v1";
+import { IUserService, UserController, UserService } from "../../../controllers/v1";
 
 class UserRoutes extends BaseRoute<UserController> {
   public baseUri = "v1/users";
 
   constructor() {
-    super(new UserController());
+    const service: IUserService = new UserService();
+    super(new UserController(service));
   }
 
   protected RegisterRoutes(): void {
