@@ -2,11 +2,28 @@ import * as dotenvx from "@dotenvx/dotenvx";
 
 export const useBackendConfig = () => {
 
-  const ef = process.env.NODE_ENV === 'production'
-    ? '.env.production'
-    : '.env.development';
+  const GetEnvironment = (): string => {
+    let environment = "env.development";
 
-  dotenvx.config({ path: ['./environment/.env', `./environment/${ef}`] });
+    switch (process.env.NODE_ENV?.trim()) {
+      case "development":
+        environment = "env.development";
+        break;
+      case "test":
+        environment = "env.test";
+        break;
+      case "production":
+        environment = ".env";
+        break;
+      default:
+        environment = "env.development"
+        break;
+    }
+
+    return `environment/${environment}`;
+  }
+
+  dotenvx.config({ path: GetEnvironment() });
 
   const GetSMTPConfig = () => {
     return {
@@ -61,7 +78,7 @@ export const useBackendConfig = () => {
   const GetDbHost = () => {
     return process.env.POSTGRES_SESAME_HOST;
   }
-  
+
 
   return {
     GetSMTPConfig,

@@ -1,22 +1,26 @@
-import type { IEvent } from "@/interfaces";
+import type { IConfig, IEvent } from "@/interfaces";
 import { HttpClient } from "@/plugins";
+import { configuration } from "@/utilities"
 
 export class ApiClient extends HttpClient {
 
-  constructor(url: string = "", header: {} = {
-    "Accept": "application/json",
-    "Content-Type": "application/json"
-  }) {
-    let apiDomain: string = url;
+  constructor(url: string = "", header: {} = {}) {
+    const config: IConfig = configuration.GetApiHeaderConfiguration() as IConfig;
 
-    if (url === "") {
-      const apiPort = import.meta.env.VUE_APP_API_PORT || 3001;
-      apiDomain = import.meta.env.VUE_APP_API_URL || `http://localhost:${apiPort}/api/v1`;
+
+    if (typeof header === "object" && Object.keys(header).length === 0 && url === "") {
+      header = configuration.GetApiHeaderConfiguration()
+      super(
+        /*@ts-ignore */
+        header
+      );
+    } else {
+      super({
+        baseURL: url,
+        timeout: 20000,
+        headers: header
+      });
     }
-    super({
-      baseURL: apiDomain,
-      headers: header
-    });
   }
 
   session = () => {

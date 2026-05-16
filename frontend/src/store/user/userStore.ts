@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import Session from "supertokens-web-js/recipe/session";
+import { UserRoleClaim } from "supertokens-web-js/recipe/userroles";
 import { ApiClient } from "@/plugins";
 import type { IUserInfo, IUserMetaData } from "@/interfaces";
 
@@ -58,6 +59,16 @@ export const useUserStore = defineStore("user", () => {
       .sendVerificationEmail({
         "email": userState.value.UserInfo.emails.at(0)?.toString() || ""
       });
+  }
+
+  const UserHasClaim = async (claimId: string): Promise<boolean> => {
+    if (await Session.doesSessionExist()) {
+      const roles = await Session.getClaimValue({claim: UserRoleClaim});
+
+      return roles !== undefined && roles.includes(claimId);
+    }
+
+    return false;
   }
 
   return {

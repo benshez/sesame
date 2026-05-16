@@ -98,6 +98,8 @@ export const SuperTokensConfig: TypeInput = {
     }),
     WebAuthN.init(),
     UserMetadata.init(),
-    Session.init()
+    Session.init({
+      antiCsrf: "VIA_CUSTOM_HEADER"
+    })
   ],
 };

@@ -1,5 +1,6 @@
-interface HttpClientOptions {
+export interface HttpClientOptions {
   baseURL: string;
+  timeout: number;
   headers: Record<string, string>;
 }
 
@@ -14,7 +15,7 @@ export class HttpClient {
   baseURL: string;
   headers: Record<string, string>;
 
-  constructor(options: HttpClientOptions = { baseURL: "", headers: {} }) {
+  constructor(options: HttpClientOptions = { baseURL: "", timeout: 10000, headers: {} }) {
     this.baseURL = options.baseURL || "";
     this.headers = options.headers || {};
   }

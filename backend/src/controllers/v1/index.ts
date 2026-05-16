@@ -1,17 +1,40 @@
-export { UserController } from "./user/UserController";
-export { EmailController } from "./email/EmailController";
-export { SessionController } from "./session/SessionController";
-export { LookupController } from "./lookup/LookupController";
-export { TenantController } from "./tenant/TenantController";
-export { EventController } from "./event/EventController";
-export { EventRequest } from "./event/EventRequest";
-export { EventResponse } from "./event/EventResponse";
-export { EventService } from "./event/EventService";
-export { IEventService } from "./event/IEventService";
-export { EmailService } from "./email/EmailService";
-export { UserService } from "./user/UserService";
-export type { IEmailService } from "./email/IEmailService";
-export type { IUserService } from "./user/IUserService";
+export {
+  type IEmailService,
+  EmailService,
+  EmailController
+} from "./email";
+
+export {
+  type IEventService,
+  EventRequest,
+  EventService,
+  EventResponse,
+  EventController
+} from "./event";
+
+export {
+  type IRoleRequest,
+  type IRoleService,
+  RoleRequest,
+  RoleService,
+  RoleController
+} from "./role";
+
+export { LookupController } from "./lookup";
+
+export { SessionController } from "./session";
+
+export { TenantController } from "./tenant";
+
+export { 
+  type IUserService, 
+  type IUserRequest, 
+  UserRequest,  
+  UserService,
+  UserController 
+} from "./user";
+
+
 export type { IBaseRequest } from "./IBaseRequest";
-export type { IUserRequest } from "./user/IUserRequest";
+
 

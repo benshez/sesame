@@ -4,6 +4,7 @@ import SessionRoutes from "./session/SessionRoutes";
 import LookupRoutes from "./lookup/LookupRoutes";
 import TenantRoutes from "./tenant/TenantRoutes";
 import EventRoutes from "./event/EventRoutes";
+import RoleRoutes from "./role/RoleRoutes";
 
 export { 
   UserRoutes, 
@@ -11,5 +12,6 @@ export {
   SessionRoutes,
   LookupRoutes, 
   TenantRoutes, 
-  EventRoutes
+  EventRoutes,
+  RoleRoutes
 };
