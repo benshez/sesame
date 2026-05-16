@@ -31,7 +31,7 @@ export class TenantController extends BaseController<ITenantService> {
 
   CreateTenant = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const reponse = await this.ControllerService.CreateTenant(this.request.CreateRequest(req));
+      const reponse = await this.ControllerService.CreateTenant(this.request.CreateRequest(req), next);
 
       if (reponse.createdNew) {
         res

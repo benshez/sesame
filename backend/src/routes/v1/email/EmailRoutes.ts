@@ -13,20 +13,20 @@ class EmailRoutes extends BaseRoute<EmailController> {
   protected RegisterRoutes(): void {
     this
     .router
-    .post("/send-verification-email", verifySession(), async (req, res) => {
-      return await this.controller.SendVerificationEmail(req, res);
+    .post("/send-verification-email", verifySession(), async (req, res, next) => {
+      return await this.controller.SendVerificationEmail(req, res, next);
     });
 
     this
     .router
-    .post("/verify-email", async (req, res) => {
-      return await this.controller.VerifyEmail(req, res);
+    .post("/verify-email", async (req, res, next) => {
+      return await this.controller.VerifyEmail(req, res, next);
     });
     
     this
     .router
-    .post("/un-verify-email",async (req, res) => {
-      return await this.controller.UnVerifyEmail(req, res);
+    .post("/un-verify-email",async (req, res, next) => {
+      return await this.controller.UnVerifyEmail(req, res, next);
     })
   }  
 }

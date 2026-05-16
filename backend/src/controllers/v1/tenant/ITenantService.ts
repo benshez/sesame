@@ -1,4 +1,5 @@
 import { type TenantConfig } from "supertokens-node/recipe/multitenancy/types";
+import { NextFunction } from "supertokens-node/lib/build/framework/custom/framework";
 import { IBaseRequest, ITenantRequest } from "../";
 
 export interface ITenantService {
@@ -11,7 +12,7 @@ export interface ITenantService {
   GetTenant(request: IBaseRequest): Promise<({
     status: "OK";
 } & TenantConfig) | undefined>;
-  CreateTenant(request: ITenantRequest): Promise<{
+  CreateTenant(request: ITenantRequest, next: NextFunction): Promise<{
     status: "OK";
     createdNew: boolean;
   }>

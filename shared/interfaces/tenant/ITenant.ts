@@ -6,5 +6,5 @@ export interface ITenant {
     "postgresql_connection_uri": string,
   }
 
-  FirstFactors?: Array<string>;
+  firstFactors?: Array<string>;
 }

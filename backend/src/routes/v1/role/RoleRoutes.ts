@@ -17,50 +17,50 @@ class RoleRoutes extends BaseRoute<RoleController> {
   protected RegisterRoutes(): void {
     this
       .router
-      .get("/get-active-roles", verifySession(), async (req, res) => {
-        return await this.controller.GetRoles(req, res);
+      .get("/get-active-roles", verifySession(), async (req, res, next) => {
+        return await this.controller.GetRoles(req, res, next);
       });
 
     this
       .router
-      .delete("/remove-role", verifySession(), async (req, res) => {
-        return await this.controller.DeleteRole(req, res);
+      .delete("/remove-role", verifySession(), async (req, res, next) => {
+        return await this.controller.DeleteRole(req, res, next);
       });
 
     this
       .router
-      .post("/create-new-role-or-add-permission", verifySession(), async (req, res) => {
-        return await this.controller.CreateNewRoleOrAddPermissions(req, res);
+      .post("/create-new-role-or-add-permission", verifySession(), async (req, res, next) => {
+        return await this.controller.CreateNewRoleOrAddPermissions(req, res, next);
       });
 
     this
       .router
-      .patch("/remove-persmission-from-role", verifySession(), async (req, res) => {
-        return await this.controller.RemovePermissionsFromRole(req, res);
+      .patch("/remove-persmission-from-role", verifySession(), async (req, res, next) => {
+        return await this.controller.RemovePermissionsFromRole(req, res, next);
       })
 
     this
       .router
-      .get("/get-permissions-for-role", verifySession(), async (req, res) => {
-        return await this.controller.GetPermissionsForRole(req, res);
+      .get("/get-permissions-for-role", verifySession(), async (req, res, next) => {
+        return await this.controller.GetPermissionsForRole(req, res, next);
       })    
 
     this
       .router
-      .get("/get-roles-that-have-permission", verifySession(), async (req, res) => {
-        return await this.controller.GetRolesThatHavePermission(req, res);
+      .get("/get-roles-that-have-permission", verifySession(), async (req, res, next) => {
+        return await this.controller.GetRolesThatHavePermission(req, res, next);
       })    
       
     this
       .router
-      .patch("/add-role-to-user", verifySession(), async (req, res) => {
-        return await this.controller.AddRoleToUser(req, res);
+      .patch("/add-role-to-user", verifySession(), async (req, res, next) => {
+        return await this.controller.AddRoleToUser(req, res, next);
       })    
       
     this
       .router
-      .delete("/remove-role-from-user", verifySession(), async (req, res) => {
-        return await this.controller.RemoveUserRole(req, res);
+      .delete("/remove-role-from-user", verifySession(), async (req, res, next) => {
+        return await this.controller.RemoveUserRole(req, res, next);
       })       
   }
 }

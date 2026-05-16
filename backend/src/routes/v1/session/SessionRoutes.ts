@@ -6,14 +6,14 @@ class SessionRoutes extends BaseRoute<SessionController> {
   public baseUri = "v1/session";
 
   constructor() {
-    super(new SessionController());
+    super(new SessionController(null));
   }
 
   protected RegisterRoutes(): void {
     this
     .router
-    .get("/info", verifySession(), async (req, res) => {
-      return await this.controller.GetSessionInfo(req, res);
+    .get("/info", verifySession(), async (req, res, next) => {
+      return await this.controller.GetSessionInfo(req, res, next);
     });
   }  
 }

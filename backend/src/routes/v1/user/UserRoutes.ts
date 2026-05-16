@@ -14,32 +14,32 @@ class UserRoutes extends BaseRoute<UserController> {
   protected RegisterRoutes(): void {
     this
       .router
-      .get("/get-user-info/:userId", verifySession(), async (req, res) => {
-        return await this.controller.GetUserInfo(req, res);
+      .get("/get-user-info/:userId", verifySession(), async (req, res, next) => {
+        return await this.controller.GetUserInfo(req, res, next);
       });
 
     this
       .router
-      .get("/get-user-metadata/:userId", verifySession(), async (req, res) => {
-        return await this.controller.GetUserMetadata(req, res);
+      .get("/get-user-metadata/:userId", verifySession(), async (req, res, next) => {
+        return await this.controller.GetUserMetadata(req, res, next);
       })
 
     this
       .router
-      .post("/update-user-metadata", verifySession(), async (req, res) => {
-        return await this.controller.UpdateUserMetadata(req, res);
+      .post("/update-user-metadata", verifySession(), async (req, res, next) => {
+        return await this.controller.UpdateUserMetadata(req, res, next);
       })
 
     this
       .router
-      .post("/add-role-to-user", verifySession(), async (req, res) => {
-        return await this.controller.AddRoleToUser(req, res);
+      .post("/add-role-to-user", verifySession(), async (req, res, next) => {
+        return await this.controller.AddRoleToUser(req, res, next);
       })
 
     this
       .router
-      .post("/update-user-email-password", verifySession(), async (req, res) => {
-        return await this.controller.UpdateUserPasswordAndEmail(req, res);
+      .post("/update-user-email-password", verifySession(), async (req, res, next) => {
+        return await this.controller.UpdateUserPasswordAndEmail(req, res, next);
       })
   }
 

@@ -1,7 +1,9 @@
 import { TenantConfig } from "supertokens-node/recipe/multitenancy/types";
 import Multitenancy from "supertokens-node/recipe/multitenancy";
-import {RecipeUserId} from "supertokens-node";
+import { RecipeUserId } from "supertokens-node";
+import { NextFunction } from "supertokens-node/lib/build/framework/custom/framework";
 import { IBaseRequest, ITenantRequest, ITenantService } from "../";
+import { ValidationError } from "../../../core/error";
 
 export class TenantService implements ITenantService {
   GetTenants = async (): Promise<{ status: "OK"; tenants: ({ tenantId: string; } & TenantConfig)[]; }> => {
@@ -14,10 +16,27 @@ export class TenantService implements ITenantService {
 
     return reponse;
   }
-  CreateTenant = async (request: ITenantRequest): Promise<{ status: "OK"; createdNew: boolean; }> => {
-    const reponse = await Multitenancy.createOrUpdateTenant(request.tenant.TenantId, {
-      coreConfig: request.tenant.coreConfig
-    });
+  CreateTenant = async (request: ITenantRequest, next: NextFunction): Promise<{ status: "OK"; createdNew: boolean; }> => {
+    const config = {};
+
+    if (request.tenant) {
+      if (request.tenant.firstFactors && request.tenant.firstFactors?.length > 0) {
+        Object.assign(config, { firstFactors: request.tenant.firstFactors });
+      }
+      if (request.tenant.coreConfig && Object.keys(request.tenant.coreConfig).length > 0) {
+        Object.assign(config, { coreConfig: request.tenant.coreConfig });
+      }
+    }
+
+    if (!request.tenant || Object.keys(config).length === 0) {
+      next(new ValidationError({ code: 400, context: "Config is required" as unknown as undefined, logging: true }));
+      return {
+        status: "OK",
+        createdNew: false
+      }
+    }
+
+    const reponse = await Multitenancy.createOrUpdateTenant(request.tenant.TenantId, config);
 
     return reponse;
   }

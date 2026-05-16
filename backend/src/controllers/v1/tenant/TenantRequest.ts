@@ -22,6 +22,7 @@ export class TenantRequest {
 
     if (body.tenant && this.request.tenant) {
       if (body.tenant.coreConfig) this.request.tenant.coreConfig = body.tenant.coreConfig;
+      if (body.tenant.firstFactors) this.request.tenant.firstFactors = body.tenant.firstFactors;
     }
 
     return this.request as unknown as ITenantRequest;

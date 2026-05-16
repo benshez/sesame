@@ -1,7 +1,8 @@
 import { SessionRequest } from "supertokens-node/framework/express";
+import { NextFunction } from "supertokens-node/lib/build/framework/custom/framework";
 import { Response } from "express-serve-static-core";
 import { BaseController } from "../../../core/routing";
-
+import { BadRequestError } from "../../../core/error";
 import { useDatabase } from "../../../core/db/query/useDatabase";
 
 const database = useDatabase();
@@ -9,7 +10,7 @@ const database = useDatabase();
 export class LookupController extends BaseController {
   public Id: string = "LookupController";
 
-  GetCountries = async (req: SessionRequest, res: Response) => {
+  GetCountries = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const session = req.session;
       const tenantId = session!.getTenantId();
@@ -25,12 +26,11 @@ export class LookupController extends BaseController {
 
       res.json(events);
     } catch (error) {
-      console.log("Error fetching countries info: ", error);
-      throw error;
+      next(new BadRequestError({ message: `Error un-verifying email ${error}`, logging: true }));
     }
   }
 
-  GetEventTypes = async (req: SessionRequest, res: Response) => {
+  GetEventTypes = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const session = req.session;
       const tenantId = session!.getTenantId();
@@ -46,12 +46,11 @@ export class LookupController extends BaseController {
 
       res.json(eventType);
     } catch (error) {
-      console.log("Error fetching event types info: ", error);
-      throw error;
+      next(new BadRequestError({ message: `Error un-verifying email ${error}`, logging: true }));
     }
   }
 
-  GetVenues = async (req: SessionRequest, res: Response) => {
+  GetVenues = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const session = req.session;
       const tenantId = session!.getTenantId();
@@ -67,12 +66,11 @@ export class LookupController extends BaseController {
 
       res.json(eventType);
     } catch (error) {
-      console.log("Error fetching event venue info: ", error);
-      throw error;
+      next(new BadRequestError({ message: `Error un-verifying email ${error}`, logging: true }));
     }
   }
 
-  GetOrganizations = async (req: SessionRequest, res: Response) => {
+  GetOrganizations = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const session = req.session;
       const tenantId = session!.getTenantId();
@@ -88,12 +86,11 @@ export class LookupController extends BaseController {
 
       res.json(eventType);
     } catch (error) {
-      console.log("Error fetching event organization info: ", error);
-      throw error;
+      next(new BadRequestError({ message: `Error un-verifying email ${error}`, logging: true }));
     }
   }  
 
-  GetEventStatuses = async (req: SessionRequest, res: Response) => {
+  GetEventStatuses = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const session = req.session;
       const tenantId = session!.getTenantId();
@@ -109,8 +106,7 @@ export class LookupController extends BaseController {
 
       res.json(statuses);
     } catch (error) {
-      console.log("Error fetching event statuses info: ", error);
-      throw error;
+      next(new BadRequestError({ message: `Error un-verifying email ${error}`, logging: true }));
     }
   }  
 }
