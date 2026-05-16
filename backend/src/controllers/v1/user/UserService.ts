@@ -99,7 +99,7 @@ export class UserService implements IUserService {
       throw new Error("Should never come here");
     }
 
-    const loginMethod = userInfo.loginMethods.find((lM) => lM.recipeUserId.getAsString() === request.baseRequest.recipeUserId && lM.recipeId === "emailpassword");
+    const loginMethod = userInfo.loginMethods.find((lM) => lM.recipeUserId.getAsString() === request.baseRequest.recipeUserId?.getAsString() && lM.recipeId === "emailpassword");
 
     return loginMethod;
   }

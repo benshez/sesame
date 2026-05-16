@@ -6,7 +6,7 @@ class LookupRoutes extends BaseRoute<LookupController> {
   public baseUri = "v1/lookup";
 
   constructor() {
-    super(new LookupController());
+    super(new LookupController(null));
   }
 
   protected RegisterRoutes(): void {

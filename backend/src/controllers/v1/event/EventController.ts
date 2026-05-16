@@ -2,7 +2,7 @@ import { SessionRequest } from "supertokens-node/framework/express";
 import type Event from "../../../core/db/sesame_model_types/event";
 import { Response } from "express-serve-static-core";
 import { BaseController } from "../../../core/routing";
-import { BadRequestError, ValidationError } from "../../../core/error"
+import { BadRequestError, ValidationError } from "../../../core/error";
 import { NextFunction } from "supertokens-node/lib/build/framework/custom/framework";
 import { IEventService } from "./IEventService";
 import { EventRequest } from "./EventRequest";

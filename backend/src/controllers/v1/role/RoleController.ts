@@ -1,106 +1,99 @@
 import { SessionRequest } from "supertokens-node/framework/express";
 import { Response } from "express-serve-static-core";
+import { NextFunction } from "supertokens-node/lib/build/framework/custom/framework";
 import { BaseController } from "../../../core/routing";
-import { IRoleService } from "../";
-import { RoleRequest } from "../";
+import { BadRequestError } from "../../../core/error";
+import { RoleRequest, IRoleService } from "../";
 
 export class RoleController extends BaseController<IRoleService> {
   public Id: string = "RoleController";
   private request = new RoleRequest();
 
-  GetRoles = async (req: SessionRequest, res: Response) => {
+  GetRoles = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const response = await this.ControllerService.GetRoles();
 
       res
         .json(response);
     } catch (error) {
-      console.log("Error roles: ", error);
-      throw error;
+      next(new BadRequestError({ message: `Error getting roles ${error}`, logging: true }));
     }
   }
 
-  DeleteRole = async (req: SessionRequest, res: Response) => {
+  DeleteRole = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const response = await this.ControllerService.DeleteRole(this.request.CreateRequest(req));
 
       res
         .json(response);
     } catch (error) {
-      console.log("Error roles: ", error);
-      throw error;
+      next(new BadRequestError({ message: `Error deleting ${error}`, logging: true }));
     }
   }
 
-  CreateNewRoleOrAddPermissions = async (req: SessionRequest, res: Response) => {
+  CreateNewRoleOrAddPermissions = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const response = await this.ControllerService.DeleteRole(this.request.CreateRequest(req));
 
       res
         .json(response);
     } catch (error) {
-      console.log("Error roles: ", error);
-      throw error;
+      next(new BadRequestError({ message: `Error creating role or permission ${error}`, logging: true }));
     }
   }
 
-  RemovePermissionsFromRole = async (req: SessionRequest, res: Response) => {
+  RemovePermissionsFromRole = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const response = await this.ControllerService.DeleteRole(this.request.CreateRequest(req));
 
       res
         .json(response);
     } catch (error) {
-      console.log("Error roles: ", error);
-      throw error;
+      next(new BadRequestError({ message: `Error removing permission from role ${error}`, logging: true }));
     }
   }  
 
-  GetPermissionsForRole = async (req: SessionRequest, res: Response) => {
+  GetPermissionsForRole = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const response = await this.ControllerService.DeleteRole(this.request.CreateRequest(req));
 
       res
         .json(response);
     } catch (error) {
-      console.log("Error roles: ", error);
-      throw error;
+      next(new BadRequestError({ message: `Error gettoing permissions for role ${error}`, logging: true }));
     }
   }   
 
-  GetRolesThatHavePermission = async (req: SessionRequest, res: Response) => {
+  GetRolesThatHavePermission = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const response = await this.ControllerService.DeleteRole(this.request.CreateRequest(req));
 
       res
         .json(response);
     } catch (error) {
-      console.log("Error roles: ", error);
-      throw error;
+      next(new BadRequestError({ message: `Error roles that have permission ${error}`, logging: true }));
     }
   }  
 
-  AddRoleToUser = async (req: SessionRequest, res: Response) => {
+  AddRoleToUser = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const response = await this.ControllerService.DeleteRole(this.request.CreateRequest(req));
 
       res
         .json(response);
     } catch (error) {
-      console.log("Error roles: ", error);
-      throw error;
+      next(new BadRequestError({ message: `Error adding role to user ${error}`, logging: true }));
     }
   }  
 
-  RemoveUserRole = async (req: SessionRequest, res: Response) => {
+  RemoveUserRole = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const response = await this.ControllerService.DeleteRole(this.request.CreateRequest(req));
 
       res
         .json(response);
     } catch (error) {
-      console.log("Error roles: ", error);
-      throw error;
+      next(new BadRequestError({ message: `Error removing user role ${error}`, logging: true }));
     }
   }   
 }

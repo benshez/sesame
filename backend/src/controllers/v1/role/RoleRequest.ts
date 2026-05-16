@@ -1,13 +1,15 @@
 import { SessionRequest } from "supertokens-node/framework/express";
 import { IRoleRequest } from "../";
+import { IRole } from "../../../../../shared/interfaces";
 
 export class RoleRequest {
   private request: IRoleRequest = {
     baseRequest: {
       userId: "",
       tenantId: "",
-      recipeUserId: ""
-    }
+      recipeUserId: undefined
+    },
+    role: {} as IRole
   } as IRoleRequest;
 
   CreateRequest(req: SessionRequest): IRoleRequest {
@@ -16,11 +18,13 @@ export class RoleRequest {
 
     this.request.baseRequest.userId = session!.getUserId();
     this.request.baseRequest.tenantId = session!.getTenantId();
-    this.request.baseRequest.recipeUserId = session!.getRecipeUserId().getAsString();
-    this.request.permission = body.permission !== "" ? body.permission : "";
-    this.request.permissions = body.permissions !== "" ? body.permissions : [];
-    this.request.roleId = body.roleId ? body.roleId : "";
+    this.request.baseRequest.recipeUserId = session!.getRecipeUserId();
+    if (body.role && this.request.role) {
+      this.request.role.roleId = body.role.roleId ? body.role.roleId : "";
+      this.request.role.permission = body.role.permission ? body.role.permission : "";
+      this.request.role.permissions = body.role.permissions ? body.role.permissions : [];
+    }
 
-    return this.request.permissions as unknown as IRoleRequest;
+    return this.request as unknown as IRoleRequest;
   }
 }

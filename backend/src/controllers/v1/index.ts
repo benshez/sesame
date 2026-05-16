@@ -24,7 +24,13 @@ export { LookupController } from "./lookup";
 
 export { SessionController } from "./session";
 
-export { TenantController } from "./tenant";
+export { 
+  type ITenantRequest,
+  type ITenantService,
+  TenantRequest,
+  TenantService,
+  TenantController 
+} from "./tenant";
 
 export { 
   type IUserService, 

@@ -1,0 +1,1 @@
+export type { ITenant } from "./ITenant";

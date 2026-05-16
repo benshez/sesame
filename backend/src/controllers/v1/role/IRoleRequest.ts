@@ -1,8 +1,7 @@
 import { IBaseRequest } from "..";
+import { IRole } from "../../../../../shared/interfaces";
 
 export interface IRoleRequest {
   baseRequest: IBaseRequest;
-  roleId?: string;
-  permission?: string;
-  permissions?: Array<string>;
+  role?: IRole;
 }
