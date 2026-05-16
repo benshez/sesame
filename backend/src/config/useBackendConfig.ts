@@ -25,6 +25,10 @@ export const useBackendConfig = () => {
 
   dotenvx.config({ path: GetEnvironment() });
 
+  const GetApiKey = (): string  => {
+      return process.env.WEB_SITE_API_KEY as string;
+  }
+
   const GetSMTPConfig = () => {
     return {
       host: process.env.SMTP_HOST as string,
@@ -81,6 +85,7 @@ export const useBackendConfig = () => {
 
 
   return {
+    GetApiKey,
     GetSMTPConfig,
     GetApiDomain,
     GetWebsiteDomain,

@@ -112,4 +112,26 @@ export class UserController extends BaseController<IUserService> {
       next(new BadRequestError({ message: `Error un-verifying email ${error}`, logging: true }));
     }
   }
+
+  SignUp = async(req: SessionRequest, res: Response, next: NextFunction) => {
+    try {
+      const response = await this.ControllerService.SignUp(this.request.CreateRequest(req));
+
+      res
+        .json(response);
+    } catch (error) {
+      next(new BadRequestError({ message: `Error signing up ${error}`, logging: true }));
+    }
+  }
+
+  SignIn = async(req: SessionRequest, res: Response, next: NextFunction) => {
+    try {
+      const response = await this.ControllerService.SignIn(this.request.CreateRequest(req));
+
+      res
+        .json(response);
+    } catch (error) {
+      next(new BadRequestError({ message: `Error signing up ${error}`, logging: true }));
+    }
+  }  
 }

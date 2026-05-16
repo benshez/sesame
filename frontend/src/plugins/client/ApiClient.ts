@@ -1,18 +1,17 @@
-import type { IConfig, IEvent } from "@/interfaces";
-import { HttpClient } from "@/plugins";
+import type { IEvent } from "@/interfaces";
+import { HttpClient, type HttpClientOptions } from "@/plugins";
 import { configuration } from "@/utilities"
+import type { IUser } from "../../../../shared/interfaces";
 
 export class ApiClient extends HttpClient {
 
   constructor(url: string = "", header: {} = {}) {
-    const config: IConfig = configuration.GetApiHeaderConfiguration() as IConfig;
-
 
     if (typeof header === "object" && Object.keys(header).length === 0 && url === "") {
-      header = configuration.GetApiHeaderConfiguration()
+      const options: HttpClientOptions = Object.assign(header, { ...configuration.GetApiHeaderConfiguration() as HttpClientOptions })
+
       super(
-        /*@ts-ignore */
-        header
+        options
       );
     } else {
       super({
@@ -44,6 +43,8 @@ export class ApiClient extends HttpClient {
       addRoleToUser: (role: { role: string }) => this.post("/users/users/add-role-to-user", role, this.getHeader("Authorization")),
       updateUserMetadata: (userInfo: {}) => this.post("/users/update-user-metadata", { userInfo }, this.getHeader("Authorization")),
       updateUserEmailAndPassword: (userInfo: {}) => this.post("/users/update-user-email-password", { userInfo }, this.getHeader("Authorization")),
+      signUp: (user: IUser) => this.post("/users/sign-up", { user }, this.getHeader("Authorization")),
+      signIn: (user: IUser) => this.post("/users/sign-in", { user }, this.getHeader("Authorization"))
     }
   }
 

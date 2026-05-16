@@ -1,4 +1,5 @@
 import { User } from "supertokens-node";
+import { RecipeUserId } from "supertokens-node";
 import { IUserRequest } from "../";
 import UserMetadata from "supertokens-node/recipe/usermetadata";
 
@@ -22,4 +23,12 @@ export interface IUserService {
     status: string;
     metadata: string;
   }>;
+  SignUp(request: IUserRequest): Promise<{ status: "OK"; user: User; recipeUserId: RecipeUserId; } | { status: "EMAIL_ALREADY_EXISTS_ERROR"; }>;
+  SignIn(request: IUserRequest): Promise<{
+    status: "OK";
+    user: User;
+    recipeUserId: RecipeUserId;
+  } | {
+    status: "WRONG_CREDENTIALS_ERROR";
+  }>
 }

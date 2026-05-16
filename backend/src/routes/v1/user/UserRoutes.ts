@@ -41,6 +41,18 @@ class UserRoutes extends BaseRoute<UserController> {
       .post("/update-user-email-password", verifySession(), async (req, res, next) => {
         return await this.controller.UpdateUserPasswordAndEmail(req, res, next);
       })
+
+    this
+      .router
+      .post("/sign-up", async (req, res, next) => {
+        return await this.controller.SignUp(req, res, next);
+      })  
+      
+    this
+      .router
+      .post("/sign-in", async (req, res, next) => {
+        return await this.controller.SignIn(req, res, next);
+      })         
   }
 
 

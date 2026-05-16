@@ -1,11 +1,12 @@
 import { RecipeUserId } from "supertokens-node";
 import { IBaseRequest } from "../";
-import { IUserInfo } from "../../../../../shared/interfaces";
+import { IUserInfo, IUser } from "../../../../../shared/interfaces";
 
 export interface IUserRequest {
   baseRequest: IBaseRequest
   password?: string;
   newPassword?: string;
+  email?: string;
   newEmail?: string;
   UpdateObject?: {
     recipeUserId: RecipeUserId;
@@ -13,5 +14,6 @@ export interface IUserRequest {
     tenantIdForPasswordPolicy: string;
   }, 
   userInfo?: IUserInfo;
-  roleId?: string
+  roleId?: string;
+  user: IUser;
 }

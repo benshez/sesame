@@ -1,4 +1,4 @@
-import supertokens, { User } from "supertokens-node";
+import supertokens, { User, RecipeUserId } from "supertokens-node";
 import UserMetadata from "supertokens-node/recipe/usermetadata";
 import UserRoles from "supertokens-node/recipe/userroles";
 import EmailPassword from "supertokens-node/recipe/emailpassword";
@@ -44,6 +44,24 @@ export class UserService implements IUserService {
     return response;
   }
 
+  SignUp = async (request: IUserRequest): Promise<{ status: "OK"; user: User; recipeUserId: RecipeUserId; } | { status: "EMAIL_ALREADY_EXISTS_ERROR"; }> => {
+    const response = await EmailPassword.signUp(request.baseRequest.tenantId, request.user.email as string, request.user.password as string)
+
+    return response;
+  }
+
+  SignIn = async (request: IUserRequest): Promise<{
+    status: "OK";
+    user: User;
+    recipeUserId: RecipeUserId;
+  } | {
+    status: "WRONG_CREDENTIALS_ERROR";
+  }> => {
+    const response = await EmailPassword.signIn(request.baseRequest.tenantId, request.user.email as string, request.user.password as string)
+
+    return response;
+  }
+
   UpdateUserPasswordAndEmail = async (request: IUserRequest): Promise<{
     status: string;
     metadata: string;
@@ -80,10 +98,10 @@ export class UserService implements IUserService {
     const response = await EmailPassword.updateEmailOrPassword(UpdatedObject);
 
     if (response.status === "PASSWORD_POLICY_VIOLATED_ERROR") {
-        return {
-          status: "ERROR",
-          metadata: "Not Updated!"
-        }
+      return {
+        status: "ERROR",
+        metadata: "Not Updated!"
+      }
     }
 
     return {

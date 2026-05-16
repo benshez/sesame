@@ -11,6 +11,8 @@ class appConfiguration implements IConfig {
   MapboxToken?: string | undefined;
   IsProductionEnvironment: boolean | false;
   IsDevelopmentEnvironment: boolean | false;
+  ApiTimeout: number = 1000;
+  ApiKey?: string;
   ApiRequestConfig: HttpClientOptions = {
     baseURL: "",
     timeout: 0,
@@ -30,27 +32,29 @@ class appConfiguration implements IConfig {
     this.CorsDomains = import.meta.env.VITE_APP_ACCESS_CONTROL_ALLOW_ORIGINS;
     this.AppBaseRoute = import.meta.env.VITE_APP_BASE_ROUTE;
     this.MapboxToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+    this.ApiTimeout = import.meta.env.VITE_API_TIMEOUT;
+    this.ApiKey = import.meta.env.VITE_API_KEY;
 
     this.GetApiHeaderConfiguration();
   }
 
-  GetApiHeaderConfiguration = (): {} => {
+  GetApiHeaderConfiguration = (): HttpClientOptions => {
     this.ApiRequestConfig = {
       baseURL: this.ApiBaseUrl as string,
-      timeout: 1000 as number,
+      timeout: this.ApiTimeout,
       headers: {
         "Content-type": "application/json",
       }
     };
 
-    //this.SetAuthorizationBearerToken()
+    this.SetApiKey(this.ApiKey)
 
     return this.ApiRequestConfig;
   }
 
-  SetAuthorizationBearerToken = async (token: string = ""): Promise<void> => {
+  SetApiKey = async (token: string = ""): Promise<void> => {
     if (token && token !== "") {
-      Object.assign(this.ApiRequestConfig?.headers as object, { "Authorization": `Bearer ${token}` });
+      Object.assign(this.ApiRequestConfig?.headers as object, { "x-api-key": `${token}` });
     }
   }
 

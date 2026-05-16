@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import supertokens from "supertokens-node";
+import { SessionRequest } from "supertokens-node/framework/express";
+import { Response } from "express-serve-static-core";
+import { NextFunction } from "supertokens-node/lib/build/framework/custom/framework";
 //import { verifySession } from "supertokens-node/recipe/session/framework/express";
 //import { middleware, errorHandler, SessionRequest } from "supertokens-node/framework/express";
 import { middleware } from "supertokens-node/framework/express";
@@ -13,19 +16,35 @@ import { errorHandler } from "./src/core/error";
 import "express-async-errors";
 
 supertokens.init(SuperTokensConfig);
-
+const config = useBackendConfig();
 const app = express();
 
-app.use(express.json());
 
 app.use(
   cors({
-    origin: useBackendConfig().GetWebsiteDomain(),
-    allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
+    origin: config.GetWebsiteDomain(),
+    allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders(), "x-api-key"],
     methods: ["GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
   })
 );
+
+const authenticateApiKey = (request: SessionRequest, response: Response, next: NextFunction) => {
+  const authKey = request.headers["authorization"];
+  const apiKey = request.headers["x-api-key"];
+
+  if (authKey !== undefined) {
+    if (!apiKey || config.GetApiKey() !== apiKey) {
+      return response
+        .status(401)
+        .json({ error: "Invalid or missing API key" });
+    }
+  }
+
+  return next();
+}
+//app.use(express.json());
+app.use(authenticateApiKey, express.json());
 
 // This exposes all the APIs from SuperTokens to the client.
 app.use(middleware());
