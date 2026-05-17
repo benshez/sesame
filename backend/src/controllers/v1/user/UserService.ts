@@ -18,7 +18,6 @@ export class UserService implements IUserService {
     status: "OK";
     metadata: unknown;
   }> => {
-
     const response = await UserMetadata.getUserMetadata(request.baseRequest.userId);
 
     return response;

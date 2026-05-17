@@ -1,6 +1,6 @@
 import createConnectionPool, { sql } from "@databases/pg";
 import tables from "@databases/pg-typed";
-import DatabaseSchema from "../sesame_model_types";
+import DatabaseSchema from "../../../../../shared/interfaces/sesame_model_types";
 import { useBackendConfig } from "../../../config/useBackendConfig";
 
 

@@ -13,7 +13,7 @@ export const useBackendConfig = () => {
         environment = "env.test";
         break;
       case "production":
-        environment = ".env";
+        environment = ".env.production";
         break;
       default:
         environment = "env.development"

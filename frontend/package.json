@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "encrypt": "cd environment && dotenvx encrypt touch '.env.development'",
     "debug": "vite --port 3000 --host",
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
@@ -27,7 +28,8 @@
     "@vueuse/core": "^10.0.0",
     "validator": "^13.9.0",
     "ts-luxon": "^6.2.0",
-    "vue-flatpickr-component": "^12.0.0"
+    "vue-flatpickr-component": "^12.0.0",
+    "vite-plugin-dotenvx": "^0.1.1"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",

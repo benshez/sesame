@@ -5,6 +5,9 @@
   "main": "./src/index.js",
   "scripts": {
     "debug": "cd frontend && npm run debug",
+    "encrypt:frontend": "cd frontend && npm run encrypt",
+    "encrypt:backend": "cd backend && npm run encrypt",
+    "encrypt:all": "npm-run-all --parallel encrypt:frontend encrypt:backend",
     "start:frontend": "cd frontend && npm run dev",
     "start:frontend-live-demo-app": "cd frontend && npx serve -s build",
     "start:backend": "cd backend && npm run start",

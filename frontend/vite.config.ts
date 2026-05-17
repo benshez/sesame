@@ -4,11 +4,30 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import tailwindcss from "@tailwindcss/vite";
 import vueDevTools from "vite-plugin-vue-devtools";
+import Dotenvx from "vite-plugin-dotenvx";
 
 // Vite resolve alias configuration
 export default defineConfig({
   envDir: "./environment",
   plugins: [
+    Dotenvx({
+      // Basic options
+      enabled: true,
+      verbose: true,
+      path: ["./environment/.env.production", "./environment/.env.test", "./environment/.env.development"],
+      ignore: ["MISSING_ENV_FILE"],
+      envKeysFile: "./environment/.env.keys",
+      overload: false,
+      convention: "nextjs",
+
+      // Advanced options
+      /*applyInBuild: true, // Apply in build mode as well
+      strict: true, // Exit with code 1 if any errors are encountered
+      ignore: ["MISSING_ENV_FILE"], // Ignore specific errors
+      generateExample: true, // Auto-generate .env.example file
+      updateGitignore: true, // Auto-add .env.keys to .gitignore
+      exposeToClient: ["VITE_._", "PUBLIC_._"], // Expose specific variables to client*/
+    }),
     vue(),
     tailwindcss(),
     vueDevTools(),
