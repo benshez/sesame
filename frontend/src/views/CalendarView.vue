@@ -104,6 +104,7 @@ import BaseLayout from "@/layouts/BaseLayout.vue";
 import { useEventStore } from "@/store";
 import type { IEvent, IStatus } from "@/interfaces";
 import { ApiClient } from "@/plugins";
+import type Event from "../../../shared/interfaces/sesame_model_types/event";
 
 
 const apiClient = new ApiClient();
@@ -112,7 +113,7 @@ const route = useRoute();
 const router = useRouter();
 const calendarRef = ref(null);
 const isOpen = ref(false);
-const selectedEvent = ref<IEvent>();
+const selectedEvent = ref<Event>();
 const eventTitle = ref("");
 const eventStartDate = ref<Date>();
 const eventEndDate = ref<Date>();
@@ -124,14 +125,18 @@ const handleAddOrUpdateEvent = async () => {
     id: "",
     title: eventTitle.value,
     start: eventStartDate.value as unknown as Date,
-    end: eventEndDate.value as unknown as Date, 
+    end: eventEndDate.value as unknown as Date,
     extendedProps: {
       calendar: eventLevel.value as unknown as string,
-      estimatedAttendance: 0,
+      organisationId: "",
+      locations: []
     },
   }
+
+  calenderStore.SetupEvent(event)
+
   if (selectedEvent.value) {
-    event.id = selectedEvent.value.id as unknown as string;
+    event.id = selectedEvent.value.event_id as unknown as string;
 
     await calenderStore.UpdateEvent(
       event,
@@ -149,7 +154,7 @@ const handleAddOrUpdateEvent = async () => {
 
 const handleDeleteEvent = async () => {
   if (selectedEvent.value) {
-    await calenderStore.DeleteEvent(selectedEvent.value.id);
+    await calenderStore.DeleteEvent(selectedEvent.value.event_id as unknown as string);
     calendarOptions.events = calenderStore.eventState as unknown as any;
     closeModal()
   }
@@ -209,7 +214,7 @@ const renderEventContent = (eventInfo: any) => {
 }
 
 const openModal = (eventId: string = "new") => {
-  if(typeof eventId === "object") eventId = "new"
+  if (typeof eventId === "object") eventId = "new"
   router.push(`/map/${route.params.tenantId}/${route.params.userId}/${eventId}`)
   //isOpen.value = true;
 }

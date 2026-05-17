@@ -66,10 +66,10 @@ export class ApiClient extends HttpClient {
 
   events = () => {
     return {
-      getActiveEventsByTenantIdAndUserId: () => this.get(`/event/get-active-user-events`, this.getHeader("Authorization")),
-      createTenenatAndUserEvent: (eventInfo: IEvent) => this.post("/event/create-tenant-user-event", { eventInfo }, this.getHeader("Authorization")),
-      updateTenenatAndUserEvent: (eventInfo: IEvent) => this.post("/event/update-tenant-user-event", { eventInfo }, this.getHeader("Authorization")),
-      deleteTenenatAndUserEvent: (eventId: string) => this.patch("/event/delete-tenenat-user-event", { eventId }, this.getHeader("Authorization"))
+      getActiveEventsByTenantIdAndUserId: (event: {}) => this.get(`/event/get-active-user-events`, this.getHeader("Authorization")),
+      createTenenatAndUserEvent: (event: {}) => this.post("/event/create-tenant-user-event", { event }, this.getHeader("Authorization")),
+      updateTenenatAndUserEvent: (event: {}) => this.post("/event/update-tenant-user-event", { event }, this.getHeader("Authorization")),
+      deleteTenenatAndUserEvent: (event: {}) => this.patch("/event/delete-tenenat-user-event", { event }, this.getHeader("Authorization"))
     }
   }
 }

@@ -1,41 +1,29 @@
-import type Event from "../../../core/db/sesame_model_types/event";
-import type { IEvent } from "../../../../../shared/interfaces";
+import type Event from "../../../../../shared/interfaces/sesame_model_types/event";
+import { SessionRequest } from "supertokens-node/framework/express";
+import { IEventRequest } from "./IEventRequest";
 
 export class EventRequest {
+  public request: IEventRequest = {
+    baseRequest: {
+      userId: "",
+      tenantId: "",
+      recipeUserId: undefined
+    },
+    event: {} as Event
+  } as IEventRequest;
 
-  public request: Event = {} as Event;
+  CreateRequest(request: SessionRequest): IEventRequest {
+    const session = request.session;
+    const body = request.body;
 
-  CreateRequest(event: IEvent, userId: string = "", tenantId: string = ""): Event {
-    this.request.active = true;
-    this.request.actual_attendance = 0;
-    this.request.budget_estimated = "10";
-    this.request.event_type_id = 1;
-    this.request.total_expenditure = "10";
-    this.request.venue_id = 1;
-    this.request.estimated_attendance = 0;
+    if (session) {
+      this.request.baseRequest.userId = session!.getUserId();
+      this.request.baseRequest.tenantId = session!.getTenantId();
+      this.request.baseRequest.recipeUserId = session!.getRecipeUserId();
+    }
 
-    if (userId !== "") {
-      this.request.user_id = userId;
-    }
-    if (tenantId !== "") {
-      this.request.tenant_id = tenantId;
-    }
-    if (event.id) {
-      this.request.event_id = parseInt(event.id);
-    }
-    if (event.title) {
-      this.request.description = event.title;
-    }
-    if (event.end) {
-      this.request.end_date = event.end as unknown as Date;
-    }
-    if (event.start) {
-      this.request.start_date = event.start;
-    }
-    if (event.extendedProps) {
-      if (event.extendedProps.locations) this.request.locations = event.extendedProps.locations;
-      if (event.extendedProps.organisationId) this.request.organization_id = event.extendedProps.organisationId as unknown as number;
-      if (event.extendedProps.calendar) this.request.status_id = event.extendedProps.calendar as unknown as number;
+    if (body.event) {
+      Object.assign(this.request, { event: body.event });
     }
 
     return this.request;

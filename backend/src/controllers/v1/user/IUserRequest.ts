@@ -3,7 +3,7 @@ import { IBaseRequest } from "../";
 import { IUserInfo, IUser } from "../../../../../shared/interfaces";
 
 export interface IUserRequest {
-  baseRequest: IBaseRequest
+  baseRequest: IBaseRequest;
   password?: string;
   newPassword?: string;
   email?: string;

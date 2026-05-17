@@ -4,10 +4,11 @@ import type { IEvent } from "@/interfaces";
 import { ApiClient } from "@/plugins";
 import { useUserStore } from "@/store";
 import { useLocalStorage } from "@vueuse/core";
+import type Event from "../../../../shared/interfaces/sesame_model_types/event";
 
 export const useEventStore = defineStore("events", () => {
   const apiClient = new ApiClient();
-  const eventState = ref(useLocalStorage("sesame.event.state", [] as Array<IEvent>));
+  const eventState = ref(([] as Array<IEvent>));
 
   const GetAccessToken = async () => {
     const userStore = useUserStore();
@@ -19,24 +20,27 @@ export const useEventStore = defineStore("events", () => {
     return await userStore.GetUserId();
   }
 
-  const SetupEvent = async (event: IEvent, tenantId: string) => {
-    return {
-      event_id: event.id,
+  const SetupEvent = (event: IEvent) => {
+    const eventInfo = {
       active: true,
-      actual_attendance: 0,
-      budget_estimated: "10",
+      actual_attendance: null,
+      budget_estimated: null,
       description: event.title,
       end_date: event.end,
-      locations: event.extendedProps?.locations,
+      estimated_attendance: null,
+      event_id: event.id as unknown as number,
       event_type_id: 1,
+      locations: event.extendedProps?.locations,
       organization_id: event.extendedProps?.organisationId,
       start_date: event.start,
       status_id: event.extendedProps?.calendar,
-      tenant_id: tenantId,
-      total_expenditure: "10",
-      user_id: await GetUserId(),
-      venue_id: 1
-    }
+      tenant_id: "1",
+      total_expenditure: null,
+      user_id: "",
+      venue_id: "1"
+    } as unknown as Event
+
+    return eventInfo
   }
 
   const GetEventStatusById = async (id: string) => {
@@ -56,13 +60,30 @@ export const useEventStore = defineStore("events", () => {
 
   const GetEvents = async () => {
     eventState.value = [];
+    const event: IEvent = {
 
-    const events: Array<IEvent> = await apiClient
+    } as unknown as IEvent;
+
+    const events: Array<Event> = await apiClient
       .setBearerAuth(await GetAccessToken())
       .events()
-      .getActiveEventsByTenantIdAndUserId() as unknown as Array<IEvent>;
+      .getActiveEventsByTenantIdAndUserId(SetupEvent(event)) as unknown as Array<Event>;
 
-      eventState.value = events as Array<IEvent>;
+    events.forEach((event: Event) => {
+      eventState.value.push(
+        {
+          id: event.event_id.toString(),
+          start: event.start_date,
+          end: event.end_date,
+          title: event.description?.toString() || "",
+          extendedProps: {
+            calendar: event.status_id.toString(),
+            organisationId: event.organization_id,
+            locations: event.locations,
+          }
+        }
+      )
+    })
   }
 
   const GetEventByEventId = (eventId: string): IEvent => {
@@ -73,7 +94,7 @@ export const useEventStore = defineStore("events", () => {
     await apiClient
       .setBearerAuth(await GetAccessToken())
       .events()
-      .createTenenatAndUserEvent(event);
+      .createTenenatAndUserEvent(SetupEvent(event));
 
     await GetEvents();
   }
@@ -82,22 +103,27 @@ export const useEventStore = defineStore("events", () => {
     await apiClient
       .setBearerAuth(await GetAccessToken())
       .events()
-      .updateTenenatAndUserEvent(event);
+      .updateTenenatAndUserEvent(SetupEvent(event));
 
     await GetEvents();
   }
 
   const DeleteEvent = async (eventId: string) => {
+    const event: IEvent = {
+      id: eventId
+    } as unknown as IEvent;
+
     await apiClient
       .setBearerAuth(await GetAccessToken())
       .events()
-      .deleteTenenatAndUserEvent(eventId);
+      .deleteTenenatAndUserEvent(SetupEvent(event));
 
     await GetEvents();
   }
 
   return {
     eventState,
+    SetupEvent,
     GetEvents,
     GetEventByEventId,
     CreateEvent,

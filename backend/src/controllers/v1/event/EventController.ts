@@ -1,27 +1,23 @@
 import { SessionRequest } from "supertokens-node/framework/express";
-import type Event from "../../../core/db/sesame_model_types/event";
 import { Response } from "express-serve-static-core";
 import { BaseController } from "../../../core/routing";
-import { BadRequestError, ValidationError } from "../../../core/error";
+import { BadRequestError } from "../../../core/error";
 import { NextFunction } from "supertokens-node/lib/build/framework/custom/framework";
 import { IEventService } from "./IEventService";
 import { EventRequest } from "./EventRequest";
-
+import { IEventRequest } from "./IEventRequest";
 
 export class EventController extends BaseController<IEventService> {
-
   public Id: string = "EventController";
+  private request = new EventRequest();
 
   GetActiveEventsByTenantIdAndUserId = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-
-      const session = req.session;
-      const tenantId = session!.getTenantId();
-      const userId = session!.getUserId();
+      const response = await this.ControllerService.GetActiveItemsByTenantIdAndUserId(this.request.CreateRequest(req) as unknown as IEventRequest);
 
       res
       .status(200)
-      .json(await this.ControllerService.GetActiveItemsByTenantIdAndUserId(userId, tenantId));
+      .json(response);
 
     } catch (error) {
       next(new BadRequestError({ message: `Error fetching event info ${error}`, logging: true }));
@@ -30,17 +26,11 @@ export class EventController extends BaseController<IEventService> {
 
   CreateEventByTenenantAndUserId = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-
-      const session = req.session;
-      const eventInfo = req.body.eventInfo;
-      const tenantId = session!.getTenantId();
-      const userId = session!.getUserId();
-      delete eventInfo.id;
-      const request: Event = new EventRequest().CreateRequest(eventInfo, userId, tenantId);
-
+      const response = await this.ControllerService.CreateEventByTenenantAndUserId(this.request.CreateRequest(req));
+      
       res
       .status(200)
-      .json(await this.ControllerService.CreateEventByTenenantAndUserId(request));
+      .json(response);
 
     } catch (error) {
       next(new BadRequestError({ message: `Error creating event info ${error}`, logging: true }));
@@ -49,23 +39,11 @@ export class EventController extends BaseController<IEventService> {
 
   UpdateEventById = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-
-      const session = req.session;
-      const eventInfo = req.body.eventInfo;
-      const eventId = eventInfo.id;
-      delete eventInfo.id;
-      const tenantId = session!.getTenantId();
-      const userId = session!.getUserId();
-
-      if (!eventId || eventId === "") {
-        next(new ValidationError({ code: 400, context: "Event Id is required" as unknown as undefined, logging: true }));
-      }
-
-      const request: Event = new EventRequest().CreateRequest(eventInfo, userId ,tenantId);
+      const response = await this.ControllerService.UpdateEventById(this.request.CreateRequest(req), next);
 
       res
       .status(200)
-      .json(await this.ControllerService.UpdateEventById(request, eventId));
+      .json(response);
 
     } catch (error: unknown) {
       next(new BadRequestError({ context: `Error updating event info ${error}` as unknown as undefined, logging: true }))
@@ -74,15 +52,11 @@ export class EventController extends BaseController<IEventService> {
 
   DeleteEventById = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const eventId = req.body.eventId;
-
-      if (!eventId || eventId === "") {
-        next(new ValidationError({ code: 400, context: "Event Id is required" as unknown as undefined, logging: true }));
-      }
+      const response = await this.ControllerService.DeleteEventById(this.request.CreateRequest(req), next);
 
       res
       .status(200)
-      .json(await this.ControllerService.DeleteEventById(eventId));
+      .json(response);
 
     } catch (error) {
       next(new BadRequestError({ context: `Error deleting event info ${error}` as unknown as undefined, logging: true }));
