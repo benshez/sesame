@@ -1,7 +1,8 @@
 import { IBaseRequest } from "../";
-import { Event } from "../../../../../shared/interfaces/sesame_model_types";
+import { IEvent } from "../../../../../shared/interfaces";
+
 
 export interface IEventRequest {
   baseRequest: IBaseRequest;
-  event?: Event;
+  event?: IEvent;
 }

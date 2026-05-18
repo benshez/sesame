@@ -1,6 +1,6 @@
-import type Event from "../../../../../shared/interfaces/sesame_model_types/event";
 import { SessionRequest } from "supertokens-node/framework/express";
 import { IEventRequest } from "./IEventRequest";
+import { IEvent } from "../../../../../shared/interfaces";
 
 export class EventRequest {
   public request: IEventRequest = {
@@ -9,10 +9,10 @@ export class EventRequest {
       tenantId: "",
       recipeUserId: undefined
     },
-    event: {} as Event
+    event: {} as IEvent
   } as IEventRequest;
 
-  CreateRequest(request: SessionRequest): IEventRequest {
+  CreateRequest = (request: SessionRequest): IEventRequest => {
     const session = request.session;
     const body = request.body;
 

@@ -2,16 +2,17 @@ import { NextFunction } from "supertokens-node/lib/build/framework/custom/framew
 import { ValidationError } from "../../../core/error";
 import type Event from "../../../../../shared/interfaces/sesame_model_types/event";
 import { useDatabase } from "../../../core/db/query/useDatabase";
-import { IEventService } from "./IEventService";
+import { IEventService, EventResponse } from "./";
 import { IEventRequest } from "./IEventRequest";
+import { IEvent } from "../../../../../shared/interfaces";
 
 
 export class EventService implements IEventService {
 
   private database = useDatabase();
 
-  async GetActiveItemsByTenantIdAndUserId(request: IEventRequest): Promise<Event[]> {
-    const response = await this.database
+  async GetActiveItemsByTenantIdAndUserId(request: IEventRequest): Promise<IEvent[]> {
+    const events = await this.database
       .event(this.database.db)
       .find(
         {
@@ -21,28 +22,31 @@ export class EventService implements IEventService {
         })
       .all();
 
-    return response as unknown as Event[];
+    const response = EventResponse.CreateArrayResponse(events)
+
+    return response as unknown as IEvent[];
   }
 
-  async CreateEventByTenenantAndUserId(request: IEventRequest): Promise<Event> {
-    const eventInfo: Partial<Event> = request.event as unknown as Event;
+  async CreateEventByTenenantAndUserId(request: IEventRequest): Promise<IEvent> {
+    const eventInfo: Partial<Event> = EventResponse.FromIEventToEventResponse(request);
     delete eventInfo.event_id;
 
     const response = await this.database
       .event(this.database.db)
       .insert(eventInfo as Event);
 
-    return response as unknown as Event;
+    return response as unknown as IEvent;
   }
 
-  async UpdateEventById(request: IEventRequest, next: NextFunction): Promise<Event> {
+  async UpdateEventById(request: IEventRequest, next: NextFunction): Promise<IEvent> {
     let eventId: number = 0;
-    if (request.event && request.event.event_id) {
-      eventId = request.event.event_id as unknown as number;
+    if (request.event && request.event.id) {
+      eventId = request.event.id as unknown as number;
       if (eventId === 0 || !eventId) {
         next(new ValidationError({ code: 400, context: "Event Id is required" as unknown as undefined, logging: true }));
       }
     }
+
     const response = await this.database
       .event(this.database.db)
       .update(
@@ -50,16 +54,16 @@ export class EventService implements IEventService {
           event_id: eventId as unknown as number
         },
         {
-          ...request.event
+          ...EventResponse.FromIEventToEventResponse(request)
         });
 
-    return response as unknown as Event;
+    return response as unknown as IEvent;
   }
 
-  async DeleteEventById(request: IEventRequest, next: NextFunction): Promise<Event> {
+  async DeleteEventById(request: IEventRequest, next: NextFunction): Promise<IEvent> {
     let eventId: number = 0;
-    if (request.event && request.event.event_id) {
-      eventId = request.event.event_id as unknown as number;
+    if (request.event && request.event.id) {
+      eventId = request.event.id as unknown as number;
       if (eventId === 0 || !eventId) {
         next(new ValidationError({ code: 400, context: "Event Id is required" as unknown as undefined, logging: true }));
       }
@@ -74,6 +78,6 @@ export class EventService implements IEventService {
           active: false
         })
 
-    return response as unknown as Event;
+    return response as unknown as IEvent;
   }
 }

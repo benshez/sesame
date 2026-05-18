@@ -133,8 +133,6 @@ const handleAddOrUpdateEvent = async () => {
     },
   }
 
-  calenderStore.SetupEvent(event)
-
   if (selectedEvent.value) {
     event.id = selectedEvent.value.event_id as unknown as string;
 
@@ -231,7 +229,7 @@ const calendarOptions: CalendarOptions = reactive({
   selectable: true,
   select: handleDateSelect,
   eventClick: handleEventClick,
-  eventContent: "vcxvxc",
+  eventContent: "",
   customButtons: {
     addEventButton: {
       text: "Add Event +",

@@ -1,10 +1,10 @@
 import { NextFunction } from "supertokens-node/lib/build/framework/custom/framework";
-import type Event from "../../../../../shared/interfaces/sesame_model_types/event";
 import { IEventRequest } from "./";
+import { IEvent } from "../../../../../shared/interfaces";
 
 export interface IEventService {
-  GetActiveItemsByTenantIdAndUserId(request: IEventRequest): Promise<Event[]>;
-  CreateEventByTenenantAndUserId(request: IEventRequest): Promise<Event>;
-  UpdateEventById(request: IEventRequest, next: NextFunction): Promise<Event>;
-  DeleteEventById(request: IEventRequest, next: NextFunction): Promise<Event>;
+  GetActiveItemsByTenantIdAndUserId(request: IEventRequest): Promise<IEvent[]>;
+  CreateEventByTenenantAndUserId(request: IEventRequest): Promise<IEvent>;
+  UpdateEventById(request: IEventRequest, next: NextFunction): Promise<IEvent>;
+  DeleteEventById(request: IEventRequest, next: NextFunction): Promise<IEvent>;
 }

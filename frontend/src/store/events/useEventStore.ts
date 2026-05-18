@@ -64,26 +64,17 @@ export const useEventStore = defineStore("events", () => {
 
     } as unknown as IEvent;
 
-    const events: Array<Event> = await apiClient
+    const events = await apiClient
       .setBearerAuth(await GetAccessToken())
       .events()
-      .getActiveEventsByTenantIdAndUserId(SetupEvent(event)) as unknown as Array<Event>;
+      .getActiveEventsByTenantIdAndUserId() as unknown as Array<IEvent>;
 
-    events.forEach((event: Event) => {
-      eventState.value.push(
-        {
-          id: event.event_id.toString(),
-          start: event.start_date,
-          end: event.end_date,
-          title: event.description?.toString() || "",
-          extendedProps: {
-            calendar: event.status_id.toString(),
-            organisationId: event.organization_id,
-            locations: event.locations,
-          }
-        }
-      )
+    events.forEach((event) => {
+      event.start = event.start.toString().split(".")[0] as unknown as Date
+      event.end = event.end ? event.end.toString().split(".")[0] as unknown as Date : null as unknown as Date
     })
+
+    eventState.value = events;
   }
 
   const GetEventByEventId = (eventId: string): IEvent => {
@@ -94,7 +85,7 @@ export const useEventStore = defineStore("events", () => {
     await apiClient
       .setBearerAuth(await GetAccessToken())
       .events()
-      .createTenenatAndUserEvent(SetupEvent(event));
+      .createTenenatAndUserEvent(event);
 
     await GetEvents();
   }
@@ -103,7 +94,7 @@ export const useEventStore = defineStore("events", () => {
     await apiClient
       .setBearerAuth(await GetAccessToken())
       .events()
-      .updateTenenatAndUserEvent(SetupEvent(event));
+      .updateTenenatAndUserEvent(event);
 
     await GetEvents();
   }
@@ -116,7 +107,7 @@ export const useEventStore = defineStore("events", () => {
     await apiClient
       .setBearerAuth(await GetAccessToken())
       .events()
-      .deleteTenenatAndUserEvent(SetupEvent(event));
+      .deleteTenenatAndUserEvent(event);
 
     await GetEvents();
   }

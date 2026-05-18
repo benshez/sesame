@@ -88,13 +88,13 @@ const CurrentEvent: IEvent = {
 
 const onSaveEvent = async () => {
   CurrentEvent.title = formStore.getElementValue("description") as string,
-    CurrentEvent.start = formStore.getElementValue("startDate") as unknown as Date,
-    CurrentEvent.end = formStore.getElementValue("endDate") as unknown as Date,
-    CurrentEvent.extendedProps = {
-      calendar: formStore.getElementValue("progress") as string,
-      organisationId: formStore.getElementValue("organisation") as string,
-      locations: map.GetEventCoordinates()
-    }
+  CurrentEvent.start = formStore.getElementValue("startDate") as unknown as Date,
+  CurrentEvent.end = formStore.getElementValue("endDate") as unknown as Date,
+  CurrentEvent.extendedProps = {
+    calendar: formStore.getElementValue("progress") as string,
+    organisationId: formStore.getElementValue("organisation") as string,
+    locations: map.GetEventCoordinates()
+  }
 
   if (eventId.value !== "NEW") {
     await eventStore.UpdateEvent(
@@ -153,8 +153,8 @@ onMounted(async () => {
     await eventStore.GetEvents();
     const event = eventStore.GetEventByEventId(eventId.value);
 
-    formStore.updateElementState("endDate", { key: "value", value: event.end?.toString().split(".")[0] });
-    formStore.updateElementState("startDate", { key: "value", value: event.start?.toString().split(".")[0] });
+    formStore.updateElementState("endDate", { key: "value", value: event.end?.toString().split(".")[0] as unknown as Date });
+    formStore.updateElementState("startDate", { key: "value", value: event.start?.toString().split(".")[0] as unknown as Date  });
     formStore.updateElementState("progress", { key: "value", value: event.extendedProps?.calendar });
     formStore.updateElementState("organisation", { key: "value", value: event.extendedProps?.organisationId });
     formStore.updateElementState("description", { key: "value", value: event.title });

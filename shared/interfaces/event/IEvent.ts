@@ -9,7 +9,7 @@ export interface IEvent {
   end?: Date,
   endStr?: string,
   extendedProps?: {
-    calendar: string,
+    calendar: string | number,
     organisationId?: string | number,
     locations: object | string,
   },
