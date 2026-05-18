@@ -21,15 +21,17 @@ export const useUserStore = defineStore("user", () => {
     return await Session.getUserId();
   }
 
-  const GetUserInfo = async () => {
+  const GetUserInfo = async (userId: string) => {
+    userState.value.UserInfo = {} as IUserInfo;
+
     const user = await apiClient
       .setBearerAuth(await GetAccessToken())
       .users()
-      .userInfo(await GetUserId())
+      .userInfo(userId)
 
     Object.assign(userState.value.UserInfo, user);
 
-    return userState.value.UserInfo;
+    return user;
   }
 
   const SaveUserMetaData = async (userInfo: IUserMetaData) => {
@@ -39,19 +41,21 @@ export const useUserStore = defineStore("user", () => {
       .updateUserMetadata(userInfo);
   }
 
-  const GetUserMetaData = async () => {
+  const GetUserMetaData = async (userId: string) => {
+    userState.value.UserMetaData = {} as IUserMetaData;
+    
     const response: any = await apiClient
       .setBearerAuth(await GetAccessToken())
       .users()
-      .getUserMetadata(await GetUserId());
+      .getUserMetadata(userId);
 
     Object.assign(userState.value.UserMetaData, response.metadata);
 
-    return userState.value.UserMetaData;
+    return response.metadata;
   }
 
   const SendVerificationEmail = async () => {
-    const user = await GetUserInfo();
+    const user = await GetUserInfo(await GetUserId());
 
     const response = await apiClient
       .setBearerAuth(await GetAccessToken())

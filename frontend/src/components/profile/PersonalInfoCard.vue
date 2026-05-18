@@ -66,6 +66,10 @@ import type { IUserMetaData } from "@/interfaces";
 import { useObjectHelper } from "@/utilities";
 import EditIcon from "@/components/svg/EditIcon.vue";
 import CloseIcon from "@/components/svg/CloseIcon.vue";
+import { useRouter, useRoute } from "vue-router";
+
+const router = useRouter();
+const route = useRoute();
 
 interface IFormData {
   key: string,
@@ -92,7 +96,7 @@ const SetProperty = <T>(obj: T, path: string, value: any): T => {
 
 const SaveUserMetaData = async () => {
   if (!formStore.formState.formIsValid) return;
-  
+
   if (await Session.doesSessionExist()) {
     let user: IUserMetaData = {} as IUserMetaData;
 
@@ -106,10 +110,14 @@ const SaveUserMetaData = async () => {
 
   isPersonalInfofoModal.value = false;
 }
+const GetUserId = (): string => {
+  return route.params.userId as unknown as string;
+}
 
 const CreateSummary = async () => {
-  userInfo.value = await userStore.GetUserMetaData();
-  const user = helper.Flatten(userInfo.value, {});
+  await router.isReady();
+  await userStore.GetUserMetaData(GetUserId());
+  const user = helper.Flatten(userStore.userState.UserMetaData, {});
   formData.value = helper.ToArray<IFormData>(user);
 }
 
@@ -117,8 +125,8 @@ const ShowPersonalInfoModal = async () => {
   isPersonalInfofoModal.value = true;
 
   if (await Session.doesSessionExist()) {
-    if (!userInfo.value) userInfo.value = await userStore.GetUserMetaData();
-    formStore.bind(userInfo.value);
+    if (!userInfo.value) await userStore.GetUserMetaData(GetUserId());
+    formStore.bind(userStore.userState.UserMetaData);
   }
 }
 

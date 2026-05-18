@@ -17,11 +17,13 @@
                         {{ userStore.userState.UserMetaData?.displayName }}
                       </h4>
                       <div class="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
-                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ userStore.userState.UserMetaData?.position }}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{
+                          userStore.userState.UserMetaData?.position }}</p>
                         <div class="hidden h-3.5 w-px bg-gray-300 dark:bg-gray-700 xl:block">
                         </div>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ userStore.userState.UserMetaData?.address?.city }}, {{
-                          userStore.userState.UserMetaData?.address?.state }}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{
+                          userStore.userState.UserMetaData?.address?.city }}, {{
+                            userStore.userState.UserMetaData?.address?.state }}</p>
                       </div>
                     </div>
                     <div class="flex items-center order-2 gap-2 grow xl:order-3 xl:justify-end">
@@ -29,7 +31,7 @@
                     </div>
                   </div>
                   <button class="edit-button" @click="ShowModal">
-                    <EditIcon/>
+                    <EditIcon />
                     Edit
                   </button>
                 </div>
@@ -73,7 +75,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onBeforeMount } from "vue";
 import * as Session from "supertokens-web-js/recipe/session";
 import Modal from "@/components/profile/Modal.vue";
 import FormBody from "@/components/Form/FormBody.vue";
@@ -82,14 +84,18 @@ import ProfileIcon from "@/components/svg/ProfileIcon.vue";
 import SocialIcons from "@/components/svg/SocialIcons.vue"
 import EditIcon from "@/components/svg/EditIcon.vue";
 import CloseIcon from "@/components/svg/CloseIcon.vue";
+import { useRouter, useRoute } from "vue-router";
+import type { IUserInfo } from "@/interfaces";
 
+const router = useRouter();
+const route = useRoute();
 const userStore = useUserStore();
 const formStore = useFormStore();
 const isProfileInfoModal = ref<boolean>(false);
 
 const SaveProfile = async () => {
-  if(!formStore.formState.formIsValid) return;
-  
+  if (!formStore.formState.formIsValid) return;
+
   if (await Session.doesSessionExist()) {
     //await userStore.SaveUserMetaData();
   }
@@ -101,10 +107,15 @@ const ShowModal = async () => {
   isProfileInfoModal.value = true;
 
   if (await Session.doesSessionExist()) {
-    const userInfo = await userStore.GetUserInfo();
+    await router.isReady();
+    const userId = route.params.userId as unknown as string;
+    const userInfo: IUserInfo = await userStore.GetUserInfo(userId) as unknown as IUserInfo;
 
     formStore.updateElementState("newemail", { key: "value", value: userInfo.emails.at(0) });
     formStore.updateElementState("email", { key: "value", value: userInfo.emails.at(0) });
   }
 }
+onBeforeMount(async () => {
+
+})
 </script>

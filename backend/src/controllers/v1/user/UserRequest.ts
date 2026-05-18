@@ -15,9 +15,12 @@ export class UserRequest {
   CreateRequest(req: SessionRequest): IUserRequest {
     const session = req.session;
     const body = req.body;
+    let userId = session!.getUserId();
+
+    if(userId !== req.params.userId) userId = req.params.userId;
 
     if (session) {
-      this.request.baseRequest.userId = session!.getUserId();
+      this.request.baseRequest.userId = userId;
       this.request.baseRequest.tenantId = session!.getTenantId();
       this.request.baseRequest.recipeUserId = session!.getRecipeUserId();
       this.request.roleId = body.roleId ? body.roleId : "";
