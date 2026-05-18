@@ -1,11 +1,53 @@
 import { TenantConfig } from "supertokens-node/recipe/multitenancy/types";
 import Multitenancy from "supertokens-node/recipe/multitenancy";
-import { RecipeUserId } from "supertokens-node";
+import { RecipeUserId, getUsersNewestFirst } from "supertokens-node";
 import { NextFunction } from "supertokens-node/lib/build/framework/custom/framework";
 import { IBaseRequest, ITenantRequest, ITenantService } from "../";
 import { ValidationError } from "../../../core/error";
+import { User } from "supertokens-node/types";
 
 export class TenantService implements ITenantService {
+  GetUsersForTenant = async (request: IBaseRequest): Promise<{ users: User[]; nextPaginationToken?: string; }> => {
+    const input = {
+      tenantId: request.tenantId
+    };
+
+    const response: {
+      users: User[];
+      nextPaginationToken?: string;
+    } = {
+      users: [],
+      nextPaginationToken: ""
+    };
+
+    let usersResponse;
+    let readMore = true;
+    let counter = 0;
+    do {
+      usersResponse = await getUsersNewestFirst(input);
+      if (usersResponse.users) {
+        usersResponse.users.forEach((user: User) => {
+          response.users.push(user)
+        })
+
+        Object.assign(input,
+          {
+            limit: 200,
+            paginationToken: usersResponse.nextPaginationToken,
+          }
+        )
+        counter++;
+
+        if (!usersResponse.nextPaginationToken || counter === 5) readMore = false;
+      } else {
+        readMore = false;
+      }
+    } while (readMore);
+
+    response.nextPaginationToken = usersResponse.nextPaginationToken;
+
+    return response;
+  }
   GetTenants = async (): Promise<{ status: "OK"; tenants: ({ tenantId: string; } & TenantConfig)[]; }> => {
     const reponse = await Multitenancy.listAllTenants();
 

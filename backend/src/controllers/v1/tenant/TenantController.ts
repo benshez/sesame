@@ -29,6 +29,17 @@ export class TenantController extends BaseController<ITenantService> {
     }
   }
 
+  GetUsersForTenant = async (req: SessionRequest, res: Response, next: NextFunction) => {
+    try {
+      const reponse = await this.ControllerService.GetUsersForTenant(this.request.CreateRequest(req).baseRequest);
+
+      res
+        .json(reponse);
+    } catch (error) {
+      next(new BadRequestError({ message: `Error tenant ${error}`, logging: true }));
+    }
+  }  
+
   CreateTenant = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const reponse = await this.ControllerService.CreateTenant(this.request.CreateRequest(req), next);

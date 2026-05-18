@@ -8,7 +8,6 @@ import { IUserInfo } from "../../../../../shared/interfaces";
 
 export class UserService implements IUserService {
   GetUserInfo = async (request: IUserRequest): Promise<User | undefined> => {
-
     const response = await supertokens.getUser(request.baseRequest.userId);
 
     return response;

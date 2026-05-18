@@ -62,5 +62,6 @@ const checkForSession = async function () {
 
 onMounted(async () => {
   await checkForSession();
+
 });
 </script>

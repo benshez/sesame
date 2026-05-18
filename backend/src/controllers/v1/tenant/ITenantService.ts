@@ -1,6 +1,7 @@
 import { type TenantConfig } from "supertokens-node/recipe/multitenancy/types";
 import { NextFunction } from "supertokens-node/lib/build/framework/custom/framework";
 import { IBaseRequest, ITenantRequest } from "../";
+import { User } from "supertokens-node/types";
 
 export interface ITenantService {
   GetTenants(): Promise<{
@@ -11,10 +12,14 @@ export interface ITenantService {
   }>;
   GetTenant(request: IBaseRequest): Promise<({
     status: "OK";
-} & TenantConfig) | undefined>;
+  } & TenantConfig) | undefined>;
   CreateTenant(request: ITenantRequest, next: NextFunction): Promise<{
     status: "OK";
     createdNew: boolean;
+  }>
+  GetUsersForTenant(request: IBaseRequest): Promise<{
+    users: User[];
+    nextPaginationToken?: string;
   }>
   AddUserToTenant(request: ITenantRequest): Promise<{
     status: "OK";

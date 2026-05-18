@@ -72,4 +72,10 @@ export class ApiClient extends HttpClient {
       deleteTenenatAndUserEvent: (event: {}) => this.patch("/event/delete-tenenat-user-event", { event }, this.getHeader("Authorization"))
     }
   }
+
+  tenant = () => {
+    return {
+      getTenantUsers: () => this.get(`/tenant/get-tenant-users`, this.getHeader("Authorization"))
+    }
+  }
 }
