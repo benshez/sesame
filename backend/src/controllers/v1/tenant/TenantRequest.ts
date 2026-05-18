@@ -1,4 +1,5 @@
 import { SessionRequest } from "supertokens-node/framework/express";
+import { sanitize } from "express-xss-sanitizer";
 import { ITenantRequest } from "../";
 import { ITenant } from "../../../../../shared/interfaces";
 
@@ -25,6 +26,6 @@ export class TenantRequest {
       if (body.tenant.firstFactors) this.request.tenant.firstFactors = body.tenant.firstFactors;
     }
 
-    return this.request as unknown as ITenantRequest;
+    return sanitize(this.request) as unknown as ITenantRequest;
   }
 }

@@ -1,4 +1,5 @@
 import { SessionRequest } from "supertokens-node/framework/express";
+import { sanitize } from "express-xss-sanitizer";
 import { IUserRequest } from "./IUserRequest";
 import { IUser } from "../../../../../shared/interfaces";
 
@@ -20,7 +21,7 @@ export class UserRequest {
     if(userId !== req.params.userId) userId = req.params.userId;
 
     if (session) {
-      this.request.baseRequest.userId = userId;
+      this.request.baseRequest.userId = sanitize(userId);
       this.request.baseRequest.tenantId = session!.getTenantId();
       this.request.baseRequest.recipeUserId = session!.getRecipeUserId();
       this.request.roleId = body.roleId ? body.roleId : "";
@@ -40,6 +41,6 @@ export class UserRequest {
       this.request.user.password = body.user.password;
     }
 
-    return this.request;
+    return sanitize(this.request);
   }
 }

@@ -1,22 +1,18 @@
 import { SessionRequest } from "supertokens-node/framework/express";
 import { Response } from "express-serve-static-core";
-import supertokens from "supertokens-node";
 import { NextFunction } from "supertokens-node/lib/build/framework/custom/framework";
 import { BaseController } from "../../../core/routing";
 import { IEmailService } from "../index";
 import { BadRequestError } from "../../../core/error";
+import { EmailRequest } from "./";
 
 export class EmailController extends BaseController<IEmailService> {
   public Id: string = "EmailController";
+  private request = new EmailRequest();
 
   SendVerificationEmail = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const session = req.session;
-      const userId = session!.getUserId();
-      const tenantId = session!.getTenantId();
-      const recipeUserId = session!.getRecipeUserId();
-      const email = req.body.email;
-      const response = await this.ControllerService.SendVerificationEmail(userId, recipeUserId, tenantId, email);
+      const response = await this.ControllerService.SendVerificationEmail(this.request.CreateRequest(req));
 
       if (response.status === "OK") {
         res
@@ -35,7 +31,7 @@ export class EmailController extends BaseController<IEmailService> {
 
   VerifyEmail = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const response = await this.ControllerService.VerifyEmail(req.body.tenantId, new supertokens.RecipeUserId(req.body.userId));
+      const response = await this.ControllerService.VerifyEmail(this.request.CreateRequest(req));
 
       if (response.status === "OK") {
         res
@@ -54,7 +50,7 @@ export class EmailController extends BaseController<IEmailService> {
 
   UnVerifyEmail = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const response = await this.ControllerService.UnVerifyEmail(new supertokens.RecipeUserId(req.body.userId));
+      const response = await this.ControllerService.UnVerifyEmail(this.request.CreateRequest(req));
 
       if (response.status === "OK") {
         res
@@ -70,5 +66,4 @@ export class EmailController extends BaseController<IEmailService> {
       next(new BadRequestError({ message: `Error un-verifying email ${error}`, logging: true }));
     }
   }
-
 }

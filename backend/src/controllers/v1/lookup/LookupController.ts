@@ -4,16 +4,17 @@ import { Response } from "express-serve-static-core";
 import { BaseController } from "../../../core/routing";
 import { BadRequestError } from "../../../core/error";
 import { useDatabase } from "../../../core/db/query/useDatabase";
+import { LookupRequest } from "./";
 
 const database = useDatabase();
 
 export class LookupController extends BaseController {
   public Id: string = "LookupController";
+  private request = new LookupRequest();
 
   GetCountries = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const session = req.session;
-      const tenantId = session!.getTenantId();
+      const tenantId = this.request.CreateRequest(req).baseRequest.tenantId;
 
       const events = await database
         .country(database.db)
@@ -32,8 +33,7 @@ export class LookupController extends BaseController {
 
   GetEventTypes = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const session = req.session;
-      const tenantId = session!.getTenantId();
+      const tenantId = this.request.CreateRequest(req).baseRequest.tenantId;
 
       const eventType = await database
         .event_type(database.db)
@@ -52,8 +52,7 @@ export class LookupController extends BaseController {
 
   GetVenues = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const session = req.session;
-      const tenantId = session!.getTenantId();
+      const tenantId = this.request.CreateRequest(req).baseRequest.tenantId;
 
       const eventType = await database
         .venue(database.db)
@@ -72,8 +71,7 @@ export class LookupController extends BaseController {
 
   GetOrganizations = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const session = req.session;
-      const tenantId = session!.getTenantId();
+      const tenantId = this.request.CreateRequest(req).baseRequest.tenantId;
 
       const eventType = await database
         .organization(database.db)
@@ -92,8 +90,7 @@ export class LookupController extends BaseController {
 
   GetEventStatuses = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const session = req.session;
-      const tenantId = session!.getTenantId();
+      const tenantId = this.request.CreateRequest(req).baseRequest.tenantId;
 
       const statuses = await database
         .event_status(database.db)

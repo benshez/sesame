@@ -1,19 +1,18 @@
 import { SessionRequest } from "supertokens-node/framework/express";
 import { sanitize } from "express-xss-sanitizer";
-import { IEventRequest } from "./IEventRequest";
-import { IEvent } from "../../../../../shared/interfaces";
+import { IEmailRequest } from ".";
 
-export class EventRequest {
-  public request: IEventRequest = {
+export class EmailRequest {
+  public request: IEmailRequest = {
     baseRequest: {
       userId: "",
       tenantId: "",
       recipeUserId: undefined
     },
-    event: {} as IEvent
-  } as IEventRequest;
+    email: ""
+  } as IEmailRequest;
 
-  CreateRequest = (request: SessionRequest): IEventRequest => {
+  CreateRequest = (request: SessionRequest): IEmailRequest => {
     const session = request.session;
     const body = request.body;
 
@@ -23,8 +22,9 @@ export class EventRequest {
       this.request.baseRequest.recipeUserId = session!.getRecipeUserId();
     }
 
-    if (body.event) {
-      Object.assign(this.request, { event: body.event });
+    if (body) {
+      if (body.email) this.request.email = body.email;
+      if (body.tenantId && this.request.baseRequest.tenantId === "") this.request.baseRequest.tenantId = body.tenantId;
     }
 
     return sanitize(this.request);

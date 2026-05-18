@@ -13,6 +13,7 @@ import { useBackendConfig } from "./src/config/useBackendConfig";
 //import { EmailRoutes, SessionRoutes, LookupRoutes } from "./src/routes";
 import { RouteLoader } from "./src/core/routing";
 import { errorHandler } from "./src/core/error";
+import { xss } from "express-xss-sanitizer";
 import "express-async-errors";
 
 supertokens.init(SuperTokensConfig);
@@ -46,6 +47,7 @@ const authenticateApiKey = (request: SessionRequest, response: Response, next: N
 //app.use(express.json());
 app.use(authenticateApiKey, express.json());
 
+app.use(xss());
 // This exposes all the APIs from SuperTokens to the client.
 app.use(middleware());
 
