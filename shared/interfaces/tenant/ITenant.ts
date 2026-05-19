@@ -5,6 +5,5 @@ export interface ITenant {
     "password_reset_token_lifetime": number,
     "postgresql_connection_uri": string,
   }
-
   firstFactors?: Array<string>;
 }

@@ -85,7 +85,6 @@ import SocialIcons from "@/components/svg/SocialIcons.vue"
 import EditIcon from "@/components/svg/EditIcon.vue";
 import CloseIcon from "@/components/svg/CloseIcon.vue";
 import { useRouter, useRoute } from "vue-router";
-import type { IUserInfo } from "@/interfaces";
 
 const router = useRouter();
 const route = useRoute();
@@ -109,10 +108,10 @@ const ShowModal = async () => {
   if (await Session.doesSessionExist()) {
     await router.isReady();
     const userId = route.params.userId as unknown as string;
-    const userInfo: IUserInfo = await userStore.GetUserInfo(userId) as unknown as IUserInfo;
+    await userStore.GetUserInfo(userId);
 
-    formStore.updateElementState("newemail", { key: "value", value: userInfo.emails.at(0) });
-    formStore.updateElementState("email", { key: "value", value: userInfo.emails.at(0) });
+    formStore.updateElementState("newemail", { key: "value", value: userStore.userState.UserInfo.emails.at(0) });
+    formStore.updateElementState("email", { key: "value", value: userStore.userState.UserInfo.emails.at(0) });
   }
 }
 onBeforeMount(async () => {

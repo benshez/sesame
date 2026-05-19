@@ -54,14 +54,15 @@ export const useUserStore = defineStore("user", () => {
     return response.metadata;
   }
 
-  const SendVerificationEmail = async () => {
-    const user = await GetUserInfo(await GetUserId());
+  const SendVerificationEmail = async (userId: string, email: string) => {
+    //const user = await GetUserInfo(userId);
 
     const response = await apiClient
       .setBearerAuth(await GetAccessToken())
       .email()
       .sendVerificationEmail({
-        "email": userState.value.UserInfo.emails.at(0)?.toString() || ""
+        "email": email, 
+        "userId": userId,
       });
   }
 

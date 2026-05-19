@@ -30,9 +30,9 @@ export class ApiClient extends HttpClient {
 
   email = () => {
     return {
-      sendVerificationEmail: (email: { email: string }) => this.post("/emails/send-verification-email", { ...email }, this.getHeader("Authorization")),
-      verifyEmail: (args: { token: string, tenantId: string, userId: string }) => this.post("/emails/verify-email", { ...args }, this.getHeader("Authorization")),
-      unVerifyEmail: (args: { userId: string }) => this.post("/emails/un-verify-email", { ...args }, this.getHeader("Authorization"))
+      sendVerificationEmail: (email: { email: string, userId: string }) => this.post("/email/send-verification-email", email, this.getHeader("Authorization")),
+      verifyEmail: (args: { tenantId: string, userId: string, recipeUserId: string }) => this.post("/email/verify-email", { ...args }, this.getHeader("Authorization")),
+      unVerifyEmail: (user: { recipeUserId: string, email: string }) => this.post("/email/un-verify-email", { ...user }, this.getHeader("Authorization"))
     }
   }
 
@@ -75,7 +75,7 @@ export class ApiClient extends HttpClient {
 
   tenant = () => {
     return {
-      getTenantUsers: () => this.get(`/tenant/get-tenant-users`, this.getHeader("Authorization"))
+      getTenantUsers: (nextPaginationToken: string) => this.get(`/tenant/get-tenant-users/${nextPaginationToken}`, this.getHeader("Authorization"))
     }
   }
 }

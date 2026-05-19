@@ -81,8 +81,6 @@ const formStore = useFormStore();
 const isPersonalInfofoModal = ref<boolean>(false);
 const formData = ref<Array<IFormData>>([]);
 const helper = useObjectHelper();
-let userInfo = ref<IUserMetaData>({} as IUserMetaData);
-
 
 const SetProperty = <T>(obj: T, path: string, value: any): T => {
   const [head, ...rest] = path.split(".");
@@ -125,7 +123,7 @@ const ShowPersonalInfoModal = async () => {
   isPersonalInfofoModal.value = true;
 
   if (await Session.doesSessionExist()) {
-    if (!userInfo.value) await userStore.GetUserMetaData(GetUserId());
+    if (!userStore.userState.UserMetaData) await userStore.GetUserMetaData(GetUserId());
     formStore.bind(userStore.userState.UserMetaData);
   }
 }

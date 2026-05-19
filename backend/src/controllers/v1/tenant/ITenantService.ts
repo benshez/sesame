@@ -17,7 +17,7 @@ export interface ITenantService {
     status: "OK";
     createdNew: boolean;
   }>
-  GetUsersForTenant(request: IBaseRequest): Promise<{
+  GetUsersForTenant(request: ITenantRequest): Promise<{
     users: User[];
     nextPaginationToken?: string;
   }>

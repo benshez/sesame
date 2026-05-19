@@ -7,10 +7,15 @@ import { ValidationError } from "../../../core/error";
 import { User } from "supertokens-node/types";
 
 export class TenantService implements ITenantService {
-  GetUsersForTenant = async (request: IBaseRequest): Promise<{ users: User[]; nextPaginationToken?: string; }> => {
+  GetUsersForTenant = async (request: ITenantRequest): Promise<{ users: User[]; nextPaginationToken?: string; }> => {
     const input = {
-      tenantId: request.tenantId
+      tenantId: request.baseRequest.tenantId,
+      limit: 2
     };
+
+    if (request.nextPaginationToken && request.nextPaginationToken !== "get-tenant-users-next-pagination-token") {
+      Object.assign(input, { limit: 2, paginationToken: request.nextPaginationToken });
+    }
 
     const response: {
       users: User[];
@@ -20,29 +25,13 @@ export class TenantService implements ITenantService {
       nextPaginationToken: ""
     };
 
-    let usersResponse;
-    let readMore = true;
-    let counter = 0;
-    do {
-      usersResponse = await getUsersNewestFirst(input);
-      if (usersResponse.users) {
-        usersResponse.users.forEach((user: User) => {
-          response.users.push(user)
-        })
+    const usersResponse = await getUsersNewestFirst(input);
 
-        Object.assign(input,
-          {
-            limit: 200,
-            paginationToken: usersResponse.nextPaginationToken,
-          }
-        )
-        counter++;
-
-        if (!usersResponse.nextPaginationToken || counter === 5) readMore = false;
-      } else {
-        readMore = false;
-      }
-    } while (readMore);
+    if (usersResponse.users) {
+      usersResponse.users.forEach((user: User) => {
+        response.users.push(user)
+      });
+    }
 
     response.nextPaginationToken = usersResponse.nextPaginationToken;
 

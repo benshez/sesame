@@ -45,7 +45,7 @@ export class EmailService implements IEmailService {
   }
 
   async UnVerifyEmail(request: IEmailRequest): Promise<{ status: string; }> {
-    const response = await EmailVerification.unverifyEmail(request.baseRequest.recipeUserId as RecipeUserId);
+    const response = await EmailVerification.unverifyEmail(request.baseRequest.recipeUserId as RecipeUserId, request.email);
 
     if (response.status === "OK") {
       return {

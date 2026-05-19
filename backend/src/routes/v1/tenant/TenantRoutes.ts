@@ -25,7 +25,7 @@ class TenantRoutes extends BaseRoute<TenantController> {
 
     this
       .router
-      .get("/get-tenant-users", verifySession(), async (req, res, next) => {
+      .get("/get-tenant-users/:nextPaginationToken", verifySession(), async (req, res, next) => {
         return await this.controller.GetUsersForTenant(req, res, next);
       });
 
