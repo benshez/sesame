@@ -49,6 +49,7 @@ import FormOneColumnLayout from "@/layouts/FormOneColumnLayout.vue";
 import FormBuilder from "@/components/Form/FormBuilder.vue";
 import { useFormStore, useDisplayStore } from "@/store";
 import { ApiClient } from "@/plugins";
+import type { IUserInfo } from "@/interfaces";
 
 const displayStore = useDisplayStore();
 const router = useRouter();
@@ -107,10 +108,6 @@ const signIn = async (_: Event) => {
   const params = new URLSearchParams(window.location.search);
   if (params.has("token")) {
     isVerify.value = true;
-    const accessToken = await Session.getAccessTokenPayloadSecurely();
-    const userId = await Session.getUserId();
-    const token = params.get("token");
-    const tenantId = params.get("tenantId");
     // const unVerifyResponse = await apiClient
     //   .setBearerAuth(accessToken)
     //   .email()
@@ -119,14 +116,26 @@ const signIn = async (_: Event) => {
     //   });
 
     try {
-      const verifyResponse = await apiClient
+      const accessToken = await Session.getAccessTokenPayloadSecurely();
+      const userId = await Session.getUserId();
+      const tenantId = params.get("tenantId");
+
+      const user = await apiClient
+        .setBearerAuth(accessToken)
+        .users()
+        .userInfo(userId) as unknown as IUserInfo;
+
+      const loginMethod = user.loginMethods[0];
+
+      await apiClient
         .setBearerAuth(accessToken)
         .email()
-        .verifyEmail({
-          "token": token || "",
-          "tenantId": tenantId || "",
-          "userId": userId
-        });
+        .verifyEmail(
+          {
+            tenantId: tenantId as string,
+            userId: user.id,
+            recipeUserId: loginMethod.recipeUserId.recipeUserId as unknown as string
+          });
     } catch (error) {
       window.location.assign("/auth");
     }

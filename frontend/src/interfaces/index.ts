@@ -8,6 +8,7 @@ export type { IPage } from "@/interfaces/properties/IPage";
 export type { IMapboxDirections } from "@interfaces/map/IMapboxDirections";
 export type { ILongLat, ICoordinates } from "@/interfaces/map/ILongLat";
 export type { IResources } from "@/interfaces/resources/IResources";
+export type { ITableColumn, ITableRow, ITableRowElement } from "@/interfaces/table";
 export type { 
   ILoginMethods, 
   IUserInfo, 

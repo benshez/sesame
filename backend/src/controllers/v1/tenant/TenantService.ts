@@ -10,11 +10,11 @@ export class TenantService implements ITenantService {
   GetUsersForTenant = async (request: ITenantRequest): Promise<{ users: User[]; nextPaginationToken?: string; }> => {
     const input = {
       tenantId: request.baseRequest.tenantId,
-      limit: 2
+      limit: 10
     };
 
     if (request.nextPaginationToken && request.nextPaginationToken !== "get-tenant-users-next-pagination-token") {
-      Object.assign(input, { limit: 2, paginationToken: request.nextPaginationToken });
+      Object.assign(input, { limit: 10, paginationToken: request.nextPaginationToken });
     }
 
     const response: {
