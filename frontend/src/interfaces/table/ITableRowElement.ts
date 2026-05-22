@@ -1,4 +1,4 @@
 export interface ITableRowElement {
   tag?: string | unknown;
-  html?: string | unknown;
+  html?: string;
 }

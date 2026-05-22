@@ -1,5 +1,5 @@
 <template>
-  <label :for="`toggle-${id}`" class="relative inline-flex items-center cursor-pointer">
+  <label :for="`toggle-${id}`" class="relative inline-flex items-center cursor-pointer" :title="title">
     <input :name="`toggle-${id}`" :id="`toggle-${id}`" @click="$emit('toggle')" :checked="checked" type="checkbox"
       value="" class="sr-only peer">
     <div
@@ -19,6 +19,10 @@ const props = defineProps({
   checked: {
     type: Boolean,
     required: true
+  },
+  title: {
+    type: String,
+    required: false,
   }
 });
 </script>

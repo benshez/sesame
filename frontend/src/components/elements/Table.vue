@@ -22,13 +22,10 @@
                     class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
                     {{ row.values?.[columnIndex] }}
                   </span>
-                  <span v-if="IsHTMLElement(column)"     
-                    class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                    <component :is="GetRowTag(row.values?.[columnIndex] as unknown as ITableRowElement)" v-html="GetRowHTML(row.values?.[columnIndex] as unknown as ITableRowElement)" v-bind="row.props?.[columnIndex]" @click="$emit('onEditRowClicked', row.rowData)"/>                   
-                  </span>
                   <span v-if="IsComponent(column)"
                     class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                    <component :is="column.type" v-bind="row.props?.[columnIndex]" @toggle="$emit('toggle', row.rowData)" />
+                    <component :is="column.type" v-bind="row.props?.[columnIndex]"
+                      @toggle="$emit('toggle', row.rowData)" @edit-clicked="$emit('edit-clicked', row.rowData)" />
                   </span>
                 </td>
               </tr>
@@ -41,27 +38,15 @@
 </template>
 
 <script setup lang="ts">
-import type { ITableColumn, ITableRow, ITableRowElement } from "@/interfaces";
+import { ref } from "vue";
+import type { ITableColumn, ITableRow } from "@/interfaces";
+const html = ref("<pre><code>let a = 'foo';</code></pre>");
 
 const IsComponent = (column: ITableColumn): boolean => {
   return typeof column.type === "object";
 }
-
-const IsHTMLElement = (column: ITableColumn): boolean => {
-  /*@ts-ignore */
-  return typeof column.type === "object" && ["button", "input", "select", "textarea"].includes(column.type?.tag as string);
-}
-
 const IsString = (column: ITableColumn): boolean => {
   return column.type === String;
-}
-
-const GetRowTag = (element: ITableRowElement): string => {
-  return element.tag as string || "div";
-}
-
-const GetRowHTML = (element: ITableRowElement): string => {
-  return element.html as string || "";
 }
 
 const props = defineProps({

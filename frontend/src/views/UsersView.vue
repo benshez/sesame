@@ -10,7 +10,7 @@
       <slot name="subheader"></slot>
 
       <Table :id="'users-table'" :columns="GetTableHeaders()" :rows="GetTableRows()" @toggle="onToggleVerification"
-        @onEditRowClicked="ShowModal" />
+        @edit-clicked="onEditUser" />
 
       <div class="flex space-x-1" v-if="nextPaginationToken !== ''">
         <button @click="onGetMoreClick"
@@ -35,10 +35,7 @@
               </button>
             </template>
             <template v-slot:content>
-              <Tab :tabs="[
-                { id: 'personalInfo', name: 'Personal Info', selected: true, component: PersonalInfoCard },
-                { id: 'sessions', name: 'Sessions', selected: false, component: CloseIcon }
-              ]" @onTabChange="onTabChange" />
+              <Tab :tabs="GetTabData()" @onTabChange="onTabChange" />
 
             </template>
             <template v-slot:footer="elements">
@@ -55,23 +52,25 @@
 </template>
 <script setup lang="ts">
 import { type Component, ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import Session from "supertokens-web-js/recipe/session";
 import BaseLayout from "@/layouts/BaseLayout.vue";
 import Toggle from "@/components/elements/Toggle.vue";
 import Modal from "@/components/profile/Modal.vue";
 import FormBody from "@/components/Form/FormBody.vue";
 import CloseIcon from "@/components/svg/CloseIcon.vue";
+import EditButton from "@/components/buttons/EditButton.vue";
 import PersonalInfoCard from "@/components/profile/PersonalInfoCard.vue";
 import Tab from "@/components/elements/Tab.vue";
 import Table from "@/components/elements/Table.vue";
 import { ApiClient } from "@/plugins";
-import type { IUserInfo, ITableColumn, ITableRow, ITableRowElement } from "@/interfaces";
+import type { IUserInfo, ITableColumn, ITableRow } from "@/interfaces";
 
 const apiClient = new ApiClient();
 const users = ref<IUserInfo[]>([]);
 const nextPaginationToken = ref<string>("get-tenant-users-next-pagination-token");
 const route = useRoute();
+const router = useRouter();
 const isUserInfoModal = ref<boolean>(false);
 
 const GetTableHeaders = (): Array<ITableColumn> => {
@@ -79,7 +78,7 @@ const GetTableHeaders = (): Array<ITableColumn> => {
     { id: "userId", caption: "User id", type: String },
     { id: "userEmail", caption: "User email", type: String },
     { id: "verified", caption: "Verified", type: Toggle },
-    { id: "action", caption: "Action", type: { tag: "button", html: "<div>Edit</div>" } as unknown as ITableRowElement }
+    { id: "action", caption: "Action", type: EditButton }
   ]
 }
 
@@ -96,17 +95,9 @@ const GetTableRows = (): Array<ITableRow> => {
       },
     } as unknown as Component;
 
-    const actionButtonComponent: ITableRowElement = {
-      tag: "button",
-      html: `
-        <svg class="fill-current" width="21" height="21" viewBox="0 0 21 21" fill="none"
-        xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd"
-          d="M17.0911 3.53206C16.2124 2.65338 14.7878 2.65338 13.9091 3.53206L5.6074 11.8337C5.29899 12.1421 5.08687 12.5335 4.99684 12.9603L4.26177 16.445C4.20943 16.6931 4.286 16.9508 4.46529 17.1301C4.64458 17.3094 4.90232 17.3859 5.15042 17.3336L8.63507 16.5985C9.06184 16.5085 9.45324 16.2964 9.76165 15.988L18.0633 7.68631C18.942 6.80763 18.942 5.38301 18.0633 4.50433L17.0911 3.53206ZM14.9697 4.59272C15.2626 4.29982 15.7375 4.29982 16.0304 4.59272L17.0027 5.56499C17.2956 5.85788 17.2956 6.33276 17.0027 6.62565L16.1043 7.52402L14.0714 5.49109L14.9697 4.59272ZM13.0107 6.55175L6.66806 12.8944C6.56526 12.9972 6.49455 13.1277 6.46454 13.2699L5.96704 15.6283L8.32547 15.1308C8.46772 15.1008 8.59819 15.0301 8.70099 14.9273L15.0436 8.58468L13.0107 6.55175Z"
-          fill="">
-        </path>
-      </svg>
-    `}
+    const actionButtonComponent = {
+      name: "EditButton",
+    } as unknown as Component;
 
     rows.push({
       values: [user.id, user.emails[0], toggleComponent, actionButtonComponent],
@@ -114,18 +105,27 @@ const GetTableRows = (): Array<ITableRow> => {
       props: [{}, {},
       {
         id: user.id,
-        checked: user.loginMethods[0]?.verified
+        checked: user.loginMethods[0]?.verified,
+        title: user.loginMethods[0]?.verified ? `Unverify email - ${user.emails[0]}` : `Verify email - ${user.emails[0]}`
       },
       {
-        class: "text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90"
+        title: `Edit User - ${user.emails[0]}`,
       }],
     })
   })
 
   return rows;
 }
-const ShowModal = async (user: IUserInfo) => {
-  isUserInfoModal.value = true;
+
+const GetTabData = (): Array<{ id: string, name: string, selected: boolean, component: Component }> => {
+  return [
+    { id: "personalInfo", name: "Personal Info", selected: true, component: PersonalInfoCard },
+    { id: "sessions", name: "Sessions", selected: false, component: CloseIcon }
+  ]
+}
+
+const onEditUser = async (user: IUserInfo) => {
+  router.push(`/edit/public/${user.id}`);
 }
 
 const onToggleVerification = async (user: IUserInfo): Promise<void> => {
