@@ -30,5 +30,10 @@ export interface IUserService {
     recipeUserId: RecipeUserId;
   } | {
     status: "WRONG_CREDENTIALS_ERROR";
-  }>
+  }>;
+  DeleteUser(request: IUserRequest): Promise<{
+    status: "OK";
+  } | {
+    status: "USER_DOES_NOT_EXIST_ERROR";
+  }>;
 }

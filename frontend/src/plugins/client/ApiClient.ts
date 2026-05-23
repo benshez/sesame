@@ -30,7 +30,7 @@ export class ApiClient extends HttpClient {
 
   email = () => {
     return {
-      sendVerificationEmail: (email: { email: string, userId: string }) => this.post("/email/send-verification-email", email, this.getHeader("Authorization")),
+      sendVerificationEmail: (user: { email: string, userId: string, recipeUserId: string, tenantId: string }) => this.post("/email/send-verification-email", { ...user }, this.getHeader("Authorization")),
       verifyEmail: (args: { tenantId: string, userId: string, recipeUserId: string }) => this.post("/email/verify-email", { ...args }, this.getHeader("Authorization")),
       unVerifyEmail: (user: { recipeUserId: string, email: string }) => this.post("/email/un-verify-email", { ...user }, this.getHeader("Authorization"))
     }
@@ -44,7 +44,8 @@ export class ApiClient extends HttpClient {
       updateUserMetadata: (userInfo: {}) => this.post("/users/update-user-metadata", { userInfo }, this.getHeader("Authorization")),
       updateUserEmailAndPassword: (userInfo: {}) => this.post("/users/update-user-email-password", { userInfo }, this.getHeader("Authorization")),
       signUp: (user: IUser) => this.post("/users/sign-up", { user }, this.getHeader("Authorization")),
-      signIn: (user: IUser) => this.post("/users/sign-in", { user }, this.getHeader("Authorization"))
+      signIn: (user: IUser) => this.post("/users/sign-in", { user }, this.getHeader("Authorization")),
+      deleteUser: (userId: string) => this.delete(`/users/delete-user/${userId}`, this.getHeader("Authorization"))
     }
   }
 
@@ -75,7 +76,8 @@ export class ApiClient extends HttpClient {
 
   tenant = () => {
     return {
-      getTenantUsers: (nextPaginationToken: string) => this.get(`/tenant/get-tenant-users/${nextPaginationToken}`, this.getHeader("Authorization"))
+      getTenantUsers: (nextPaginationToken: string) => this.get(`/tenant/get-tenant-users/${nextPaginationToken}`, this.getHeader("Authorization")),
+      removeUserFromTenant: (userId: string) => this.delete(`/tenant/remove-user-from-tenant/${userId}`, this.getHeader("Authorization"))
     }
   }
 }

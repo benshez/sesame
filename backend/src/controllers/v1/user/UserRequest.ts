@@ -16,9 +16,10 @@ export class UserRequest {
   CreateRequest(req: SessionRequest): IUserRequest {
     const session = req.session;
     const body = req.body;
+    const params = req.params;
     let userId = session!.getUserId();
 
-    if(userId !== req.params.userId) userId = req.params.userId;
+    if (userId !== req.params.userId) userId = req.params.userId;
 
     if (session) {
       this.request.baseRequest.userId = sanitize(userId);
@@ -28,7 +29,8 @@ export class UserRequest {
     }
 
     if (body.userInfo) {
-      this.request.userInfo = body.userInfo ? body.userInfo : {};
+      this.request.userInfo = body.userInfo.userInfo ? body.userInfo.userInfo : {};
+      this.request.baseRequest.userId = body.userInfo.userId ? body.userInfo.userId : this.request.baseRequest.userId;
       this.request.UpdateObject = {
         recipeUserId: session!.getRecipeUserId(),
         applyPasswordPolicy: true,
@@ -39,6 +41,10 @@ export class UserRequest {
     if (body.user) {
       this.request.user.email = body.user.email;
       this.request.user.password = body.user.password;
+    }
+
+    if (params.userId) {
+      this.request.baseRequest.userId = params.userId;
     }
 
     return sanitize(this.request);

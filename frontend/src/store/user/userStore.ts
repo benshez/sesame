@@ -4,9 +4,10 @@ import Session from "supertokens-web-js/recipe/session";
 import { UserRoleClaim } from "supertokens-web-js/recipe/userroles";
 import { ApiClient } from "@/plugins";
 import type { IUserInfo, IUserMetaData } from "@/interfaces";
-
+import { useRoute } from "vue-router";
 
 export const useUserStore = defineStore("user", () => {
+  const route = useRoute();
   const apiClient = new ApiClient();
   const userState = ref({
     UserInfo: {} as IUserInfo,
@@ -17,6 +18,9 @@ export const useUserStore = defineStore("user", () => {
     return await Session.getAccessTokenPayloadSecurely();
   }
 
+  const GetUserIdFromRoute = (): string => {
+    return route.params.userId as unknown as string;
+  }
   const GetUserId = async () => {
     return await Session.getUserId();
   }
@@ -35,15 +39,21 @@ export const useUserStore = defineStore("user", () => {
   }
 
   const SaveUserMetaData = async (userInfo: IUserMetaData) => {
+    const userId = await GetUserId();
+
+    const payload = {
+      userInfo: userInfo,
+      userId: userId === GetUserIdFromRoute() ? userId : GetUserIdFromRoute()
+    };
     return await apiClient
       .setBearerAuth(await GetAccessToken())
       .users()
-      .updateUserMetadata(userInfo);
+      .updateUserMetadata(payload);
   }
 
   const GetUserMetaData = async (userId: string) => {
     userState.value.UserMetaData = {} as IUserMetaData;
-    
+
     const response: any = await apiClient
       .setBearerAuth(await GetAccessToken())
       .users()
@@ -61,14 +71,16 @@ export const useUserStore = defineStore("user", () => {
       .setBearerAuth(await GetAccessToken())
       .email()
       .sendVerificationEmail({
-        "email": email, 
+        "email": email,
         "userId": userId,
+        "recipeUserId": userId,
+        "tenantId": "public"
       });
   }
 
   const UserHasClaim = async (claimId: string): Promise<boolean> => {
     if (await Session.doesSessionExist()) {
-      const roles = await Session.getClaimValue({claim: UserRoleClaim});
+      const roles = await Session.getClaimValue({ claim: UserRoleClaim });
 
       return roles !== undefined && roles.includes(claimId);
     }

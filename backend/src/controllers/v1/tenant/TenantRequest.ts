@@ -1,5 +1,6 @@
 import { SessionRequest } from "supertokens-node/framework/express";
 import { sanitize } from "express-xss-sanitizer";
+import superTokens from "supertokens-node";
 import { ITenantRequest } from "../";
 import { ITenant } from "../../../../../shared/interfaces";
 
@@ -30,6 +31,11 @@ export class TenantRequest {
 
     if (params.nextPaginationToken) {
       if (params.nextPaginationToken) this.request.nextPaginationToken = params.nextPaginationToken; 
+    }
+
+    if (params.userId) {
+      this.request.baseRequest.userId = params.userId;
+      this.request.baseRequest.recipeUserId = superTokens.convertToRecipeUserId(params.userId);
     }
 
     return sanitize(this.request) as unknown as ITenantRequest;

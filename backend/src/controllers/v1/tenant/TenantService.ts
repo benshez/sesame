@@ -77,7 +77,7 @@ export class TenantService implements ITenantService {
     return response;
   }
   RemoveUserFromTenant = async (request: ITenantRequest): Promise<{ status: "OK"; wasAssociated: boolean; }> => {
-    const response = await Multitenancy.disassociateUserFromTenant(request.baseRequest.userId, request.baseRequest.recipeUserId as RecipeUserId);
+    const response = await Multitenancy.disassociateUserFromTenant(request.baseRequest.tenantId, request.baseRequest.recipeUserId as RecipeUserId);
 
     return response;
   }

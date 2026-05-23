@@ -52,7 +52,13 @@ class UserRoutes extends BaseRoute<UserController> {
       .router
       .post("/sign-in", async (req, res, next) => {
         return await this.controller.SignIn(req, res, next);
-      })         
+      })     
+      
+    this
+      .router
+      .delete("/delete-user/:userId", verifySession(), async (req, res, next) => {
+        return await this.controller.DeleteUser(req, res, next);
+      })          
   }
 
 

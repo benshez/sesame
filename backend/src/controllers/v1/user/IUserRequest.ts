@@ -1,6 +1,6 @@
 import { RecipeUserId } from "supertokens-node";
 import { IBaseRequest } from "../";
-import { IUserInfo, IUser } from "../../../../../shared/interfaces";
+import { IUserInfo, IUser, IUserMetaData } from "../../../../../shared/interfaces";
 
 export interface IUserRequest {
   baseRequest: IBaseRequest;
@@ -16,4 +16,5 @@ export interface IUserRequest {
   userInfo?: IUserInfo;
   roleId?: string;
   user: IUser;
+  metadata?: IUserMetaData;
 }

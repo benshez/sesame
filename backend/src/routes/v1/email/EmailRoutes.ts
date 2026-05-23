@@ -1,5 +1,5 @@
 import { BaseRoute } from "../../../core/routing";
-import { verifySession } from "supertokens-node/recipe/session/framework/express";
+//import { verifySession } from "supertokens-node/recipe/session/framework/express";
 import { EmailController, IEmailService, EmailService } from "../../../controllers/v1";
 
 class EmailRoutes extends BaseRoute<EmailController> {
@@ -13,7 +13,7 @@ class EmailRoutes extends BaseRoute<EmailController> {
   protected RegisterRoutes(): void {
     this
     .router
-    .post("/send-verification-email", verifySession(), async (req, res, next) => {
+    .post("/send-verification-email", async (req, res, next) => {
       return await this.controller.SendVerificationEmail(req, res, next);
     });
 

@@ -143,9 +143,13 @@ const onEditUser = async (user: IUserInfo) => {
 
 const onDeleteUser = async (user: IUserInfo) => {
   const accessToken = await Session.getAccessTokenPayloadSecurely();
-isUserInfoModal.value = true;
-
-
+  await apiClient
+    .setBearerAuth(accessToken)
+    .users()
+    .deleteUser(user.id);
+    
+  users.value = [];
+  await onGetUsersForTenant();
 }
 
 const onToggleVerification = async (user: IUserInfo): Promise<void> => {

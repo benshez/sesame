@@ -43,7 +43,7 @@ class TenantRoutes extends BaseRoute<TenantController> {
 
     this
       .router
-      .delete("/remove-user-to-tenant", verifySession(), async (req, res, next) => {
+      .delete("/remove-user-from-tenant/:userId", verifySession(), async (req, res, next) => {
         return await this.controller.RemoveUserFromTenant(req, res, next);
       });
   }

@@ -45,6 +45,16 @@ export class UserController extends BaseController<IUserService> {
     }
   }
 
+  DeleteUser = async (req: SessionRequest, res: Response, next: NextFunction) => {
+    try {
+      const response = await this.ControllerService.DeleteUser(this.request.CreateRequest(req));
+      res
+        .json(response);
+    } catch (error) {
+      next(new BadRequestError({ message: `Error deleting user ${error}`, logging: true }));
+    }
+  }
+
   AddRoleToUser = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const response = await this.ControllerService.AddRoleToUser(this.request.CreateRequest(req));

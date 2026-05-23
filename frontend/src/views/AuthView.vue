@@ -47,11 +47,12 @@ import FormBody from "@/components/Form/FormBody.vue";
 import LoginProviders from "@/components/LoginProviders/LoginProviders.vue";
 import FormOneColumnLayout from "@/layouts/FormOneColumnLayout.vue";
 import FormBuilder from "@/components/Form/FormBuilder.vue";
-import { useFormStore, useDisplayStore } from "@/store";
+import { useFormStore, useDisplayStore, useUserStore } from "@/store";
 import { ApiClient } from "@/plugins";
 import type { IUserInfo } from "@/interfaces";
 
 const displayStore = useDisplayStore();
+const userStore = useUserStore();
 const router = useRouter();
 const formStore = useFormStore();
 const isSignIn = ref<boolean | true>(true);
@@ -85,7 +86,7 @@ const signIn = async (_: Event) => {
         {
           id: "password",
           value: formStore.getElement("password").value || "",
-        },
+        }
       ],
     });
 
@@ -103,6 +104,25 @@ const signIn = async (_: Event) => {
     updateErrorState("password", { key: "isValid", value: false });
     updateErrorState("password", { key: "helpText", value: response.formFields.find((f: any) => f.id === "password")?.error || "" });
     return;
+  }
+
+  if (response.status === "OK") {
+    const accessToken = await Session.getAccessTokenPayloadSecurely();
+    const userId = await Session.getUserId();
+
+    const user = await apiClient
+      .setBearerAuth(accessToken)
+      .users()
+      .userInfo(userId) as unknown as IUserInfo;
+
+    if (!user.loginMethods[0]?.verified) {
+      goToSignIn();
+      displayStore.UpdateActionTextState("Verify Email");
+      isVerify.value = true;
+      return;
+    } else {
+      router.push("/");
+    }
   }
 
   const params = new URLSearchParams(window.location.search);
@@ -139,9 +159,7 @@ const signIn = async (_: Event) => {
     } catch (error) {
       window.location.assign("/auth");
     }
-  }
-
-  window.location.assign("/");
+  } 
 };
 
 const updateErrorState = (field: string, values: { key: string, value: boolean | string }) => {
@@ -159,6 +177,10 @@ const signUp = async (_: Event) => {
         id: "password",
         value: formStore.getElement("password").value || "",
       },
+      {
+        id: "tenantId",
+        value: "public",
+      }
     ],
   });
 

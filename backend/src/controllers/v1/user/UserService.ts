@@ -22,6 +22,24 @@ export class UserService implements IUserService {
     return response;
   }
 
+  DeleteUser = async (request: IUserRequest): Promise<{
+    status: "OK";
+  } | {
+    status: "USER_DOES_NOT_EXIST_ERROR";
+  }> => {
+    const response = await supertokens.deleteUser(request.baseRequest.userId);
+
+    if (response === undefined) {
+      return {
+        status: "USER_DOES_NOT_EXIST_ERROR"
+      };
+    }
+
+    return {
+      status: "OK"
+    };
+  }
+
   UpdateUserMetadata = async (request: IUserRequest): Promise<{
     status: "OK";
     metadata: UserMetadata.JSONObject;
