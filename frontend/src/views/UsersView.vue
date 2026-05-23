@@ -10,7 +10,7 @@
       <slot name="subheader"></slot>
 
       <Table :id="'users-table'" :columns="GetTableHeaders()" :rows="GetTableRows()" @toggle="onToggleVerification"
-        @edit-clicked="onEditUser" />
+        @edit-clicked="onEditUser" @delete-clicked="onDeleteUser" />
 
       <div class="flex space-x-1" v-if="nextPaginationToken !== ''">
         <button @click="onGetMoreClick"
@@ -59,7 +59,7 @@ import Toggle from "@/components/elements/Toggle.vue";
 import Modal from "@/components/profile/Modal.vue";
 import FormBody from "@/components/Form/FormBody.vue";
 import CloseIcon from "@/components/svg/CloseIcon.vue";
-import EditButton from "@/components/buttons/EditButton.vue";
+import ActionButtons from "@/components/buttons/ActionButtons.vue";
 import PersonalInfoCard from "@/components/profile/PersonalInfoCard.vue";
 import Tab from "@/components/elements/Tab.vue";
 import Table from "@/components/elements/Table.vue";
@@ -78,7 +78,7 @@ const GetTableHeaders = (): Array<ITableColumn> => {
     { id: "userId", caption: "User id", type: String },
     { id: "userEmail", caption: "User email", type: String },
     { id: "verified", caption: "Verified", type: Toggle },
-    { id: "action", caption: "Action", type: EditButton }
+    { id: "action", caption: "Action", type: ActionButtons }
   ]
 }
 
@@ -96,7 +96,8 @@ const GetTableRows = (): Array<ITableRow> => {
     } as unknown as Component;
 
     const actionButtonComponent = {
-      name: "EditButton",
+      name: "ActionButtons",
+
     } as unknown as Component;
 
     rows.push({
@@ -109,8 +110,20 @@ const GetTableRows = (): Array<ITableRow> => {
         title: user.loginMethods[0]?.verified ? `Unverify email - ${user.emails[0]}` : `Verify email - ${user.emails[0]}`
       },
       {
-        title: `Edit User - ${user.emails[0]}`,
-      }],
+        buttons: [
+          {
+            title: `Edit User - ${user.emails[0]}`,
+            type: "edit",
+            visible: true
+          },
+          {
+            title: `Delete User - ${user.emails[0]}`,
+            type: "delete",
+            visible: true
+          }
+        ]
+      }
+      ],
     })
   })
 
@@ -126,6 +139,13 @@ const GetTabData = (): Array<{ id: string, name: string, selected: boolean, comp
 
 const onEditUser = async (user: IUserInfo) => {
   router.push(`/edit/public/${user.id}`);
+}
+
+const onDeleteUser = async (user: IUserInfo) => {
+  const accessToken = await Session.getAccessTokenPayloadSecurely();
+isUserInfoModal.value = true;
+
+
 }
 
 const onToggleVerification = async (user: IUserInfo): Promise<void> => {

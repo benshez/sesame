@@ -9,12 +9,14 @@
         <h2 class="mb-4 text-xs uppercase flex leading-[20px] justify-start">Menu</h2>
         <ul class="flex flex-col gap-4">
           <li v-for="(route, routeIndex) in GetTenantRoutes()" :key="routeIndex">
-            <button class="menu-item group w-full menu-item-inactive lg:justify-start" @click="OnTenantRouteClick(route?.name?.toString() ?? '')">
+            <button @click="OnTenantRouteClick(route?.name?.toString() ?? '')"
+              :class="{ 'menu-item group w-full menu-item-inactive lg:justify-start': true, 'menu-item group w-full lg:justify-start menu-dropdown-item-active': route?.name?.toString() === activeItem }">
               <span class="menu-item-text">{{ route.meta?.name }}</span>
             </button>
           </li>
           <li v-for="(route, routeIndex) in GetUserRoutes()" :key="routeIndex">
-            <button class="menu-item group w-full menu-item-inactive lg:justify-start" @click="OnUserRoutesClick(route?.name?.toString() ?? '')">
+            <button @click="OnUserRoutesClick(route?.name?.toString() ?? '')"
+              :class="{ 'menu-item group w-full menu-item-inactive lg:justify-start': true, 'menu-item group w-full lg:justify-start menu-dropdown-item-active': route?.name?.toString() === activeItem }">
               <span class="menu-item-text">{{ route.meta?.name }}</span>
             </button>
           </li>
@@ -24,9 +26,9 @@
   </Transition>
 </template>
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useDisplayStore } from "@/store";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { configuration } from "@/utilities";
 import * as Session from "supertokens-web-js/recipe/session";
 import { useRoutes } from "@/router/useRoutes";
@@ -35,23 +37,19 @@ import { useUserRoutes } from "@/router/useUserRoutes";
 
 const displayStore = useDisplayStore();
 const router = useRouter();
+const route = useRoute();
 const userId = ref<string | null>(null);
 const tenantId = ref<string | null>(null);
-
-const routesList = computed(() => {
-  return router.getRoutes();
-});
-
-const OnShowingSidebar = () => {
-  displayStore.UpdateSidebarShowingState(!displayStore.displayState.sidebarShowing);
-}
+const activeItem = ref<string>(route.name?.toString() ?? "");
 
 const OnTenantRouteClick = (routeName: string) => {
   router.push(`/${routeName}/${tenantId.value}`);
+  activeItem.value = routeName;
 }
 
 const OnUserRoutesClick = (routeName: string) => {
   router.push(`/${routeName}/${tenantId.value}/${userId.value}`);
+  activeItem.value = routeName;
 }
 
 const GetParentMenuItems = () => {

@@ -25,7 +25,8 @@
                   <span v-if="IsComponent(column)"
                     class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
                     <component :is="column.type" v-bind="row.props?.[columnIndex]"
-                      @toggle="$emit('toggle', row.rowData)" @edit-clicked="$emit('edit-clicked', row.rowData)" />
+                      @toggle="$emit('toggle', row.rowData)" @edit-clicked="$emit('edit-clicked', row.rowData)"
+                      @delete-clicked="$emit('deleteClicked', row.rowData)" />
                   </span>
                 </td>
               </tr>
