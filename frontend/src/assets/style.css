@@ -183,14 +183,10 @@ layer(base);
 
 @layer dark {
   aside,
+
   #sub-navbar,
   .sticky,
   .sticky > div,
-  .border,
-  .border-b,
-  .border-t,
-  .border-r,
-  .border-l,  
   .top-0,
   .flatpickr-calendar.static,
   .flatpickr-am-pm,
@@ -203,6 +199,12 @@ layer(base);
     @apply dark:bg-gray-dark;
     @apply dark:text-gray-400;
   }
+
+  button {
+    @apply dark:border-gray-800;
+    @apply dark:text-gray-400;  
+  }
+
   .sesame-start {
     @apply dark:bg-gray-900;
   }
@@ -239,15 +241,11 @@ layer(base);
 @layer base {
   
   aside,
+  button,
   #sub-navbar,
   .sticky,
   .sticky > div,
   .top-0,
-  .border,
-  .border-b,
-  .border-t,
-  .border-r,
-  .border-l,
   .flatpickr-calendar.static,
   .flatpickr-am-pm,
   .flatpickr-time input,
@@ -259,6 +257,12 @@ layer(base);
     @apply base:text-gray-400;
     @apply base:bg-white;
   }
+
+  button {
+    @apply base:border-gray-100;
+    @apply base:text-gray-400;
+  }
+
   .fc-next-button::before,
   .fc-prev-button::before  
   .flatpickr-am-pm,
@@ -291,8 +295,6 @@ layer(base);
     margin-top: 0.3rem;
   }
 }
-
-
 
 @utility menu-item {
   @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm;
@@ -403,6 +405,24 @@ layer(base);
   button:not(:disabled),
   [role='button']:not(:disabled) {
     cursor: pointer;
+  }  
+
+  :where(.divide-y>:not(:last-child)) {
+    --tw-divide-y-reverse: 0;
+    border-bottom-style: var(--tw-border-style);
+    border-top-style: var(--tw-border-style);
+    border-top-width: calc(1px * var(--tw-divide-y-reverse));
+    border-bottom-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
+  }  
+:where(.divide-x>:not(:last-child)) {
+    --tw-divide-x-reverse: 0;
+    border-inline-style: var(--tw-border-style);
+    border-inline-start-width: calc(1px * var(--tw-divide-x-reverse));
+    border-inline-end-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+}  
+
+  :where(.dark\:divide-gray-800:is(.dark *)>:not(:last-child)) {
+      border-color: var(--color-gray-800);
   }  
 }
 

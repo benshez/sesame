@@ -33,7 +33,7 @@ export class RoleController extends BaseController<IRoleService> {
 
   CreateNewRoleOrAddPermissions = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const response = await this.ControllerService.DeleteRole(this.request.CreateRequest(req));
+      const response = await this.ControllerService.CreateNewRoleOrAddPermissions(this.request.CreateRequest(req));
 
       res
         .json(response);
@@ -44,7 +44,7 @@ export class RoleController extends BaseController<IRoleService> {
 
   RemovePermissionsFromRole = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const response = await this.ControllerService.DeleteRole(this.request.CreateRequest(req));
+      const response = await this.ControllerService.RemovePermissionsFromRole(this.request.CreateRequest(req));
 
       res
         .json(response);
@@ -55,29 +55,29 @@ export class RoleController extends BaseController<IRoleService> {
 
   GetPermissionsForRole = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const response = await this.ControllerService.DeleteRole(this.request.CreateRequest(req));
+      const response = await this.ControllerService.GetPermissionsForRole(this.request.CreateRequest(req));
 
       res
         .json(response);
     } catch (error) {
-      next(new BadRequestError({ message: `Error gettoing permissions for role ${error}`, logging: true }));
+      next(new BadRequestError({ message: `Error getting permissions for role ${error}`, logging: true }));
     }
   }   
 
   GetRolesThatHavePermission = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const response = await this.ControllerService.DeleteRole(this.request.CreateRequest(req));
+      const response = await this.ControllerService.GetRolesThatHavePermission(this.request.CreateRequest(req));
 
       res
         .json(response);
     } catch (error) {
-      next(new BadRequestError({ message: `Error roles that have permission ${error}`, logging: true }));
+      next(new BadRequestError({ message: `Error getting roles that have permission ${error}`, logging: true }));
     }
   }  
 
   AddRoleToUser = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const response = await this.ControllerService.DeleteRole(this.request.CreateRequest(req));
+      const response = await this.ControllerService.AddRoleToUser(this.request.CreateRequest(req));
 
       res
         .json(response);
@@ -88,7 +88,7 @@ export class RoleController extends BaseController<IRoleService> {
 
   RemoveUserRole = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
-      const response = await this.ControllerService.DeleteRole(this.request.CreateRequest(req));
+      const response = await this.ControllerService.RemoveUserRole(this.request.CreateRequest(req));
 
       res
         .json(response);

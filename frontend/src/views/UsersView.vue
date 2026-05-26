@@ -1,63 +1,51 @@
 <template>
+
   <BaseLayout>
-    <div
-      class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] col-span-12 xl:col-span-6 xl:col-start-5 xl:col-end-9">
-      <div class="px-6 py-5">
-        <slot name="header">
-          <h3 class="text-base font-medium text-gray-800 dark:text-white/90">Users</h3>
-        </slot>
-      </div>
-      <slot name="subheader"></slot>
-
-      <Table :id="'users-table'" :columns="GetTableHeaders()" :rows="GetTableRows()" @toggle="onToggleVerification"
-        @edit-clicked="onEditUser" @delete-clicked="onDeleteUser" />
-
-      <div class="flex space-x-1" v-if="nextPaginationToken !== ''">
-        <button @click="onGetMoreClick"
-          class="min-w-9 rounded-md border border-slate-300 py-2 px-3 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white fc-addEventButton-button fc-button fc-button-primary focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-0 mt-2">
-          Load more
-        </button>
-      </div>
-    </div>
-
-    <Modal v-if="isUserInfoModal" @close="isUserInfoModal = false">
-      <template #body>
-        <div class="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white dark:bg-gray-900">
-          <FormBody :view="'personalInfo'"
-            :css-class="'grid grid-cols-2 gap-4 custom-scrollbar h-[458px] overflow-y-auto p-2'">
-            <template v-slot:header>
-              <p class="font-semibold">
-                Edit User
-              </p>
-              <button @click="isUserInfoModal = false"
-                class="transition-color absolute right-3 top-3 z-999 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-600 dark:bg-gray-700 dark:bg-white/[0.05] dark:text-gray-400 dark:hover:bg-white/[0.07] dark:hover:text-gray-300">
-                <CloseIcon />
-              </button>
-            </template>
-            <template v-slot:content>
-              <Tab :tabs="GetTabData()" @onTabChange="onTabChange" />
-
-            </template>
-            <template v-slot:footer="elements">
-              <div class="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
-
-              </div>
-            </template>
-          </FormBody>
-        </div>
-      </template>
-    </Modal>
+    <Table :id="'users-table'" :header="'Users'" :load-more-button-visible="nextPaginationToken !== ''"
+      :columns="GetTableHeaders()" :rows="GetTableRows()" @toggle="onToggleVerification" @edit-clicked="onEditUser"
+      @delete-clicked="onNotifyBeforeDelete" @get-more-clicked="onGetMoreClick" />
   </BaseLayout>
+  <Notification :message="'Are you sure you want to delete this user?'" :acceptButtonText="'Yes'" :closeButtonText="'No'"
+    @close-button-clicked="onCloseNotification" @accept-button-clicked="onAcceptNotification" />
 
+  <Modal v-if="isUserInfoModal" @close="isUserInfoModal = false">
+    <template #body>
+      <div class="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white dark:bg-gray-900">
+        <FormBody :view="'personalInfo'"
+          :css-class="'grid grid-cols-2 gap-4 custom-scrollbar h-[458px] overflow-y-auto p-2'">
+          <template v-slot:header>
+            <p class="font-semibold">
+              Edit User
+            </p>
+            <button @click="isUserInfoModal = false"
+              class="transition-color absolute right-3 top-3 z-999 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-600 dark:bg-gray-700 dark:bg-white/[0.05] dark:text-gray-400 dark:hover:bg-white/[0.07] dark:hover:text-gray-300">
+              <CloseIcon />
+            </button>
+          </template>
+          <template v-slot:content>
+            <Tab :tabs="GetTabData()" @onTabChange="onTabChange" />
+
+          </template>
+          <template v-slot:footer="elements">
+            <div class="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
+
+            </div>
+          </template>
+        </FormBody>
+      </div>
+    </template>
+  </Modal>
 </template>
 <script setup lang="ts">
 import { type Component, ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useDisplayStore } from "@/store";
 import Session from "supertokens-web-js/recipe/session";
 import BaseLayout from "@/layouts/BaseLayout.vue";
 import Toggle from "@/components/elements/Toggle.vue";
 import Modal from "@/components/profile/Modal.vue";
 import FormBody from "@/components/Form/FormBody.vue";
+import Notification from "@/components/notifications/notification.vue";
 import CloseIcon from "@/components/svg/CloseIcon.vue";
 import ActionButtons from "@/components/buttons/ActionButtons.vue";
 import PersonalInfoCard from "@/components/profile/PersonalInfoCard.vue";
@@ -67,11 +55,13 @@ import { ApiClient } from "@/plugins";
 import type { IUserInfo, ITableColumn, ITableRow } from "@/interfaces";
 
 const apiClient = new ApiClient();
+const displayStore = useDisplayStore();
 const users = ref<IUserInfo[]>([]);
 const nextPaginationToken = ref<string>("get-tenant-users-next-pagination-token");
 const route = useRoute();
 const router = useRouter();
 const isUserInfoModal = ref<boolean>(false);
+const seletedUser = ref<IUserInfo | null>(null);
 
 const GetTableHeaders = (): Array<ITableColumn> => {
   return [
@@ -138,18 +128,39 @@ const GetTabData = (): Array<{ id: string, name: string, selected: boolean, comp
 }
 
 const onEditUser = async (user: IUserInfo) => {
-  router.push(`/edit/public/${user.id}`);
+  //router.push(`/edit/public/${user.id}`);
+  isUserInfoModal.value = true;
+  const roles = await apiClient
+    .setBearerAuth(await Session.getAccessTokenPayloadSecurely())
+    .role()
+    .getRoles();
+}
+
+const onNotifyBeforeDelete = (user: IUserInfo) => {
+  displayStore.UpdateNotificationShowingState(true);
+  seletedUser.value = user;
+}
+
+const onAcceptNotification = async () => {
+  if (seletedUser.value) {
+    await onDeleteUser(seletedUser.value);
+  }
+  displayStore.UpdateNotificationShowingState(false);
 }
 
 const onDeleteUser = async (user: IUserInfo) => {
-  const accessToken = await Session.getAccessTokenPayloadSecurely();
-  await apiClient
-    .setBearerAuth(accessToken)
-    .users()
-    .deleteUser(user.id);
-    
-  users.value = [];
-  await onGetUsersForTenant();
+  // const accessToken = await Session.getAccessTokenPayloadSecurely();
+  // await apiClient
+  //   .setBearerAuth(accessToken)
+  //   .users()
+  //   .deleteUser(user.id);
+
+  // users.value = [];
+  // await onGetUsersForTenant();
+}
+
+const onCloseNotification = () => {
+  displayStore.UpdateNotificationShowingState(false);
 }
 
 const onToggleVerification = async (user: IUserInfo): Promise<void> => {

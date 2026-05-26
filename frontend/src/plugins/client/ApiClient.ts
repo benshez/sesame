@@ -80,4 +80,17 @@ export class ApiClient extends HttpClient {
       removeUserFromTenant: (userId: string) => this.delete(`/tenant/remove-user-from-tenant/${userId}`, this.getHeader("Authorization"))
     }
   }
+
+  role = () => {
+    return {
+      getRoles: () => this.get("/role/get-active-roles", this.getHeader("Authorization")),
+      deleteRole: (roleId: string) => this.delete(`/role/delete-role/${roleId}`, this.getHeader("Authorization")),
+      createNewRoleOrAddPermissions: (role: { roleId: string, permissions: Array<string> }) => this.post("/role/create-new-role-or-add-permissions", { role }, this.getHeader("Authorization")),
+      removePermissionsFromRole: (role: { roleId: string, permissions: Array<string> }) => this.post("/role/remove-permissions-from-role", { role }, this.getHeader("Authorization")),
+      getPermissionsForRole: (roleId: string) => this.get(`/role/get-permissions-for-role/${roleId}`, this.getHeader("Authorization")),
+      getRolesThatHavePermission: (permission: string) => this.get(`/role/get-roles-that-have-permission/${permission}`, this.getHeader("Authorization")),
+      addRoleToUser: (role: { roleId: string }) => this.post("/role/add-role-to-user", { role }, this.getHeader("Authorization")),
+      removeUserRole: (role: { roleId: string }) => this.post("/role/remove-user-role", { role }, this.getHeader("Authorization"))
+    }
+  }
 }

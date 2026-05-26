@@ -14,6 +14,7 @@ export const useDisplayStore = defineStore("auth", () => {
     canAddMapMarker: false,
     canCalculateMapDistance: false,
     canClearMap: false,
+    notificationShowing: false,
   }));
 
   const UpdateLoaderShowingState = (show: boolean) => {
@@ -43,6 +44,9 @@ export const useDisplayStore = defineStore("auth", () => {
   const UpdateCanClearMap = (show: boolean) => {
     displayState.value.canClearMap = show;
   };
+  const UpdateNotificationShowingState = (show: boolean) => {
+    displayState.value.notificationShowing = show;
+  };
   const UpdateActionTextState = (text: string) => {
     displayState.value.authActionText = text;
   };
@@ -58,6 +62,7 @@ export const useDisplayStore = defineStore("auth", () => {
     UpdateActionTextState,
     UpdateCanAddMapMarkerState,
     UpdateCanCalculateMapDistanceState,
-    UpdateCanClearMap
+    UpdateCanClearMap,
+    UpdateNotificationShowingState
   }
 })
