@@ -29,19 +29,19 @@ class RoleRoutes extends BaseRoute<RoleController> {
 
     this
       .router
-      .post("/create-new-role-or-add-permission", verifySession(), async (req, res, next) => {
+      .post("/create-new-role-or-add-permissions", verifySession(), async (req, res, next) => {
         return await this.controller.CreateNewRoleOrAddPermissions(req, res, next);
       });
 
     this
       .router
-      .patch("/remove-persmission-from-role", verifySession(), async (req, res, next) => {
+      .post("/remove-permissions-from-role", verifySession(), async (req, res, next) => {
         return await this.controller.RemovePermissionsFromRole(req, res, next);
       })
 
     this
       .router
-      .get("/get-permissions-for-role", verifySession(), async (req, res, next) => {
+      .get("/get-permissions-for-role/:roleId", verifySession(), async (req, res, next) => {
         return await this.controller.GetPermissionsForRole(req, res, next);
       })    
 

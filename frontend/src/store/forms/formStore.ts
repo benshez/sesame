@@ -6,7 +6,8 @@ import {
   useProfileView,
   usePersonalInfoView,
   useLoginView,
-  useEventView
+  useEventView,
+  useRoleView
 } from "@/store"
 import { useObjectHelper } from "@/utilities";
 import type { DateTime } from "ts-luxon";
@@ -36,6 +37,8 @@ export const useFormStore = defineStore("form", () => {
         break;
       case "map":
         elements = useEventView().GetElements();
+      case "roles":
+        elements = useRoleView().GetElements();
     }
 
     formState.value.elements = elements as Array<IElement>;
@@ -57,14 +60,14 @@ export const useFormStore = defineStore("form", () => {
     })
   }
 
-  const updateElementState = (key: string, options: { key: string, value: unknown }) => {
+  const updateElementState = (key: string, options: { key: string, value: unknown | [] }) => {
     const element: IElement = getElement(key);
 
     if (!element) return;
 
     switch (options.key) {
       case "value":
-        element.value = options.value as string;
+        element.value = options.value as string | Array<string>;
         break;
       case "isValid":
         element.isValid = options.value as boolean;
@@ -83,7 +86,7 @@ export const useFormStore = defineStore("form", () => {
 
     if (!element) return "";
 
-    return element.value;
+    return element.value as string | number | DateTime;
   }
 
   const handleInput = (key: string) => {
@@ -118,6 +121,24 @@ export const useFormStore = defineStore("form", () => {
     updateElementState(key, { key: "isVisible", value: display });
   }
 
+  const handleToggleList = (key: string, value: string, selected: boolean) => {
+    const element: IElement = getElement(key);
+    let values: Array<string> = [];
+
+    if (selected) {
+      if (element.value !== "") values = element.value as Array<string>;
+      values.push(value);
+    } else {
+      if (element.value !== "") values = element.value as Array<string>;
+      if (values.length > 0 && values.includes(value)) {
+        const index = values.indexOf(value);
+        values.splice(index, 1);
+      }
+    }
+
+    updateElementState(key, { key: "value", value: values })
+  }
+
   return {
     formState,
     getElements,
@@ -125,6 +146,7 @@ export const useFormStore = defineStore("form", () => {
     getElementValue,
     bind,
     handleInput,
+    handleToggleList,
     updateElementState
   }
 })

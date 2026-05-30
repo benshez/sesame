@@ -11,6 +11,7 @@ import FormInput from "@/components/Form/FormInput.vue";
 import FormDropdown from "@/components/Form/FormDropdown.vue";
 import FormRadioList from "@/components/Form/FormRadioList.vue";
 import FormCalendar from "@/components/Form/FormCalendar.vue";
+import FormToggleList from "@/components/Form/FormToggleList.vue";
 import type { IElement } from "@/interfaces";
 
 const props = defineProps({
@@ -33,6 +34,10 @@ const comp = (element: IElement): any => {
     case "FormCalendar": 
       component = FormCalendar;
       break;
+    case "FormToggleList":
+      component = FormToggleList;
+      break;
+
   }
 
   return component;

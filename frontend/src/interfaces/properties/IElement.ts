@@ -4,7 +4,7 @@ export interface IElement {
   id?: string;
   label?: string;
   component: string;
-  value: string;
+  value: string | Array<string>;
   helpText?: string;
   placeholderText?: string;
   options?: Function | Array<IOption>;

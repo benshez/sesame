@@ -10,7 +10,7 @@
       <slot name="subheader"></slot>
 
       <ProfileCard />
-      <PersonalInfoCard />
+      <PersonalInfoCard :displayEditButton="true" />
 
     </div>
   </BaseLayout>

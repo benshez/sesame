@@ -5,8 +5,8 @@
       :columns="GetTableHeaders()" :rows="GetTableRows()" @toggle="onToggleVerification" @edit-clicked="onEditUser"
       @delete-clicked="onNotifyBeforeDelete" @get-more-clicked="onGetMoreClick" />
   </BaseLayout>
-  <Notification :message="'Are you sure you want to delete this user?'" :acceptButtonText="'Yes'" :closeButtonText="'No'"
-    @close-button-clicked="onCloseNotification" @accept-button-clicked="onAcceptNotification" />
+  <Notification :message="'Are you sure you want to delete this user?'" :acceptButtonText="'Yes'"
+    :closeButtonText="'No'" @close-button-clicked="onCloseNotification" @accept-button-clicked="onAcceptNotification" />
 
   <Modal v-if="isUserInfoModal" @close="isUserInfoModal = false">
     <template #body>
@@ -154,7 +154,7 @@ const onDeleteUser = async (user: IUserInfo) => {
   //   .setBearerAuth(accessToken)
   //   .users()
   //   .deleteUser(user.id);
-
+  seletedUser.value = null;
   // users.value = [];
   // await onGetUsersForTenant();
 }

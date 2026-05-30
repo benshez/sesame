@@ -2,7 +2,6 @@ import type { RouteRecordRaw } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
 import AuthView from "@/views/AuthView.vue";
 import AuthCallbackView from "@/views/AuthCallbackView.vue";
-import Session from "supertokens-web-js/recipe/session";
 import { useTenantRoutes } from "@/router/useTenantRoutes";
 import { configuration } from "@/utilities";
 

@@ -1,6 +1,6 @@
 <template>
   <label :for="`toggle-${id}`" class="relative inline-flex items-center cursor-pointer" :title="title">
-    <input :name="`toggle-${id}`" :id="`toggle-${id}`" @click="$emit('toggle')" :checked="checked" type="checkbox"
+    <input :name="`toggle-${id}`" :id="`toggle-${id}`" @click="$emit('toggle', $event)" :checked="checked" type="checkbox"
       value="" class="sr-only peer">
     <div
       class="block h-6 w-11 rounded-full bg-gray-200 dark:bg-white/10 peer-checked:bg-brand-500 peer-checked:dark:bg-brand-500">
@@ -25,4 +25,5 @@ const props = defineProps({
     required: false,
   }
 });
+
 </script>

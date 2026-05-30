@@ -14,7 +14,7 @@ export class RoleController extends BaseController<IRoleService> {
       const response = await this.ControllerService.GetRoles();
 
       res
-        .json(response);
+        .json(response.roles);
     } catch (error) {
       next(new BadRequestError({ message: `Error getting roles ${error}`, logging: true }));
     }
@@ -51,18 +51,20 @@ export class RoleController extends BaseController<IRoleService> {
     } catch (error) {
       next(new BadRequestError({ message: `Error removing permission from role ${error}`, logging: true }));
     }
-  }  
+  }
 
   GetPermissionsForRole = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const response = await this.ControllerService.GetPermissionsForRole(this.request.CreateRequest(req));
 
-      res
-        .json(response);
+      if (response.status === "OK") {
+        res
+          .json(response.permissions);
+      }
     } catch (error) {
       next(new BadRequestError({ message: `Error getting permissions for role ${error}`, logging: true }));
     }
-  }   
+  }
 
   GetRolesThatHavePermission = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
@@ -73,7 +75,7 @@ export class RoleController extends BaseController<IRoleService> {
     } catch (error) {
       next(new BadRequestError({ message: `Error getting roles that have permission ${error}`, logging: true }));
     }
-  }  
+  }
 
   AddRoleToUser = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
@@ -84,7 +86,7 @@ export class RoleController extends BaseController<IRoleService> {
     } catch (error) {
       next(new BadRequestError({ message: `Error adding role to user ${error}`, logging: true }));
     }
-  }  
+  }
 
   RemoveUserRole = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
@@ -95,5 +97,5 @@ export class RoleController extends BaseController<IRoleService> {
     } catch (error) {
       next(new BadRequestError({ message: `Error removing user role ${error}`, logging: true }));
     }
-  }   
+  }
 }
