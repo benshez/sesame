@@ -23,7 +23,7 @@ class RoleRoutes extends BaseRoute<RoleController> {
 
     this
       .router
-      .delete("/remove-role", verifySession(), async (req, res, next) => {
+      .delete("/delete-role/:roleId", verifySession(), async (req, res, next) => {
         return await this.controller.DeleteRole(req, res, next);
       });
 

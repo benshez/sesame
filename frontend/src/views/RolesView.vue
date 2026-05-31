@@ -1,7 +1,11 @@
 <template>
   <BaseLayout>
     <Table :id="'roles-table'" :header="'Roles'" :columns="roleStore.CreateTableHeader()"
-      :rows="roleStore.rolesState.tableRows" @edit-clicked="onEditRole" />
+      :rows="roleStore.rolesState.tableRows" @edit-clicked="onEditRole" @delete-clicked="onNotifyBeforeDelete" />
+    <Notification :message="'Are you sure you want to delete this role?'" :acceptButtonText="'Yes'"
+      :closeButtonText="'No'" @close-button-clicked="onCloseNotification"
+      @accept-button-clicked="onAcceptNotification" />
+
     <div class="mt-4 md:mt-6">
       <FormBody :view="'roles'" :css-class="'grid grid-cols-2 gap-4 custom-scrollbar overflow-y-auto p-2'">
         <template v-slot:header>
@@ -24,7 +28,7 @@
                 class="inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-4 py-3 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300">
                 <span>Save Changes</span>
               </button>
-              <button @click="onAddRoleOrPermissions" v-else
+              <button @click="onSaveRoleOrPermissions" v-else
                 class="inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-4 py-3 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300">
                 <span>Add Role</span>
               </button>
@@ -36,32 +40,40 @@
   </BaseLayout>
 </template>
 <script setup lang="ts">
-import { onMounted, provide, inject } from "vue";
+import { onMounted, provide } from "vue";
 import Table from "@/components/elements/Table.vue";
 import BaseLayout from "@/layouts/BaseLayout.vue";
 import FormBody from "@/components/Form/FormBody.vue";
-import { useRoleStore, useFormStore } from "@/store";
+import Notification from "@/components/notifications/notification.vue";
+import { useRoleStore, useFormStore, useDisplayStore } from "@/store";
 import type { IRole } from "../../../shared/interfaces";
-
 
 const roleStore = useRoleStore();
 const formStore = useFormStore();
+const displayStore = useDisplayStore();
+
+const UpdateRoleFormState = (roleId: string = "", permissions: Array<string> | string = "") => {
+  formStore.updateElementState("role", { key: "value", "value": roleId });
+  formStore.updateElementState("permissions", { key: "value", "value": permissions });
+}
+const UpdateSelectedRole = (role: IRole = {}) => {
+  roleStore.UpdateSelectedRole(role);
+}
 
 const onEditRole = (role: IRole) => {
-  roleStore.UpdateSelectedRole(role);
-  formStore.updateElementState("role", { key: "value", "value": role.roleId });
+  UpdateSelectedRole(role);
   const permissions: Array<string> = [];
 
   role.permissions?.forEach((permission: string) => {
     permissions.push(permission);
   })
 
-  formStore.updateElementState("permissions", { key: "value", "value": permissions });
+  UpdateRoleFormState(role.roleId, permissions);
 }
 
 const onItemToggled = async (option: string, isChecked: boolean) => {
-  const roleId = roleStore.rolesState.selectedRole.roleId;
-  if (roleStore.rolesState.selectedRole) {
+  if (roleStore.rolesState && roleStore.rolesState.selectedRole.roleId) {
+    const roleId = roleStore.rolesState.selectedRole.roleId;
     const role = { roleId: roleId as string, permissions: [option] };
     if (isChecked) {
       await roleStore.AddRolePermissions(role);
@@ -69,17 +81,32 @@ const onItemToggled = async (option: string, isChecked: boolean) => {
       await roleStore.RemoveRolePermissions(role);
     }
   }
-  roleStore.UpdateSelectedRole({});
+}
+
+const onNotifyBeforeDelete = (role: IRole) => {
+  displayStore.UpdateNotificationShowingState(true);
+  UpdateSelectedRole(role);
+}
+
+const onCloseNotification = () => {
+  UpdateSelectedRole();
+  displayStore.UpdateNotificationShowingState(false);
+}
+
+const onAcceptNotification = async () => {
+  if (roleStore.rolesState && roleStore.rolesState.selectedRole.roleId) {
+    await roleStore.DeleteRole(roleStore.rolesState.selectedRole.roleId);
+  }
+
+  UpdateSelectedRole();
+  UpdateRoleFormState();
+  displayStore.UpdateNotificationShowingState(false);
 }
 
 const onSaveRoleOrPermissions = async () => {
-  //await roleStore.RemoveRolePermissions()
-  roleStore.UpdateSelectedRole({});
-}
-
-const onAddRoleOrPermissions = async () => {
-  roleStore.UpdateSelectedRole({});
-  await roleStore.CreateRole()
+  await roleStore.CreateOrUpdateRole();
+  UpdateSelectedRole();
+  UpdateRoleFormState();
 }
 
 provide("onItemToggled", onItemToggled)

@@ -3,7 +3,7 @@ import { type Component, ref } from "vue";
 import { ApiClient } from "@/plugins";
 import { useFormStore, useUserStore } from "@/store";
 import type { IRole } from "../../../../shared/interfaces";
-import type { IOption, ITableColumn, ITableRow } from "@/interfaces";
+import type { ITableColumn, ITableRow } from "@/interfaces";
 import ActionButtons from "@/components/buttons/ActionButtons.vue";
 
 export const useRoleStore = defineStore("role", () => {
@@ -31,6 +31,7 @@ export const useRoleStore = defineStore("role", () => {
     } as unknown as Component;
 
     const rows: Array<ITableRow> = [];
+    rolesState.value.tableRows = rows;
 
     rolesState.value.roles.forEach((role: IRole) => {
       rows.push({
@@ -39,10 +40,15 @@ export const useRoleStore = defineStore("role", () => {
         props: [{}, {}, {
           buttons: [
             {
-              title: `Edit User - ${role.roleId}`,
+              title: `Edit Role - ${role.roleId}`,
               type: "edit",
               visible: true
             },
+            {
+              title: `Delete Role - ${role.roleId}`,
+              type: "delete",
+              visible: true
+            }
           ]
         }]
       })
@@ -61,14 +67,14 @@ export const useRoleStore = defineStore("role", () => {
   const GetRoles = async () => {
     const roles: Array<IRole> = [];
     const authToken = await userStore.GetAccessToken();
+    rolesState.value.roles = roles;
 
     const response = await apiClient
       .setBearerAuth(authToken)
       .role()
       .getRoles() as unknown as Array<IRole>;
 
-
-    response.forEach(async (role: IRole) => {
+    response.forEach(async (role: IRole, index: number) => {
       const roleId: string = role as unknown as string;
       const permissions = await GetRolePermissions(roleId, authToken) as unknown as Array<string>;
       rolesState.value.roles.push(
@@ -77,7 +83,8 @@ export const useRoleStore = defineStore("role", () => {
           permissions: permissions
         }
       );
-      CreateTableRows()
+
+      CreateTableRows();
     })
   }
 
@@ -93,6 +100,8 @@ export const useRoleStore = defineStore("role", () => {
       .setBearerAuth(token)
       .role()
       .removePermissionsFromRole(role) as unknown as Array<IRole>;
+
+    GetRoles();
   }
 
   const AddRolePermissions = async (role: { roleId: string, permissions: Array<string> }) => {
@@ -102,15 +111,17 @@ export const useRoleStore = defineStore("role", () => {
       .setBearerAuth(token)
       .role()
       .createNewRoleOrAddPermissions(role) as unknown as Array<IRole>;
+
+    GetRoles();
   }
 
-  const CreateRole = async () => {
-    const permissions = formStore.getElement("permissions");
+  const CreateOrUpdateRole = async () => {
+    const permissions = formStore.getElement("permissions").value as Array<string>;
     const roleId: string = formStore.getElement("role").value as string;
 
     const role = {
       roleId: roleId,
-      permissions: permissions.value as Array<string>
+      permissions: permissions
     }
     const token = await userStore.GetAccessToken();
 
@@ -118,16 +129,30 @@ export const useRoleStore = defineStore("role", () => {
       .setBearerAuth(token)
       .role()
       .createNewRoleOrAddPermissions(role) as unknown as Array<IRole>;
+
+    GetRoles();
+  }
+
+  const DeleteRole = async (roleId: string) => {
+    const token = await userStore.GetAccessToken();
+
+    await apiClient
+      .setBearerAuth(token)
+      .role()
+      .deleteRole(roleId);
+
+    GetRoles();
   }
 
   return {
     rolesState,
     CreateTableHeader,
     GetRoles,
-    CreateRole,
+    CreateOrUpdateRole,
     AddRolePermissions,
     RemoveRolePermissions,
     GetRolePermissions,
+    DeleteRole,
     UpdateSelectedRole
   }
 })
