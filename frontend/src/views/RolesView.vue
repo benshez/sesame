@@ -14,7 +14,9 @@
           </p>
           <p v-else class="text-sm text-gray-500 dark:text-gray-400">Add role detail.</p>
         </template>
-        <template v-slot:content></template>
+        <template v-slot:content>
+
+        </template>
         <template v-slot:footer="elements">
           <div class="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
             <div class="flex items-center gap-5 lg:justify-end">
@@ -34,12 +36,13 @@
   </BaseLayout>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, provide, inject } from "vue";
 import Table from "@/components/elements/Table.vue";
 import BaseLayout from "@/layouts/BaseLayout.vue";
 import FormBody from "@/components/Form/FormBody.vue";
 import { useRoleStore, useFormStore } from "@/store";
 import type { IRole } from "../../../shared/interfaces";
+
 
 const roleStore = useRoleStore();
 const formStore = useFormStore();
@@ -56,12 +59,21 @@ const onEditRole = (role: IRole) => {
   formStore.updateElementState("permissions", { key: "value", "value": permissions });
 }
 
-const toggle = () => {
-
+const onItemToggled = async (option: string, isChecked: boolean) => {
+  const roleId = roleStore.rolesState.selectedRole.roleId;
+  if (roleStore.rolesState.selectedRole) {
+    const role = { roleId: roleId as string, permissions: [option] };
+    if (isChecked) {
+      await roleStore.AddRolePermissions(role);
+    } else {
+      await roleStore.RemoveRolePermissions(role);
+    }
+  }
+  roleStore.UpdateSelectedRole({});
 }
 
 const onSaveRoleOrPermissions = async () => {
-  await roleStore.RemoveRolePermissions()
+  //await roleStore.RemoveRolePermissions()
   roleStore.UpdateSelectedRole({});
 }
 
@@ -69,6 +81,8 @@ const onAddRoleOrPermissions = async () => {
   roleStore.UpdateSelectedRole({});
   await roleStore.CreateRole()
 }
+
+provide("onItemToggled", onItemToggled)
 
 onMounted(async () => {
   await roleStore.GetRoles();

@@ -54,45 +54,23 @@ export const useRoleView = () => {
 
           return validators.IsMinimunCharacterLength(permissions, 7);
         },
-        "options": async () => {
-          //const authToken = await userStore.GetAccessToken();
-          const role = roleStore.rolesState.selectedRole;
-          let options: Array<IOption> = [];
-
-          // if (role.roleId) {
-          //   const permissions = await roleStore.GetRolePermissions(role.roleId, authToken) as unknown as Array<string>;
-
-          //   permissions.forEach((permission: string) => {
-          //     options.push({
-          //       key: permission,
-          //       value: permission,
-          //       checked: role.permissions?.includes(permission)
-          //     })
-          //   })
-          // }
-
-          if (options.length === 0) {
-            options.push(
-              {
-                key: "read",
-                value: "Read",
-                checked: false
-              },
-              {
-                key: "write",
-                value: "Write",
-                checked: false
-              },
-              {
-                key: "delete",
-                value: "Delete",
-                checked: false
-              },
-            )
-          }
-
-          return options;
-        },
+        "options": [
+          {
+            key: "read",
+            value: "Read",
+            checked: false
+          },
+          {
+            key: "write",
+            value: "Write",
+            checked: false
+          },
+          {
+            key: "delete",
+            value: "Delete",
+            checked: false
+          },
+        ],
         "cssClass": "dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800",
         "labelIcon": "M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"
       }

@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { defineStore, } from "pinia";
-import type { IElement } from "@/interfaces";
+import type { IElement, IOption } from "@/interfaces";
 import {
   useRegisterView,
   useProfileView,
@@ -12,6 +12,7 @@ import {
 import { useObjectHelper } from "@/utilities";
 import type { DateTime } from "ts-luxon";
 import { useLocalStorage } from "@vueuse/core";
+import type { IOType } from "child_process";
 
 export const useFormStore = defineStore("form", () => {
   const formState = ref(useLocalStorage("sesame.form.state", {
@@ -121,8 +122,19 @@ export const useFormStore = defineStore("form", () => {
     updateElementState(key, { key: "isVisible", value: display });
   }
 
-  const handleToggleList = (key: string, value: string, selected: boolean) => {
+  const handleToggleList = async (key: string, value: string, selected: boolean) => {
     const element: IElement = getElement(key);
+    let options: Array<IOption> = element.options as Array<IOption>;
+
+    if (typeof element.options === "function") {
+      options = await element.options();
+      options.forEach((option) => {
+        if(option.key === value) {
+          option.checked = selected
+        }
+      })
+    }
+
     let values: Array<string> = [];
 
     if (selected) {

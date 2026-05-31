@@ -86,56 +86,22 @@ export const useRoleStore = defineStore("role", () => {
     Object.assign(rolesState.value.selectedRole, role);
   }
 
-  const RemoveRolePermissions = async () => {
-    const permissions = formStore.getElement("permissions");
-    const roleId: string = formStore.getElement("role").value as string;
-    const currentPermissions = rolesState.value.selectedRole.permissions;
-
-    let options: Array<IOption> = [];
-
-    if (typeof permissions.options === "function") {
-      options = await permissions.options()
-    }
-
+  const RemoveRolePermissions = async (role: { roleId: string, permissions: Array<string> }) => {
     const token = await userStore.GetAccessToken();
 
-    options.forEach(async (option) => {
-      if (!permissions.value.includes(option.key as string)) {
-        const role = {
-          roleId: roleId,
-          permissions: [option.key] as Array<string>
-        }
-        await apiClient
-          .setBearerAuth(token)
-          .role()
-          .removePermissionsFromRole(role) as unknown as Array<IRole>;
+    await apiClient
+      .setBearerAuth(token)
+      .role()
+      .removePermissionsFromRole(role) as unknown as Array<IRole>;
+  }
 
-        CreateTableRows()
-      } else {
-        if (currentPermissions && !currentPermissions.includes(option.key as string)) {
-          const role = {
-            roleId: roleId,
-            permissions: [option.key] as Array<string>
-          }
-          await apiClient
-            .setBearerAuth(token)
-            .role()
-            .createNewRoleOrAddPermissions(role) as unknown as Array<IRole>;
+  const AddRolePermissions = async (role: { roleId: string, permissions: Array<string> }) => {
+    const token = await userStore.GetAccessToken();
 
-          CreateTableRows()
-        }
-      }
-    })
-    //if(options)
-
-    // const roleId: string = formStore.getElement("role").value as string;
-
-    // const token = await userStore.GetAccessToken();
-
-    // await apiClient
-    //   .setBearerAuth(token)
-    //   .role()
-    //   .removePermissionsFromRole(role) as unknown as Array<IRole>;
+    await apiClient
+      .setBearerAuth(token)
+      .role()
+      .createNewRoleOrAddPermissions(role) as unknown as Array<IRole>;
   }
 
   const CreateRole = async () => {
@@ -159,6 +125,7 @@ export const useRoleStore = defineStore("role", () => {
     CreateTableHeader,
     GetRoles,
     CreateRole,
+    AddRolePermissions,
     RemoveRolePermissions,
     GetRolePermissions,
     UpdateSelectedRole

@@ -14,7 +14,8 @@
                   class="cursor-pointer block text-sm font-medium text-gray-700 dark:text-gray-400">
                   {{ option.value }}
                 </label>
-                <Toggle :id="`${element.id}-${option.key}`" :checked="option.checked || element.value.includes(option.key as string)" :title="option.value"
+                <Toggle :id="`${element.id}-${option.key}`"
+                  :checked="option.checked || element.value.includes(option.key as string)" :title="option.value"
                   @toggle="onToggle($event, element, option)" />
               </div>
             </div>
@@ -27,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, inject, provide } from "vue";
 import { useRoute } from "vue-router";
 import { ElementProps } from "@/components/Form/props/Props";
 import FormElement from "@/components/Form/FromElement.vue";
@@ -41,11 +42,20 @@ const props = defineProps({
 });
 const options = ref<Array<IOption>>([]);
 const { handleInput, handleToggleList } = useFormStore();
+const onToggled = inject("onItemToggled", (option: string, isChecked: boolean) => {});
+
+// provide("onItemToggled", (payload: {}) => {
+//   console.log(payload)
+// });
 
 const onToggle = (e: Event, element: IElement, option: IOption) => {
   const isChecked = (e.target as HTMLInputElement).checked;
 
-  handleToggleList(element.id as string, option.key as string, isChecked)
+  handleToggleList(element.id as string, option.key as string, isChecked);
+
+  if(onToggled) {
+    onToggled(option.key as string, isChecked);
+  }
 }
 
 onBeforeMount(async () => {
