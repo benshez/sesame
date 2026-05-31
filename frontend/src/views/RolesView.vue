@@ -14,9 +14,9 @@
           </p>
           <p v-else class="mb-2 font-semibold">Add Role</p>
           <p v-if="roleStore.rolesState.selectedRole.roleId" class="text-sm text-gray-500 dark:text-gray-400">
-            Edit role detail.
+            Edit role permissions.
           </p>
-          <p v-else class="text-sm text-gray-500 dark:text-gray-400">Add role detail.</p>
+          <p v-else class="text-sm text-gray-500 dark:text-gray-400">Add role permissions.</p>
         </template>
         <template v-slot:content>
 
