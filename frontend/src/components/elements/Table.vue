@@ -25,7 +25,7 @@
                 <tr v-for="(row, rowIndex) in props.rows" :key="rowIndex"
                   class="border-t border-gray-100 dark:border-white/5">
                   <td v-for="(column, columnIndex) in props.columns" :key="columnIndex"
-                    class="px-4 py-3 border border-gray-100 dark:border-white/5">
+                    class="px-4 py-3 border border-gray-100 dark:border-white/5 whitespace-nowrap">
                     <span v-if="IsString(column)"
                       class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
                       {{ row.values?.[columnIndex] }}

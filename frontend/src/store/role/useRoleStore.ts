@@ -64,15 +64,19 @@ export const useRoleStore = defineStore("role", () => {
       .getPermissionsForRole(roleId) as unknown as Array<string>;
   }
 
-  const GetRoles = async () => {
+  const GetAllRoles = async () => {
     const roles: Array<IRole> = [];
-    const authToken = await userStore.GetAccessToken();
     rolesState.value.roles = roles;
 
-    const response = await apiClient
-      .setBearerAuth(authToken)
+    return await apiClient
+      .setBearerAuth(await userStore.GetAccessToken())
       .role()
       .getRoles() as unknown as Array<IRole>;
+  }
+
+  const GetRolesAndRolePermissions = async () => {
+    const authToken = await userStore.GetAccessToken();
+    const response = await GetAllRoles() as unknown as Array<IRole>;
 
     response.forEach(async (role: IRole, index: number) => {
       const roleId: string = role as unknown as string;
@@ -101,7 +105,7 @@ export const useRoleStore = defineStore("role", () => {
       .role()
       .removePermissionsFromRole(role) as unknown as Array<IRole>;
 
-    GetRoles();
+    GetRolesAndRolePermissions();
   }
 
   const AddRolePermissions = async (role: { roleId: string, permissions: Array<string> }) => {
@@ -112,7 +116,7 @@ export const useRoleStore = defineStore("role", () => {
       .role()
       .createNewRoleOrAddPermissions(role) as unknown as Array<IRole>;
 
-    GetRoles();
+    GetRolesAndRolePermissions();
   }
 
   const CreateOrUpdateRole = async () => {
@@ -130,7 +134,7 @@ export const useRoleStore = defineStore("role", () => {
       .role()
       .createNewRoleOrAddPermissions(role) as unknown as Array<IRole>;
 
-    GetRoles();
+    GetRolesAndRolePermissions();
   }
 
   const DeleteRole = async (roleId: string) => {
@@ -141,17 +145,18 @@ export const useRoleStore = defineStore("role", () => {
       .role()
       .deleteRole(roleId);
 
-    GetRoles();
+    GetRolesAndRolePermissions();
   }
 
   return {
     rolesState,
     CreateTableHeader,
-    GetRoles,
+    GetRolesAndRolePermissions,
     CreateOrUpdateRole,
     AddRolePermissions,
     RemoveRolePermissions,
     GetRolePermissions,
+    GetAllRoles,
     DeleteRole,
     UpdateSelectedRole
   }

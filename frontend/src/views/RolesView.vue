@@ -112,6 +112,6 @@ const onSaveRoleOrPermissions = async () => {
 provide("onItemToggled", onItemToggled)
 
 onMounted(async () => {
-  await roleStore.GetRoles();
+  await roleStore.GetRolesAndRolePermissions();
 });
 </script>

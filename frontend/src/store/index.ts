@@ -1,4 +1,4 @@
-export { useUserStore } from "@/store/user/userStore";
+export { useUserStore } from "@/store/user/useUserStore";
 export { useDisplayStore } from "@/store/display/useDisplayStore";
 export { useFormStore } from "@store/forms/formStore";
 export { useEventStore } from "@/store/events/useEventStore";

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="fc-toolbar fc-header-toolbar fc-toolbar-ltr">
+    <div class="fc-toolbar fc-header-toolbar fc-toolbar-ltr mb-2">
       <div class="fc-toolbar-chunk">
         <div class="flex fc-button-group">
           <button :title="`${tab.name} View`" v-for="(tab, tabIndex) in tabs" :key="tabIndex"
