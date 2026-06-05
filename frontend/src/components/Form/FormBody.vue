@@ -8,14 +8,10 @@
     </div>
     <slot name="subheader"></slot>
     <div class="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
-      <div class="space-y-5">
-        <div class="space-y-6">
-          <div class="rounded-2xl">
-            <slot name="content">
-              <FormBuilder :elements="elements" :class="props.cssClass"/>
-            </slot>
-          </div>
-        </div>
+      <div class="rounded-2xl">
+        <slot name="content">
+          <FormBuilder :elements="elements" :class="props.cssClass" />
+        </slot>
       </div>
     </div>
     <slot name="footer" :elements="elements"></slot>
@@ -28,15 +24,15 @@ import FormBuilder from "@/components/Form/FormBuilder.vue";
 import { useFormStore } from "@/store/forms/formStore";
 
 const props = defineProps({
-  view: { 
-    type: String, 
+  view: {
+    type: String,
     required: false,
     default: ""
-  }, 
+  },
   cssClass: {
-    type: String, 
+    type: String,
     required: false,
-    default: ""  
+    default: ""
   }
 })
 

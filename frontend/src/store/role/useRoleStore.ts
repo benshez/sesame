@@ -17,7 +17,7 @@ export const useRoleStore = defineStore("role", () => {
     tableRows: [] as Array<ITableRow>
   });
 
-  const CreateTableHeader = (): Array<ITableColumn> => {
+  const CreateRolesTableColumns = (): Array<ITableColumn> => {
     return [
       { id: "roleId", caption: "Role", type: String },
       { id: "permissions", caption: "Permissions", type: String },
@@ -25,7 +25,7 @@ export const useRoleStore = defineStore("role", () => {
     ]
   }
 
-  const CreateTableRows = () => {
+  const CreateRolesTableRows = () => {
     const actionButtonComponent = {
       name: "ActionButtons",
     } as unknown as Component;
@@ -64,32 +64,33 @@ export const useRoleStore = defineStore("role", () => {
       .getPermissionsForRole(roleId) as unknown as Array<string>;
   }
 
-  const GetAllRoles = async () => {
-    const roles: Array<IRole> = [];
-    rolesState.value.roles = roles;
+  const GetAllRoles = async (authToken: string = ""): Promise<Array<string>> => {
+    if (authToken === "") {
+      authToken = await userStore.GetAccessToken();
+    }
 
     return await apiClient
-      .setBearerAuth(await userStore.GetAccessToken())
+      .setBearerAuth(authToken)
       .role()
-      .getRoles() as unknown as Array<IRole>;
+      .getRoles() as unknown as Array<string>;
+
   }
 
-  const GetRolesAndRolePermissions = async () => {
+  const GetRolesAndRolePermissions = async (createTableRows: boolean = true) => {
     const authToken = await userStore.GetAccessToken();
-    const response = await GetAllRoles() as unknown as Array<IRole>;
+    const roles = await GetAllRoles(authToken) as unknown as Array<string>;
+    const response: Array<IRole> = [];
 
-    response.forEach(async (role: IRole, index: number) => {
-      const roleId: string = role as unknown as string;
-      const permissions = await GetRolePermissions(roleId, authToken) as unknown as Array<string>;
-      rolesState.value.roles.push(
-        {
-          roleId: roleId,
-          permissions: permissions
-        }
-      );
+    await Promise.all(roles.map(async (role: string) => {
+      response.push({
+        roleId: role,
+        permissions: await GetRolePermissions(role, authToken) as unknown as Array<string>
+      })
+    }));
 
-      CreateTableRows();
-    })
+    rolesState.value.roles = response;
+    
+    if (createTableRows) CreateRolesTableRows();
   }
 
   const UpdateSelectedRole = (role: IRole) => {
@@ -150,7 +151,7 @@ export const useRoleStore = defineStore("role", () => {
 
   return {
     rolesState,
-    CreateTableHeader,
+    CreateRolesTableColumns,
     GetRolesAndRolePermissions,
     CreateOrUpdateRole,
     AddRolePermissions,

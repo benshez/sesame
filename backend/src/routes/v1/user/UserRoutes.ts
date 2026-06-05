@@ -26,6 +26,12 @@ class UserRoutes extends BaseRoute<UserController> {
 
     this
       .router
+      .get("/get-user-roles/:userId", verifySession(), async (req, res, next) => {
+        return await this.controller.GetUserRoles(req, res, next);
+      })
+
+    this
+      .router
       .post("/update-user-metadata", verifySession(), async (req, res, next) => {
         return await this.controller.UpdateUserMetadata(req, res, next);
       })

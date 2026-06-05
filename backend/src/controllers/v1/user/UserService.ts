@@ -60,6 +60,15 @@ export class UserService implements IUserService {
     return response;
   }
 
+  GetUserRoles = async (request: IUserRequest): Promise<{
+    status: "OK";
+    roles: Array<string>;
+  }> => {
+    const response = await UserRoles.getRolesForUser(request.baseRequest.tenantId, request.baseRequest.userId);
+
+    return response;
+  }
+
   SignUp = async (request: IUserRequest): Promise<{ status: "OK"; user: User; recipeUserId: RecipeUserId; } | { status: "EMAIL_ALREADY_EXISTS_ERROR"; }> => {
     const response = await EmailPassword.signUp(request.baseRequest.tenantId, request.user.email as string, request.user.password as string)
 

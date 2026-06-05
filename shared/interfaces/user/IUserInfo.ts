@@ -12,5 +12,6 @@ export type IUserInfo = {
     credentialIds: Array<string>,
   },
   timeJoined: number,
-  loginMethods: Array<ILoginMethods>
+  loginMethods: Array<ILoginMethods>,
+  roles?: Array<string>
 }

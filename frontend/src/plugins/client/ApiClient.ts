@@ -40,7 +40,8 @@ export class ApiClient extends HttpClient {
     return {
       userInfo: (userId: string) => this.get(`/users/get-user-info/${userId}`, this.getHeader("Authorization")),
       getUserMetadata: (userId: string) => this.get(`/users/get-user-metadata/${userId}`, this.getHeader("Authorization")),
-      addRoleToUser: (role: { role: string }) => this.post("/users/users/add-role-to-user", role, this.getHeader("Authorization")),
+      addRoleToUser: (userInfo: { userId: string, roleId: string }) => this.post("/users/add-role-to-user", userInfo, this.getHeader("Authorization")),
+      getUserRoles: (userId: string) => this.get(`/users/get-user-roles/${userId}`, this.getHeader("Authorization")),
       updateUserMetadata: (userInfo: {}) => this.post("/users/update-user-metadata", { userInfo }, this.getHeader("Authorization")),
       updateUserEmailAndPassword: (userInfo: {}) => this.post("/users/update-user-email-password", { userInfo }, this.getHeader("Authorization")),
       signUp: (user: IUser) => this.post("/users/sign-up", { user }, this.getHeader("Authorization")),
@@ -89,8 +90,6 @@ export class ApiClient extends HttpClient {
       removePermissionsFromRole: (role: { roleId: string, permissions: Array<string> }) => this.post("/role/remove-permissions-from-role", { role }, this.getHeader("Authorization")),
       getPermissionsForRole: (roleId: string) => this.get(`/role/get-permissions-for-role/${roleId}`, this.getHeader("Authorization")),
       getRolesThatHavePermission: (permission: string) => this.get(`/role/get-roles-that-have-permission/${permission}`, this.getHeader("Authorization")),
-      addRoleToUser: (role: { roleId: string }) => this.post("/role/add-role-to-user", { role }, this.getHeader("Authorization")),
-      removeUserRole: (role: { roleId: string }) => this.post("/role/remove-user-role", { role }, this.getHeader("Authorization"))
-    }
+      }
   }
 }

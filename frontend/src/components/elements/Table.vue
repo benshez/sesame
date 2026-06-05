@@ -33,7 +33,7 @@
                     <span v-if="IsComponent(column)"
                       class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
                       <component :is="column.type" v-bind="row.props?.[columnIndex]"
-                        @toggle="$emit('toggle', row.rowData)" @edit-clicked="$emit('edit-clicked', row.rowData)"
+                        @toggle="$emit('toggle', row.rowData, $event)" @edit-clicked="$emit('edit-clicked', row.rowData)"
                         @delete-clicked="$emit('deleteClicked', row.rowData)" />
                     </span>
                   </td>
@@ -65,9 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import type { ITableColumn, ITableRow } from "@/interfaces";
-const html = ref("<pre><code>let a = 'foo';</code></pre>");
 
 const IsComponent = (column: ITableColumn): boolean => {
   return typeof column.type === "object";

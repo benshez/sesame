@@ -1,24 +1,41 @@
 <template>
-    <FormBody :view="'roles'" :css-class="'p-2'">
-    <template v-slot:header>
-      <p class="mb-2 font-semibold">
-        Edit User Roles
-      </p>
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        Update user roles.
-      </p>
-    </template>
-    <template v-slot:content></template>
-    <template v-slot:footer="elements">
-      <div class="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
-        <div class="flex items-center gap-5 lg:justify-end">
-
-        </div>
-      </div>
-    </template>
-  </FormBody>
+  <Table :id="'roles-table'" :header="'Roles'" :columns="userStore.CreateUserRolesTableColumns()"
+    :rows="userStore.userState.userRolesTableRows" @toggle="onToggleRole" />
 </template>
 <script setup lang="ts">
-import FormBody from "@/components/Form/FormBody.vue";
+import { onMounted, provide } from "vue";
+import Table from "@/components/elements/Table.vue";
+import { useRoleStore, useUserStore } from "@/store";
 
+const roleStore = useRoleStore();
+const userStore = useUserStore();
+
+const onItemToggled = async (option: string, e: Event) => {
+  const isChecked = (e.target as HTMLInputElement).checked;
+  if (isChecked) {
+    //await useUserStore.AddUserToRole({ userId: userStore.userState.selectedUser.id, roleId: option });
+  } else {
+    //await roleStore.RemoveUserFromRole({ userId: userStore.userState.selectedUser.id, roleId: option });
+  }
+}
+
+const onToggleRole = async (option: Record<string, any>, e: Event) => {
+  const isChecked = (e.target as HTMLInputElement).checked;
+  if (userStore.userState.selectedUser.id) {
+    if (isChecked) {
+      await userStore.AddRoleToUser(userStore.userState.selectedUser.id, option.roleId);
+    } else {
+      console.log("Mounted UserRolesCard", option, isChecked);
+      //await roleStore.RemoveUserFromRole({ userId: userStore.userState.selectedUser.id, roleId: option });
+    }
+  }
+}
+//provide("onItemToggled", onItemToggled);
+
+
+onMounted(async () => {
+  // await roleStore.GetRolesAndRolePermissions(false);
+  // await userStore.GetRolesForSelectedUser(userStore.userState.selectedUser.id);
+  // userStore.CreateUserRolesTableRows(roleStore.rolesState.roles);
+});
 </script>

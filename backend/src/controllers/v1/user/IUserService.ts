@@ -19,6 +19,10 @@ export interface IUserService {
   } | {
     status: "UNKNOWN_ROLE_ERROR";
   }>
+  GetUserRoles(request: IUserRequest): Promise<{
+    status: "OK";
+    roles: Array<string>;
+  }>;
   UpdateUserPasswordAndEmail(request: IUserRequest): Promise<{
     status: string;
     metadata: string;

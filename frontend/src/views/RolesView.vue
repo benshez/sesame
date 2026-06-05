@@ -1,6 +1,6 @@
 <template>
   <BaseLayout>
-    <Table :id="'roles-table'" :header="'Roles'" :columns="roleStore.CreateTableHeader()"
+    <Table :id="'roles-table'" :header="'Roles'" :columns="roleStore.CreateRolesTableColumns()"
       :rows="roleStore.rolesState.tableRows" @edit-clicked="onEditRole" @delete-clicked="onNotifyBeforeDelete" />
     <Notification :message="'Are you sure you want to delete this role?'" :acceptButtonText="'Yes'"
       :closeButtonText="'No'" @close-button-clicked="onCloseNotification"

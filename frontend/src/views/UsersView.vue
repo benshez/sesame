@@ -2,9 +2,10 @@
 
   <BaseLayout>
     <Table :id="'users-table'" :header="'Users'"
-      :load-more-button-visible="userStore.userState.nextPaginationToken !== ''" :columns="userStore.GetTableHeaders()"
-      :rows="userStore.userState.tableRows" @toggle="onToggleVerification" @edit-clicked="onEditUser"
-      @delete-clicked="onNotifyBeforeDelete" @get-more-clicked="onGetMoreClick" />
+      :load-more-button-visible="userStore.userState.nextPaginationToken !== ''"
+      :columns="userStore.GetUserTableColumns()" :rows="userStore.userState.userTableRows"
+      @toggle="onToggleVerification" @edit-clicked="onEditUser" @delete-clicked="onNotifyBeforeDelete"
+      @get-more-clicked="onGetMoreClick" />
 
     <div class="mt-4 md:mt-6">
       <FormBody :view="'roles'" :css-class="'grid grid-cols-2 gap-4 custom-scrollbar overflow-y-auto p-2'">
@@ -50,8 +51,14 @@ const isUserInfoModal = ref<boolean>(false);
 
 const onEditUser = async (user: IUserInfo) => {
   //if (await Session.doesSessionExist()) {
-    if (!userStore.userState.UserMetaData) await userStore.GetUserMetaData(user.id);
-    formStore.bind(userStore.userState.UserMetaData);
+  await userStore.GetUserMetaData(user.id);
+  formStore.bind(userStore.userState.UserMetaData);
+  userStore.UpdateSelectedUserState(user);
+  await roleStore.GetRolesAndRolePermissions(false);
+  await userStore.GetRolesForSelectedUser(userStore.userState.selectedUser.id);
+  userStore.CreateUserRolesTableRows(roleStore.rolesState.roles);
+
+  //await userStore.GetRolesForSelectedUser(user.id);
   //}
   //router.push(`/edit/public/${user.id}`);
   //isUserInfoModal.value = true;
@@ -83,7 +90,7 @@ const onToggleVerification = async (user: IUserInfo): Promise<void> => {
 }
 
 const onTabChange = (tabId: string) => {
-  console.log("Selected Tab: ", tabId);
+
 }
 const onGetMoreClick = async () => {
   await userStore.GetUsersForTenant();
@@ -91,6 +98,6 @@ const onGetMoreClick = async () => {
 
 onMounted(async () => {
   await userStore.GetUsersForTenant();
-  userStore.CreateTableRows();
+  userStore.CreateUserTableRows();
 });
 </script>

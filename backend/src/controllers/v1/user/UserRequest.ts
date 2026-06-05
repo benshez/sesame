@@ -31,6 +31,7 @@ export class UserRequest {
     if (body.userInfo) {
       this.request.userInfo = body.userInfo.userInfo ? body.userInfo.userInfo : {};
       this.request.baseRequest.userId = body.userInfo.userId ? body.userInfo.userId : this.request.baseRequest.userId;
+      this.request.roleId = body.userInfo.roleId ? body.userInfo.roleId : "";
       this.request.UpdateObject = {
         recipeUserId: session!.getRecipeUserId(),
         applyPasswordPolicy: true,
@@ -41,6 +42,14 @@ export class UserRequest {
     if (body.user) {
       this.request.user.email = body.user.email;
       this.request.user.password = body.user.password;
+    }
+
+    if(body.userId) {
+      this.request.baseRequest.userId = body.userId;
+    }
+    
+    if(body.roleId) {
+      this.request.roleId = body.roleId.roleId ? body.roleId.roleId : "";
     }
 
     if (params.userId) {

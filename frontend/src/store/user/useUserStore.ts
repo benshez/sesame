@@ -9,6 +9,7 @@ import ActionButtons from "@/components/buttons/ActionButtons.vue";
 import Toggle from "@/components/elements/Toggle.vue";
 import UserProfileCard from "@/components/users/UserProfileCard.vue";
 import UserRolesCard from "@/components/users/UserRolesCard.vue";
+import type { IRole } from "../../../../shared/interfaces";
 
 export const useUserStore = defineStore("user", () => {
   const route = useRoute();
@@ -18,7 +19,8 @@ export const useUserStore = defineStore("user", () => {
     UserInfo: {} as IUserInfo,
     UserMetaData: {} as IUserMetaData,
     selectedUser: {} as IUserInfo,
-    tableRows: [] as Array<ITableRow>,
+    userTableRows: [] as Array<ITableRow>,
+    userRolesTableRows: [] as Array<ITableRow>,
     nextPaginationToken: "get-tenant-users-next-pagination-token" as string,
   });
 
@@ -29,7 +31,7 @@ export const useUserStore = defineStore("user", () => {
     ]
   }
 
-  const GetTableHeaders = (): Array<ITableColumn> => {
+  const GetUserTableColumns = (): Array<ITableColumn> => {
     return [
       { id: "userId", caption: "User id", type: String },
       { id: "userEmail", caption: "User email", type: String },
@@ -38,9 +40,9 @@ export const useUserStore = defineStore("user", () => {
     ]
   }
 
-  const CreateTableRows = () => {
+  const CreateUserTableRows = () => {
     const rows: Array<ITableRow> = [];
-    userState.value.tableRows = rows;
+    userState.value.userTableRows = rows;
 
     userState.value.Users.forEach((user: IUserInfo) => {
       const isVerifield = user.loginMethods[0]?.verified || false;
@@ -89,6 +91,46 @@ export const useUserStore = defineStore("user", () => {
     })
   }
 
+  const CreateUserRolesTableColumns = (): Array<ITableColumn> => {
+    return [
+      { id: "roleId", caption: "Role", type: String },
+      { id: "permissions", caption: "Permissions", type: String },
+      { id: "action", caption: "Action", type: Toggle }
+    ]
+  }
+
+  const CreateUserRolesTableRows = (allRoles: Array<IRole>) => {
+    const rows: Array<ITableRow> = [];
+
+    allRoles.forEach((role: IRole) => {
+      const hasRole = userState.value.UserInfo.roles?.includes(role.roleId || "") || false;
+
+      const toggleComponent = {
+        name: "Toggle",
+        props: {
+          id: role.roleId,
+          checked: hasRole
+        },
+      } as unknown as Component;
+
+      rows.push({
+        values: [role.roleId as string, role.permissions || "", toggleComponent],
+        rowData: { roleId: role },
+        props: [
+          {},
+          {},
+          {
+            id: role.roleId,
+            checked: hasRole,
+            title: `Remove role - ${role.roleId}`
+          }
+        ]
+      })
+    })
+
+    userState.value.userRolesTableRows = rows;
+  }
+
   const GetUsersForTenant = async () => {
     const nextPaginationToken = userState.value.nextPaginationToken;
 
@@ -113,7 +155,7 @@ export const useUserStore = defineStore("user", () => {
 
     Object.assign(userState.value.Users, users);
 
-    CreateTableRows();
+    CreateUserTableRows();
   }
 
   const GetAccessToken = async () => {
@@ -134,6 +176,7 @@ export const useUserStore = defineStore("user", () => {
 
   const GetUserInfo = async (userId: string) => {
     userState.value.UserInfo = {} as IUserInfo;
+    userState.value.UserInfo.roles = [];
 
     const user = await apiClient
       .setBearerAuth(await GetAccessToken())
@@ -141,6 +184,8 @@ export const useUserStore = defineStore("user", () => {
       .userInfo(userId)
 
     Object.assign(userState.value.UserInfo, user);
+
+    const userRoles = await GetRolesForSelectedUser();
 
     return user;
   }
@@ -152,6 +197,11 @@ export const useUserStore = defineStore("user", () => {
       userInfo: userInfo,
       userId: userId === GetUserIdFromRoute() ? userId : GetUserIdFromRoute()
     };
+
+    if (userState.value.selectedUser.id !== payload.userId) {
+      payload.userId = userState.value.selectedUser.id;
+    }
+
     return await apiClient
       .setBearerAuth(await GetAccessToken())
       .users()
@@ -225,6 +275,18 @@ export const useUserStore = defineStore("user", () => {
         });
   }
 
+  const AddRoleToUser = async (userId: string, roleId: string) => {
+    const userInfo = {
+      userId: userId,
+      roleId: roleId
+    }
+
+    await apiClient
+      .setBearerAuth(await GetAccessToken())
+      .users()
+      .addRoleToUser(userInfo);
+  }
+
   const RemoveUser = async (user: IUserInfo) => {
     await apiClient
       .setBearerAuth(await GetAccessToken())
@@ -241,7 +303,17 @@ export const useUserStore = defineStore("user", () => {
     Object.assign(userState.value.selectedUser, user);
   }
 
+  const GetRolesForSelectedUser = async (userId: string = ""): Promise<Array<string>> => {
+    if (userId === "") userId = userState.value.selectedUser.id;
+    const userRoles = await apiClient
+      .setBearerAuth(await GetAccessToken())
+      .users()
+      .getUserRoles(userId) as unknown as Array<string>;
 
+    userState.value.UserInfo.roles = userRoles;
+
+    return userRoles as unknown as Array<string>;
+  }
 
   return {
     userState,
@@ -251,12 +323,16 @@ export const useUserStore = defineStore("user", () => {
     SendVerificationEmail,
     GetAccessToken,
     GetUserId,
-    GetTableHeaders,
-    CreateTableRows,
+    GetUserTableColumns,
+    CreateUserTableRows,
+    CreateUserRolesTableColumns,
+    CreateUserRolesTableRows,
     GetTabs,
     GetUsersForTenant,
     UpdateSelectedUserState,
     VerifyOrUnverifyUserEmail,
-    RemoveUser
+    GetRolesForSelectedUser,
+    RemoveUser,
+    AddRoleToUser
   }
 })

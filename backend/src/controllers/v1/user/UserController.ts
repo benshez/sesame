@@ -66,6 +66,16 @@ export class UserController extends BaseController<IUserService> {
     }
   }
 
+  GetUserRoles = async (req: SessionRequest, res: Response, next: NextFunction) => {
+    try {
+      const response = await this.ControllerService.GetUserRoles(this.request.CreateRequest(req));
+      res
+        .json(response.roles);
+    } catch (error) {
+      next(new BadRequestError({ message: `Error fetching user roles ${error}`, logging: true }));
+    }
+  }
+
   UserHasRole = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const roleId = req.body.roleId;
