@@ -60,6 +60,17 @@ export class UserService implements IUserService {
     return response;
   }
 
+  RemoveRoleFromUser = async (request: IUserRequest): Promise<{
+    status: "OK";
+    didUserHaveRole: boolean;
+  } | {
+    status: "UNKNOWN_ROLE_ERROR";
+  }> => {
+    const response = await UserRoles.removeUserRole(request.baseRequest.tenantId, request.baseRequest.userId, request.roleId as string);
+
+    return response;
+  } 
+
   GetUserRoles = async (request: IUserRequest): Promise<{
     status: "OK";
     roles: Array<string>;

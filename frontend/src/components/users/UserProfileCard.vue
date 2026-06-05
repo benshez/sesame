@@ -37,7 +37,7 @@ const SaveUserMetaData = async () => {
   if (!formStore.formState.formIsValid) return;
 
   if (await Session.doesSessionExist() &&
-    userStore.userState.selectedUser.hasOwnProperty("id")) {
+    userStore.selectedUserState.UserInfo.hasOwnProperty("id")) {
     let user: IUserMetaData = {} as IUserMetaData;
 
     formStore.formState.elements.forEach((e) => {
@@ -48,9 +48,9 @@ const SaveUserMetaData = async () => {
   }
 }
 onMounted(async () => {
-  if (await Session.doesSessionExist() && userStore.userState.selectedUser.hasOwnProperty("id")) {
-    await userStore.GetUserMetaData(userStore.userState.selectedUser.id);
-    formStore.bind(userStore.userState.UserMetaData);
+  if (await Session.doesSessionExist() && userStore.selectedUserState.UserInfo.hasOwnProperty("id")) {
+    await userStore.GetUserMetaData(userStore.selectedUserState.UserInfo.id);
+    formStore.bind(userStore.selectedUserState.UserMetaData);
   }
 });
 </script>

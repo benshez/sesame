@@ -108,10 +108,10 @@ const ShowModal = async () => {
   if (await Session.doesSessionExist()) {
     await router.isReady();
     const userId = route.params.userId as unknown as string;
-    await userStore.GetUserInfo(userId);
+    await userStore.GetSelectedUserInfo(userId);
 
-    formStore.updateElementState("newemail", { key: "value", value: userStore.userState.UserInfo.emails.at(0) });
-    formStore.updateElementState("email", { key: "value", value: userStore.userState.UserInfo.emails.at(0) });
+    formStore.updateElementState("newemail", { key: "value", value: userStore.selectedUserState.UserInfo.emails.at(0) });
+    formStore.updateElementState("email", { key: "value", value: userStore.selectedUserState.UserInfo.emails.at(0) });
   }
 }
 onBeforeMount(async () => {

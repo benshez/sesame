@@ -66,6 +66,16 @@ export class UserController extends BaseController<IUserService> {
     }
   }
 
+  RemoveRoleFromUser = async (req: SessionRequest, res: Response, next: NextFunction) => {
+    try {
+      const response = await this.ControllerService.RemoveRoleFromUser(this.request.CreateRequest(req));
+      res
+        .json(response);
+    } catch (error) {
+      next(new BadRequestError({ message: `Error removing role from user ${error}`, logging: true }));
+    }
+  }
+
   GetUserRoles = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const response = await this.ControllerService.GetUserRoles(this.request.CreateRequest(req));

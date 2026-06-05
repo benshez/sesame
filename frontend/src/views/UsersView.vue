@@ -55,7 +55,7 @@ const onEditUser = async (user: IUserInfo) => {
   formStore.bind(userStore.userState.UserMetaData);
   userStore.UpdateSelectedUserState(user);
   await roleStore.GetRolesAndRolePermissions(false);
-  await userStore.GetRolesForSelectedUser(userStore.userState.selectedUser.id);
+  await userStore.GetRolesForSelectedUser(userStore.selectedUserState.UserInfo.id);
   userStore.CreateUserRolesTableRows(roleStore.rolesState.roles);
 
   //await userStore.GetRolesForSelectedUser(user.id);
@@ -71,8 +71,8 @@ const onNotifyBeforeDelete = (user: IUserInfo) => {
 }
 
 const onAcceptNotification = async () => {
-  if (userStore.userState.selectedUser) {
-    await onDeleteUser(userStore.userState.selectedUser);
+  if (userStore.selectedUserState.UserInfo) {
+    await onDeleteUser(userStore.selectedUserState.UserInfo);
   }
   displayStore.UpdateNotificationShowingState(false);
 }

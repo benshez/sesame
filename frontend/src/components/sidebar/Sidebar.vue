@@ -8,16 +8,16 @@
       <div class="flex flex-col gap-4 mt-2">
         <h2 class="mb-4 text-xs uppercase flex leading-[20px] justify-start">Menu</h2>
         <ul class="flex flex-col gap-4">
-          <li v-for="(route, routeIndex) in GetTenantRoutes()" :key="routeIndex">
+          <li v-for="(route, routeIndex) in tenantMenuOptions" :key="routeIndex">
             <button @click="OnTenantRouteClick(route?.name?.toString() ?? '')"
               :class="{ 'menu-item group w-full menu-item-inactive lg:justify-start': true, 'menu-item group w-full lg:justify-start menu-dropdown-item-active': route?.name?.toString() === activeItem }">
-              <span class="menu-item-text">{{ route.meta?.name }}</span>
+              <span class="menu-item-text">{{ route.name }}</span>
             </button>
           </li>
-          <li v-for="(route, routeIndex) in GetUserRoutes()" :key="routeIndex">
+          <li v-for="(route, routeIndex) in userMenuOptions" :key="routeIndex" v-show="route.visible">
             <button @click="OnUserRoutesClick(route?.name?.toString() ?? '')"
               :class="{ 'menu-item group w-full menu-item-inactive lg:justify-start': true, 'menu-item group w-full lg:justify-start menu-dropdown-item-active': route?.name?.toString() === activeItem }">
-              <span class="menu-item-text">{{ route.meta?.name }}</span>
+              <span class="menu-item-text">{{ route?.name }}</span>
             </button>
           </li>
         </ul>
@@ -35,12 +35,21 @@ import { useRoutes } from "@/router/useRoutes";
 import { useTenantRoutes } from "@/router/useTenantRoutes";
 import { useUserRoutes } from "@/router/useUserRoutes";
 
+interface IMenuOption {
+  name: string;
+  routeName: string;
+  visible: boolean;
+}
+
 const displayStore = useDisplayStore();
 const router = useRouter();
 const route = useRoute();
 const userId = ref<string | null>(null);
 const tenantId = ref<string | null>(null);
 const activeItem = ref<string>(route.name?.toString() ?? "");
+const userMenuOptions = ref<Array<IMenuOption>>([]);
+const tenantMenuOptions = ref<Array<IMenuOption>>([]);
+
 
 const OnTenantRouteClick = (routeName: string) => {
   router.push(`/${routeName}/${tenantId.value}`);
@@ -57,14 +66,62 @@ const GetParentMenuItems = () => {
   return routes.GetRoutes().filter(route => route?.meta?.isParentRoute === true);
 }
 
-const GetTenantRoutes = () => {
-  const routes = useTenantRoutes();
-  return routes.GetRoutes().filter(route => route?.meta?.isTenantRoute === true);
+
+
+
+const IsVisibleInMenu = async (route: any) => {
+  if (route?.meta?.hasOwnProperty("isVisibleInMenu")) {
+    return await route.meta.isVisibleInMenu();
+  }
+  return true;
 }
 
 const GetUserRoutes = () => {
   const routes = useUserRoutes();
-  return routes.GetRoutes().filter(route => route?.meta?.isUserRoute === true);
+
+  routes.GetRoutes().forEach(route => {
+    if (route?.meta?.hasOwnProperty("isVisibleInMenu") && typeof route.meta.isVisibleInMenu === "function") {
+      route.meta.isVisibleInMenu().then((isVisible: boolean) => {
+        if (isVisible) {
+          userMenuOptions.value.push({
+            name: route.meta?.name?.toString() ?? "",
+            routeName: route.name?.toString() ?? "",
+            visible: isVisible && route?.meta?.isUserRoute === true
+          });
+        }
+      });
+    } else {
+      userMenuOptions.value.push({
+        name: route.meta?.name?.toString() ?? "",
+        routeName: route.name?.toString() ?? "",
+        visible: true && route?.meta?.isUserRoute === true
+      });
+    }
+  });
+}
+
+const GetTenantRoutes = () => {
+  const routes = useTenantRoutes();
+
+  routes.GetRoutes().forEach(route => {
+    if (route?.meta?.hasOwnProperty("isVisibleInMenu") && typeof route.meta.isVisibleInMenu === "function") {
+      route.meta.isVisibleInMenu().then((isVisible: boolean) => {
+        if (isVisible) {
+          tenantMenuOptions.value.push({
+            name: route.meta?.name?.toString() ?? "",
+            routeName: route.name?.toString() ?? "",
+            visible: isVisible && route?.meta?.isTenantRoute === true
+          });
+        }
+      });
+    } else {
+      tenantMenuOptions.value.push({
+        name: route.meta?.name?.toString() ?? "",
+        routeName: route.name?.toString() ?? "",
+        visible: true && route?.meta?.isTenantRoute === true
+      });
+    }
+  });
 }
 
 onMounted(async () => {
@@ -72,6 +129,8 @@ onMounted(async () => {
     userId.value = await Session.getUserId();
     tenantId.value = localStorage.getItem("tenantId") ?? "public";
   }
+  GetUserRoutes();
+  GetTenantRoutes();
 });
 
 </script>

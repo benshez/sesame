@@ -18,10 +18,14 @@ export const useUserStore = defineStore("user", () => {
     Users: [] as Array<IUserInfo>,
     UserInfo: {} as IUserInfo,
     UserMetaData: {} as IUserMetaData,
-    selectedUser: {} as IUserInfo,
     userTableRows: [] as Array<ITableRow>,
     userRolesTableRows: [] as Array<ITableRow>,
     nextPaginationToken: "get-tenant-users-next-pagination-token" as string,
+  });
+  const selectedUserState = ref({
+    Users: [] as Array<IUserInfo>,
+    UserInfo: {} as IUserInfo,
+    UserMetaData: {} as IUserMetaData,
   });
 
   const GetTabs = () => {
@@ -103,7 +107,7 @@ export const useUserStore = defineStore("user", () => {
     const rows: Array<ITableRow> = [];
 
     allRoles.forEach((role: IRole) => {
-      const hasRole = userState.value.UserInfo.roles?.includes(role.roleId || "") || false;
+      const hasRole = selectedUserState.value.UserInfo.roles?.includes(role.roleId || "") || false;
 
       const toggleComponent = {
         name: "Toggle",
@@ -185,7 +189,25 @@ export const useUserStore = defineStore("user", () => {
 
     Object.assign(userState.value.UserInfo, user);
 
-    const userRoles = await GetRolesForSelectedUser();
+    const userRoles = await GetRolesForSelectedUser(userId);
+    userState.value.UserInfo.roles = userRoles;
+
+    return user;
+  }
+
+  const GetSelectedUserInfo = async (userId: string) => {
+    selectedUserState.value.UserInfo = {} as IUserInfo;
+    selectedUserState.value.UserInfo.roles = [];
+
+    const user = await apiClient
+      .setBearerAuth(await GetAccessToken())
+      .users()
+      .userInfo(userId)
+
+    Object.assign(selectedUserState.value.UserInfo, user);
+
+    const userRoles = await GetRolesForSelectedUser(userId);
+    selectedUserState.value.UserInfo.roles = userRoles;
 
     return user;
   }
@@ -198,8 +220,8 @@ export const useUserStore = defineStore("user", () => {
       userId: userId === GetUserIdFromRoute() ? userId : GetUserIdFromRoute()
     };
 
-    if (userState.value.selectedUser.id !== payload.userId) {
-      payload.userId = userState.value.selectedUser.id;
+    if (selectedUserState.value.UserInfo.id !== payload.userId) {
+      payload.userId = selectedUserState.value.UserInfo.id;
     }
 
     return await apiClient
@@ -209,14 +231,22 @@ export const useUserStore = defineStore("user", () => {
   }
 
   const GetUserMetaData = async (userId: string) => {
-    userState.value.UserMetaData = {} as IUserMetaData;
+    const isLoggedinUser = userId === await GetUserId();
 
     const response: any = await apiClient
       .setBearerAuth(await GetAccessToken())
       .users()
       .getUserMetadata(userId);
 
+    if (isLoggedinUser) {
+      userState.value.UserMetaData = {} as IUserMetaData;
+      Object.assign(userState.value.UserMetaData, response.metadata);
+    }
+
+    selectedUserState.value.UserMetaData = {} as IUserMetaData;
+
     Object.assign(userState.value.UserMetaData, response.metadata);
+    Object.assign(selectedUserState.value.UserMetaData, response.metadata);
 
     return response.metadata;
   }
@@ -241,6 +271,14 @@ export const useUserStore = defineStore("user", () => {
     }
 
     return false;
+  }
+
+  const UserHasRole = async (roleId: string): Promise<boolean> => {
+    if(!await Session.doesSessionExist()) return false;
+    const userId = await GetUserId();
+    await GetUserInfo(userId);
+
+    return userState.value.UserInfo.roles?.includes(roleId || "") || false;
   }
 
   const VerifyOrUnverifyUserEmail = async (user: IUserInfo) => {
@@ -287,6 +325,18 @@ export const useUserStore = defineStore("user", () => {
       .addRoleToUser(userInfo);
   }
 
+  const RemoveRoleFromUser = async (userId: string, roleId: string) => {
+    const userInfo = {
+      userId: userId,
+      roleId: roleId
+    }
+
+    await apiClient
+      .setBearerAuth(await GetAccessToken())
+      .users()
+      .removeRoleFromUser(userInfo);
+  }
+
   const RemoveUser = async (user: IUserInfo) => {
     await apiClient
       .setBearerAuth(await GetAccessToken())
@@ -300,24 +350,28 @@ export const useUserStore = defineStore("user", () => {
   }
 
   const UpdateSelectedUserState = (user: IUserInfo) => {
-    Object.assign(userState.value.selectedUser, user);
+    Object.assign(selectedUserState.value.UserInfo, user);
   }
 
   const GetRolesForSelectedUser = async (userId: string = ""): Promise<Array<string>> => {
-    if (userId === "") userId = userState.value.selectedUser.id;
+    selectedUserState.value.UserInfo.roles = [];
+
+    if (userId === "") userId = selectedUserState.value.UserInfo.id;
     const userRoles = await apiClient
       .setBearerAuth(await GetAccessToken())
       .users()
       .getUserRoles(userId) as unknown as Array<string>;
 
-    userState.value.UserInfo.roles = userRoles;
+    selectedUserState.value.UserInfo.roles = userRoles;
 
     return userRoles as unknown as Array<string>;
   }
 
   return {
     userState,
+    selectedUserState,
     GetUserInfo,
+    GetSelectedUserInfo,
     GetUserMetaData,
     SaveUserMetaData,
     SendVerificationEmail,
@@ -333,6 +387,8 @@ export const useUserStore = defineStore("user", () => {
     VerifyOrUnverifyUserEmail,
     GetRolesForSelectedUser,
     RemoveUser,
-    AddRoleToUser
+    AddRoleToUser,
+    RemoveRoleFromUser,
+    UserHasRole
   }
 })

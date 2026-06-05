@@ -44,6 +44,12 @@ class UserRoutes extends BaseRoute<UserController> {
 
     this
       .router
+      .post("/remove-role-from-user", verifySession(), async (req, res, next) => {
+        return await this.controller.RemoveRoleFromUser(req, res, next);
+      })      
+
+    this
+      .router
       .post("/update-user-email-password", verifySession(), async (req, res, next) => {
         return await this.controller.UpdateUserPasswordAndEmail(req, res, next);
       })

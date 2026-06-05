@@ -19,6 +19,12 @@ export interface IUserService {
   } | {
     status: "UNKNOWN_ROLE_ERROR";
   }>
+  RemoveRoleFromUser(request: IUserRequest): Promise<{
+    status: "OK";
+    didUserHaveRole: boolean;
+  } | {
+    status: "UNKNOWN_ROLE_ERROR";
+  }>;
   GetUserRoles(request: IUserRequest): Promise<{
     status: "OK";
     roles: Array<string>;

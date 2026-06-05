@@ -127,9 +127,10 @@ const CreateSummary = async () => {
 
 const ShowPersonalInfoModal = async () => {
   isPersonalInfofoModal.value = true;
+  const userId = GetUserId();
 
   if (await Session.doesSessionExist()) {
-    if (!userStore.userState.UserMetaData) await userStore.GetUserMetaData(GetUserId());
+    if (!userStore.userState.UserMetaData) await userStore.GetUserMetaData(userId);
     formStore.bind(userStore.userState.UserMetaData);
   }
 }
