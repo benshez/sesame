@@ -28,3 +28,4 @@ router.afterEach((to, from) => {
 })
 
 export default router;
+

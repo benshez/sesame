@@ -1,0 +1,1 @@
+export type { IMenuOption } from "@/interfaces/sidebar/IMenuOption";

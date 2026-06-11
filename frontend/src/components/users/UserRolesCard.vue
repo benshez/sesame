@@ -5,10 +5,11 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import Table from "@/components/elements/Table.vue";
-import { useRoleStore, useUserStore } from "@/store";
+import { useRoleStore, useUserStore, useDisplayStore } from "@/store";
 
 const roleStore = useRoleStore();
 const userStore = useUserStore();
+const displayStore = useDisplayStore();
 
 const onToggleRole = async (option: Record<string, any>, e: Event) => {
   const isChecked = (e.target as HTMLInputElement).checked;
@@ -16,9 +17,9 @@ const onToggleRole = async (option: Record<string, any>, e: Event) => {
     if (isChecked) {
       await userStore.AddRoleToUser(userStore.selectedUserState.UserInfo.id, option.roleId);
     } else {
-      console.log("Mounted UserRolesCard", option, isChecked);
       await userStore.RemoveRoleFromUser(userStore.selectedUserState.UserInfo.id, option.roleId);
     }
+    displayStore.InitializeMenuOptions();
   }
 }
 
