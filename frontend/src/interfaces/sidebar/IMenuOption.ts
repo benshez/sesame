@@ -1,6 +1,6 @@
 
 export interface IMenuOption {
-  name: string;
+  description: string;
   routeName: string;
   visible: boolean;
   isParentRoute?: boolean;

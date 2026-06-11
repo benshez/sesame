@@ -5,15 +5,13 @@ import { useLocalStorage } from "@vueuse/core";
 import type { IMenuOption } from "@/interfaces";
 import { useUserRoutes } from "@/router/useUserRoutes";
 import { useTenantRoutes } from "@/router/useTenantRoutes";
+import { useRoutes } from "@/router/useRoutes";
 
 export const useDisplayStore = defineStore("auth", () => {
   const displayState = ref(useLocalStorage("sesame.display.state", {
     loaderShowing: false,
     sidebarShowing: false,
-    siderMenuItems: {
-      userMenuOptions: [] as Array<IMenuOption>,
-      tenantMenuOptions: [] as Array<IMenuOption>
-    },
+    siderbarMenuItems: [] as Array<IMenuOption>,
     menuShowing: false,
     profileListShowing: false,
     darkMode: false,
@@ -31,58 +29,48 @@ export const useDisplayStore = defineStore("auth", () => {
         return await route.meta.isVisibleInMenu();
       }
 
-      return true;
+      return route.meta.isVisibleInMenu as boolean;
     }
 
     return true;
   }
 
-  const IsUserRoute = (route: RouteRecordRaw) => {
-    return route?.meta?.isUserRoute === true;
-  }
-
-  const IsTenantRoute = (route: RouteRecordRaw) => {
-    return route?.meta?.isTenantRoute === true;
-  }
-
   const IsRouteVisible = async (route: RouteRecordRaw) => {
-    const isVisibleInMenu = await IsVisibleInMenu(route);
-    const isUserRoute = IsUserRoute(route);
-    const isTenantRoute = IsTenantRoute(route);
-
-    return isVisibleInMenu && (isUserRoute || isTenantRoute);
+    return await IsVisibleInMenu(route);
   }
 
-  const FilterMenuItems = async (routes: Array<RouteRecordRaw>): Promise<Array<IMenuOption>> => {
+  const FilterMenuItems = async () => {
     const menuOptions: Array<IMenuOption> = [];
-    
-    for (const route of routes) {
-      const isVisible: boolean = await IsRouteVisible(route);
-  
-      menuOptions.push({
-        name: route.meta?.name?.toString() ?? "",
-        routeName: route.name?.toString() ?? "",
-        isParentRoute: route?.meta?.isParentRoute as boolean ?? false,
-        visible: isVisible ? isVisible && (IsUserRoute(route) || IsTenantRoute(route)) : false && (IsUserRoute(route) || IsTenantRoute(route))
-      });
+
+    for (const route of useRoutes().GetRoutes() as Array<RouteRecordRaw>) {
+      if (route.children?.length ?? 0 > 0) {
+        menuOptions.push({
+          description: route.meta?.name?.toString() ?? "",
+          routeName: route.name?.toString() ?? "",
+          isParentRoute: true,
+          visible: true
+        });
+
+        for (const childRoute of route.children as Array<RouteRecordRaw>) {
+          const isVisible: boolean = await IsRouteVisible(childRoute);
+
+          if (isVisible) {
+            menuOptions.push({
+              description: childRoute.meta?.name?.toString() ?? "",
+              routeName: childRoute.name?.toString() ?? "",
+              isParentRoute: childRoute?.meta?.isParentRoute as boolean ?? false,
+              visible: isVisible
+            });
+          }
+        }
+      }
     }
 
-    return menuOptions;
-  }
-
-  const GetUserRoutes = async () => {
-    const routes = useUserRoutes();
-    displayState.value.siderMenuItems.userMenuOptions = await FilterMenuItems(routes.GetRoutes());
-  }
-
-  const GetTenantRoutes = async () => {
-    const routes = useTenantRoutes();
-    displayState.value.siderMenuItems.tenantMenuOptions = await FilterMenuItems(routes.GetRoutes());
+    displayState.value.siderbarMenuItems = menuOptions;
   }
 
   const InitializeMenuOptions = async () => {
-    await GetUserRoutes();
-    await GetTenantRoutes();
+    await FilterMenuItems();
   }
 
   const UpdateLoaderShowingState = (show: boolean) => {
