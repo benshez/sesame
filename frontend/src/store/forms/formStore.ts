@@ -38,8 +38,10 @@ export const useFormStore = defineStore("form", () => {
         break;
       case "map":
         elements = useEventView().GetElements();
+        break;
       case "roles":
         elements = useRoleView().GetElements();
+        break;
     }
 
     formState.value.elements = elements as Array<IElement>;

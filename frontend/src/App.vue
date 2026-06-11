@@ -5,12 +5,28 @@
 import { onMounted } from "vue";
 import { RouterView } from "vue-router";
 import { useDisplayStore } from "@/store";
-import * as Session from "supertokens-web-js/recipe/session";
 
 const displayStore = useDisplayStore();
 
 onMounted(async () => {
-  displayStore.UpdateHasSessionState(await Session.doesSessionExist());
-});
+  document.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+    const isSidebarButton = ["sidebarShowButton", "sidebarIsShownButton"].includes(target.id);
 
+    if (!isSidebarButton && displayStore.displayState.sidebarShowing) {
+      displayStore.UpdateSidebarShowingState(!displayStore.displayState.sidebarShowing);
+    }
+
+    const isMenuButton = ["menuShowButton", "menuIsShownButton"].includes(target.id);
+    const isProfileButton = ["profileShownButton", "profileIsShownButton"].includes(target.id);
+
+    if ((!isMenuButton && !isProfileButton) && displayStore.displayState.menuShowing) {
+      displayStore.UpdateMenuShowingState(!displayStore.displayState.menuShowing);
+
+      if (!isProfileButton && displayStore.displayState.profileListShowing) {
+        displayStore.UpdateProfileShowingState(false);
+      }
+    }
+  });
+})
 </script>

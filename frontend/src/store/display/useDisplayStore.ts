@@ -58,10 +58,11 @@ export const useDisplayStore = defineStore("auth", () => {
     
     for (const route of routes) {
       const isVisible: boolean = await IsRouteVisible(route);
-
+  
       menuOptions.push({
         name: route.meta?.name?.toString() ?? "",
         routeName: route.name?.toString() ?? "",
+        isParentRoute: route?.meta?.isParentRoute as boolean ?? false,
         visible: isVisible ? isVisible && (IsUserRoute(route) || IsTenantRoute(route)) : false && (IsUserRoute(route) || IsTenantRoute(route))
       });
     }

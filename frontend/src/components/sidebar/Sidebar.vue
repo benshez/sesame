@@ -9,16 +9,22 @@
         <h2 class="mb-4 text-xs uppercase flex leading-[20px] justify-start">Menu</h2>
         <ul class="flex flex-col gap-4">
           <li v-for="(route, routeIndex) in displayStore.displayState.siderMenuItems.tenantMenuOptions" :key="routeIndex">
-            <button @click="OnTenantRouteClick(route?.name?.toString() ?? '')"
+            <button v-if="!route.isParentRoute" @click="OnTenantRouteClick(route.routeName)"
               :class="{ 'menu-item group w-full menu-item-inactive lg:justify-start': true, 'menu-item group w-full lg:justify-start menu-dropdown-item-active': route?.name?.toString() === activeItem }">
               <span class="menu-item-text">{{ route.name }}</span>
             </button>
+            <span v-else class="menu-item group w-full menu-item-inactive lg:justify-start cursor-default">
+              <span class="menu-item-text">{{ route?.name }}</span>
+            </span>            
           </li>
           <li v-for="(route, routeIndex) in displayStore.displayState.siderMenuItems.userMenuOptions" :key="routeIndex" v-show="route.visible">
-            <button @click="OnUserRoutesClick(route?.name?.toString() ?? '')"
+            <button v-if="!route.isParentRoute" @click="OnUserRoutesClick(route.routeName)"
               :class="{ 'menu-item group w-full menu-item-inactive lg:justify-start': true, 'menu-item group w-full lg:justify-start menu-dropdown-item-active': route?.name?.toString() === activeItem }">
               <span class="menu-item-text">{{ route?.name }}</span>
             </button>
+            <span v-else class="menu-item group w-full menu-item-inactive lg:justify-start cursor-default">
+              <span class="menu-item-text">{{ route?.name }}</span>
+            </span>
           </li>
         </ul>
       </div>

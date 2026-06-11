@@ -162,7 +162,7 @@ export const useEventView = () => {
         "isValid": true,
         "isValidIf": (): boolean => {
           const distance: IElement = GetElement("distance");
-          const traveled = distance.value.replace("km","");
+          //const traveled = distance.value.replace("km","");
 
           return validators.IsMinimunCharacterLength(distance, 3);
         },

@@ -40,7 +40,7 @@ export const useRoutes = () => {
       {
         path: "/auth/callback/:provider",
         name: "authcallback",
-        component: () => AuthCallbackView,
+        component: AuthCallbackView,
       },
       {
         path: "/dashboard",
