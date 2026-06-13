@@ -3,18 +3,18 @@
     enter-to-class="translate-x-0" leave-from-class="translate-x-0"
     leave-active-class="transition-transform duration-300 ease-in-out" leave-to-class="translate-x-[-100%]">
     <aside ref="sideBar" v-if="displayStore.displayState.sidebarShowing"
-      class="fixed left-0 top-0 h-full w-64 z-50 border-r xl:relative px-5 py-5">
+      class="show-sidebar-trigger fixed left-0 top-0 h-full w-64 z-50 border-r xl:relative px-5 py-5">
       <div class="flex justify-start mb-5 text-xl">{{ configuration.AppTitle }}</div>
       <div class="flex flex-col gap-4 mt-2">
         <h2 class="mb-4 text-xs uppercase flex leading-[20px] justify-start">Menu</h2>
         <ul class="flex flex-col gap-4">
           <li v-for="(route, routeIndex) in displayStore.displayState.siderbarMenuItems" :key="routeIndex">
             <button v-if="!route.isParentRoute" @click="OnRouteClick(route)"
-              :class="{ 'menu-item group w-full menu-item-inactive lg:justify-start': true, 'menu-item group w-full lg:justify-start menu-dropdown-item-active': route?.routeName?.toString() === activeItem }">
-              <span class="menu-item-text">{{ route.description }}</span>
+              :class="{ 'menu-item group w-full menu-item-inactive lg:justify-start show-sidebar-trigger': true, 'menu-item group w-full lg:justify-start menu-dropdown-item-active show-sidebar-trigger': route?.routeName?.toString() === activeItem }">
+              <span class="menu-item-text show-sidebar-trigger">{{ route.description }}</span>
             </button>
-            <span v-else class="menu-item group w-full menu-item-inactive lg:justify-start cursor-default">
-              <span class="menu-item-text">{{ route?.description }}</span>
+            <span v-else class="menu-item group w-full menu-item-inactive lg:justify-start cursor-default show-sidebar-trigger">
+              <span class="menu-item-text show-sidebar-trigger">{{ route?.description }}</span>
             </span>
           </li>
         </ul>
@@ -23,15 +23,12 @@
   </Transition>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { type RouteRecordRaw } from "vue-router";
+import { ref, onMounted, onBeforeUnmount, useTemplateRef } from "vue";
 import { useDisplayStore } from "@/store";
 import { useRouter, useRoute } from "vue-router";
 import { configuration } from "@/utilities";
 import * as Session from "supertokens-web-js/recipe/session";
-import { useRoutes } from "@/router/useRoutes";
 import type { IMenuOption } from "@/interfaces";
-
 
 const displayStore = useDisplayStore();
 const router = useRouter();
@@ -39,6 +36,7 @@ const route = useRoute();
 const userId = ref<string | null>(null);
 const tenantId = ref<string | null>(null);
 const activeItem = ref<string>(route.name?.toString() ?? "");
+const target = useTemplateRef("sideBar");
 
 
 const OnRouteClick = (menuItem: IMenuOption) => {
@@ -60,12 +58,19 @@ const OnRouteClick = (menuItem: IMenuOption) => {
   })
 }
 
+const OnClickOutside = (e: Event) => {
+  const sender = e.target as HTMLElement;
+  e.preventDefault()
+  e.stopPropagation()
+  if(!target || !target.value) {
+    displayStore.UpdateSidebarShowingState(false);
+  }
 
-
-
-
+}
 
 onMounted(async () => {
+  //document.addEventListener("click", OnClickOutside);
+
   if (await Session.doesSessionExist()) {
     userId.value = await Session.getUserId();
     tenantId.value = localStorage.getItem("tenantId") ?? "public";
@@ -75,4 +80,7 @@ onMounted(async () => {
   await displayStore.InitializeMenuOptions();
 });
 
+onBeforeUnmount(() => {
+  //document.removeEventListener("click", OnClickOutside);
+});
 </script>

@@ -11,6 +11,7 @@ export type { IResources } from "@/interfaces/resources/IResources";
 export type { ITableColumn, ITableRow, ITableRowElement } from "@/interfaces/table";
 export type { IActionButton } from "@/interfaces/button";
 export type { IMenuOption } from "@/interfaces/sidebar/IMenuOption";
+export type { IOutsideClickParams } from "@/interfaces/outsideClick/IOutsideClickParams";
 export type { 
   ILoginMethods, 
   IUserInfo, 

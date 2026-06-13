@@ -3,14 +3,14 @@
     <div class="flex grow flex-col items-center justify-between flex-row xl:px-6 border-b">
       <div
         class="flex w-full items-center justify-between gap-2 border-b px-3 py-3 sm:gap-4 lg:py-4 justify-normal border-b-0 xl:px-0 shadow-none">
-        <DisplaySidebarButton />
+        <DisplaySidebarButton class="click-outside"/>
       </div>
       <div
         class="flex w-full items-center justify-between gap-2 border-b px-3 py-3 sm:gap-4 lg:py-4 justify-normal border-b-0 xl:px-0 shadow-none">
         <div class="w-full items-center justify-between gap-2 flex justify-end">
           <DisplayMenuButton />
           <div class="hidden xl:flex">
-            <MenuItems />
+            <MenuItems class="click-outside" />
           </div>
         </div>
       </div>
@@ -18,7 +18,7 @@
   </header>
   <Transition enter-from-class="opacity-0 translate-y-[-100%]" enter-active-class="transition-all duration-300 ease-out"
     leave-active-class="transition-all duration-300 ease-in" leave-to-class="opacity-0 translate-y-[-100%]">
-    <div v-if="displayStore.displayState.menuShowing" class="sticky top-0 z-99998 flex w-full border-b xl:hidden">
+    <div v-if="displayStore.displayState.menuShowing" class="click-outside sticky top-0 z-99998 flex w-full border-b xl:hidden">
       <MenuItems />
     </div>
   </Transition>
