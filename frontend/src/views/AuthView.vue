@@ -52,14 +52,11 @@ import { ApiClient } from "@/plugins";
 import type { IUserInfo } from "@/interfaces";
 
 const displayStore = useDisplayStore();
-const userStore = useUserStore();
 const router = useRouter();
 const formStore = useFormStore();
 const isSignIn = ref<boolean | true>(true);
 const isVerify = ref<boolean | false>(false);
-
 const apiClient = new ApiClient();
-
 
 const goToSignUp = () => {
   isSignIn.value = false;
@@ -75,19 +72,29 @@ const goToSignIn = () => {
   displayStore.UpdateActionTextState(actionText);
 };
 
+const GetFormValue = (field: string): string => {
+  if (typeof formStore.getElement(field).value === "string") {
+    return formStore.getElement(field).value as string
+  }
+
+  return formStore.getElement(field).value.at(0) as string
+}
+
 const signIn = async (_: Event) => {
+  const payload = [
+    {
+      id: "email",
+      value: GetFormValue("email"),
+    },
+    {
+      id: "password",
+      value: GetFormValue("password"),
+    }
+  ];
+
   const response = await EmailPassword
     .signIn({
-      formFields: [
-        {
-          id: "email",
-          value: formStore.getElement("email").value || "",
-        },
-        {
-          id: "password",
-          value: formStore.getElement("password").value || "",
-        }
-      ],
+      formFields: payload,
     });
 
   if (response.status === "WRONG_CREDENTIALS_ERROR") {
@@ -145,21 +152,21 @@ const signIn = async (_: Event) => {
         .users()
         .userInfo(userId) as unknown as IUserInfo;
 
-      const loginMethod = user.loginMethods[0];
+      //const loginMethod = user.loginMethods[0];
 
-      await apiClient
-        .setBearerAuth(accessToken)
-        .email()
-        .verifyEmail(
-          {
-            tenantId: tenantId as string,
-            userId: user.id,
-            recipeUserId: loginMethod.recipeUserId.recipeUserId as unknown as string
-          });
+      // await apiClient
+      //   .setBearerAuth(accessToken)
+      //   .email()
+      //   .verifyEmail(
+      //     {
+      //       tenantId: tenantId as string,
+      //       userId: user.id,
+      //       recipeUserId: loginMethod.recipeUserId.recipeUserId as unknown as string
+      //     });
     } catch (error) {
       window.location.assign("/auth");
     }
-  } 
+  }
 };
 
 const updateErrorState = (field: string, values: { key: string, value: boolean | string }) => {
@@ -167,16 +174,19 @@ const updateErrorState = (field: string, values: { key: string, value: boolean |
 }
 
 const signUp = async (_: Event) => {
+  const payload = [
+    {
+      id: "email",
+      value: GetFormValue("email"),
+    },
+    {
+      id: "password",
+      value: GetFormValue("password"),
+    }
+  ];
   const response = await EmailPassword.signUp({
     formFields: [
-      {
-        id: "email",
-        value: formStore.getElement("email").value || "",
-      },
-      {
-        id: "password",
-        value: formStore.getElement("password").value || "",
-      },
+      ...payload,
       {
         id: "tenantId",
         value: "public",

@@ -284,7 +284,7 @@ export const useUserStore = defineStore("user", () => {
   const VerifyOrUnverifyUserEmail = async (user: IUserInfo) => {
     const loginMethod = user.loginMethods[0];
 
-    if (loginMethod.verified) {
+    if (!loginMethod.verified) {
       await VerifyUserEmail(user, loginMethod);
     } else {
       await UnVerifyUserEmail(user, loginMethod);
