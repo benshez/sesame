@@ -183,7 +183,6 @@ layer(base);
 
 @layer dark {
   aside,
-
   #sub-navbar,
   .sticky,
   .sticky > div,
@@ -395,7 +394,6 @@ layer(base);
     display: none;
     -webkit-appearance: none;
   }
-
 
   .flatpickr-calendar.static {
     @apply absolute !top-9 !left-0 custom-scrollbar;

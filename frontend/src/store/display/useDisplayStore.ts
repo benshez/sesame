@@ -1,13 +1,13 @@
 import { ref } from "vue";
-import type { RouteRecordRaw } from "vue-router";
+import { type RouteRecordRaw, useRouter, useRoute } from "vue-router";
 import { defineStore, } from "pinia";
 import { useLocalStorage } from "@vueuse/core";
 import type { IMenuOption } from "@/interfaces";
-import { useUserRoutes } from "@/router/useUserRoutes";
-import { useTenantRoutes } from "@/router/useTenantRoutes";
 import { useRoutes } from "@/router/useRoutes";
 
 export const useDisplayStore = defineStore("auth", () => {
+  const routerRoute = useRoute();
+
   const displayState = ref(useLocalStorage("sesame.display.state", {
     loaderShowing: false,
     sidebarShowing: false,
@@ -44,29 +44,46 @@ export const useDisplayStore = defineStore("auth", () => {
 
     for (const route of useRoutes().GetRoutes() as Array<RouteRecordRaw>) {
       if (route.children?.length ?? 0 > 0) {
-        menuOptions.push({
-          description: route.meta?.name?.toString() ?? "",
-          routeName: route.name?.toString() ?? "",
-          isParentRoute: true,
-          visible: true
-        });
+        const children: Array<IMenuOption> = [];
+        const isVisible: boolean = await IsRouteVisible(route);
+        let isOpen: boolean = false;
 
         for (const childRoute of route.children as Array<RouteRecordRaw>) {
-          const isVisible: boolean = await IsRouteVisible(childRoute);
+          const isChildVisible: boolean = await IsRouteVisible(childRoute);
+          const isActive: boolean = (routerRoute.name === childRoute.name);
+          if (isActive) isOpen = isActive;
 
-          if (isVisible) {
-            menuOptions.push({
-              description: childRoute.meta?.name?.toString() ?? "",
-              routeName: childRoute.name?.toString() ?? "",
-              isParentRoute: childRoute?.meta?.isParentRoute as boolean ?? false,
-              visible: isVisible
+          if (isVisible && isChildVisible) {
+            children.push({
+              text: childRoute.meta?.name?.toString() ?? "",
+              link: childRoute.name?.toString() ?? "",
+              visible: isChildVisible,
+              isActive: isActive,
+              icon: childRoute.meta?.icon?.toString() ?? "",
             });
           }
+        }
+
+        if (isVisible) {
+          menuOptions.push({
+            text: route.meta?.name?.toString() ?? "",
+            link: route.name?.toString() ?? "",
+            isOpen: isOpen,
+            visible: true,
+            children: children,
+            icon: route.meta?.icon?.toString() ?? "",
+          });
         }
       }
     }
 
     displayState.value.siderbarMenuItems = menuOptions;
+  }
+
+  const UpdateOpenMenuItemState = (item: IMenuOption) => {
+    displayState.value.siderbarMenuItems.forEach((e: IMenuOption) => {
+      e.isOpen = (e === item)
+    })
   }
 
   const InitializeMenuOptions = async () => {
@@ -120,6 +137,7 @@ export const useDisplayStore = defineStore("auth", () => {
     UpdateCanCalculateMapDistanceState,
     UpdateCanClearMap,
     UpdateNotificationShowingState,
-    InitializeMenuOptions
+    InitializeMenuOptions,
+    UpdateOpenMenuItemState
   }
 })

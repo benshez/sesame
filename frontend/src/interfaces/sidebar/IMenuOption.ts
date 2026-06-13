@@ -1,7 +1,10 @@
 
 export interface IMenuOption {
-  description: string;
-  routeName: string;
+  icon?: string;
+  text: string;
+  link: string;
+  children?: Array<IMenuOption>;
   visible: boolean;
-  isParentRoute?: boolean;
+  isActive?: boolean | undefined | unknown;  
+  isOpen?: boolean;
 }

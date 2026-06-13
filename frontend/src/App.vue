@@ -12,12 +12,12 @@ const outsideClick = useOnOutsideClick();
 
 const OnClickOutside = (e: Event) => {
   const target = e.target as HTMLElement;
-  const triggers: Array<string> = ["show-menu-trigger", "show-sidebar-trigger", "show-profile-trigger"]
-  const triggerMethods: Array<Function> = [displayStore.UpdateMenuShowingState, displayStore.UpdateSidebarShowingState, displayStore.UpdateProfileShowingState];
+  const triggers: Array<string> = ["show-sidebar-trigger"]
+  const triggerMethods: Array<Function> = [displayStore.UpdateSidebarShowingState];
 
   triggers.forEach((trigger: string, index: number) => {
     let show: boolean = target.classList.contains(trigger);
-    if (trigger === triggers.at(0) && displayStore.displayState.profileListShowing) show = displayStore.displayState.profileListShowing
+  
     outsideClick.OnOutsideClick({
       triggerClass: trigger,
       displayMethod: triggerMethods[index],
