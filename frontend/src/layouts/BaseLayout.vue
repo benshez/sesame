@@ -15,7 +15,7 @@
 
 import Menubar from "@/components/menu/Menubar.vue";
 import Sidebar from "@/components/sidebar/Sidebar.vue";
-import { useDisplayStore } from "@/store";
+import { useDisplayStore } from "@/store/display/useDisplayStore";
 
 const displayStore = useDisplayStore();
 

@@ -27,7 +27,7 @@
 import DisplayMenuButton from "@/components/buttons/DisplayMenuButton.vue";
 import DisplaySidebarButton from "@/components/buttons/DisplaySidebarButton.vue";
 import MenuItems from "@/components/menu/MenuItems.vue";
-import { useDisplayStore } from "@/store";
+import { useDisplayStore } from "@/store/display/useDisplayStore";
 
 const displayStore = useDisplayStore();
 

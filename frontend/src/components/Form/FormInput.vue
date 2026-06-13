@@ -33,7 +33,8 @@
 import { useRoute } from "vue-router";
 import { ElementProps } from "@/components/Form/props/Props";
 import FormElement from "@/components/Form/FromElement.vue";;
-import { useFormStore, useDisplayStore } from "@/store";
+import { useFormStore } from "@/store/forms/useFormStore";
+import { useDisplayStore } from "@/store/display/useDisplayStore";
 import type { IElement } from "@/interfaces";
 
 const route = useRoute();

@@ -47,8 +47,9 @@ import FormBody from "@/components/Form/FormBody.vue";
 import LoginProviders from "@/components/LoginProviders/LoginProviders.vue";
 import FormOneColumnLayout from "@/layouts/FormOneColumnLayout.vue";
 import FormBuilder from "@/components/Form/FormBuilder.vue";
-import { useFormStore, useDisplayStore, useUserStore } from "@/store";
-import { ApiClient } from "@/plugins";
+import { useFormStore } from "@/store/forms/useFormStore";
+import { useDisplayStore } from "@/store/display/useDisplayStore";
+import { ApiClient } from "@/plugins/client/ApiClient";
 import type { IUserInfo } from "@/interfaces";
 
 const displayStore = useDisplayStore();

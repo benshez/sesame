@@ -1,6 +1,6 @@
 import type { IElement, IOption, IPage } from "@/interfaces";
 import { useValidators } from "@/utilities";
-import { ApiClient } from "@/plugins";
+import { ApiClient } from "@/plugins/client/ApiClient";
 
 export const useEventView = () => {
   const apiClient = new ApiClient();

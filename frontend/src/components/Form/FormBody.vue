@@ -21,7 +21,7 @@
 import { useRoute } from "vue-router";
 import { toRefs } from "vue";
 import FormBuilder from "@/components/Form/FormBuilder.vue";
-import { useFormStore } from "@/store/forms/formStore";
+import { useFormStore } from "@/store/forms/useFormStore";
 
 const props = defineProps({
   view: {

@@ -60,7 +60,9 @@
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useMap } from "@/utilities";
-import { useEventStore, useFormStore, useDisplayStore } from "@/store";
+import { useEventStore } from "@/store/events/useEventStore";
+import { useFormStore } from "@/store/forms/useFormStore";
+import { useDisplayStore } from "@/store/display/useDisplayStore";
 import type { ICoordinates, IEvent } from "@/interfaces";
 import FormBody from "@/components/Form/FormBody.vue";
 import FormTwoColumnLayout from "@/layouts/FormTwoColumnLayout.vue";

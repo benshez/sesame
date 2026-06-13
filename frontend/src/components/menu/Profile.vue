@@ -46,7 +46,7 @@ import { useRouter } from "vue-router";
 import SVGRouteButton from "@/components/svg/SVGRouteButton.vue";
 import SVGButton from "@/components/svg/SVGButton.vue";
 import * as Session from "supertokens-web-js/recipe/session";
-import { useDisplayStore } from "@/store";
+import { useDisplayStore } from "@/store/display/useDisplayStore";
 
 const displayStore = useDisplayStore();
 const router = useRouter();

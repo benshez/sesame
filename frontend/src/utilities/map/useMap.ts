@@ -2,7 +2,8 @@ import mapboxgl, { type LngLatLike } from "mapbox-gl";
 import { lineString } from "@turf/turf";
 import { configuration } from "@/utilities";
 import type { IMapboxDirections, ILongLat, ICoordinates } from "@/interfaces";
-import { useFormStore, useDisplayStore } from "@/store";
+import { useFormStore } from "@/store/forms/useFormStore";
+import { useDisplayStore } from "@/store/display/useDisplayStore";
 
 export const useMap = () => {
   const displayStore = useDisplayStore();

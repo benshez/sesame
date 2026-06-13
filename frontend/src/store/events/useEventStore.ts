@@ -1,8 +1,8 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import type { IEvent } from "@/interfaces";
-import { ApiClient } from "@/plugins";
-import { useUserStore } from "@/store";
+import { ApiClient } from "@/plugins/client/ApiClient";
+import { useUserStore } from "@/store/user/useUserStore";
 import { useLocalStorage } from "@vueuse/core";
 import type Event from "../../../../shared/interfaces/sesame_model_types/event";
 

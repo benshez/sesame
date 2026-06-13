@@ -11,7 +11,7 @@
 import { ref, onMounted } from "vue";
 import Session from "supertokens-web-js/recipe/session";
 import BaseLayout from "@/layouts/BaseLayout.vue";
-import { ApiClient } from "@/plugins";
+import { ApiClient } from "@/plugins/client/ApiClient";
 
 // Define reactive variables
 const doesSessionExist = ref<boolean | false>(false);

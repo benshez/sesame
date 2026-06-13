@@ -31,7 +31,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useDisplayStore, useUserStore, useRoleStore, useFormStore } from "@/store";
+import { useDisplayStore } from "@/store/display/useDisplayStore";
+import { useUserStore } from "@/store/user/useUserStore";
+import { useRoleStore } from "@/store/role/useRoleStore";
+import { useFormStore } from "@/store/forms/useFormStore";
 import BaseLayout from "@/layouts/BaseLayout.vue";
 import FormBody from "@/components/Form/FormBody.vue";
 import Notification from "@/components/notifications/notification.vue";

@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { type Component, ref } from "vue";
 import Session from "supertokens-web-js/recipe/session";
 import { UserRoleClaim } from "supertokens-web-js/recipe/userroles";
-import { ApiClient } from "@/plugins";
+import { ApiClient } from "@/plugins/client/ApiClient";
 import type { IUserInfo, IUserMetaData, ITableRow, ITableColumn, ILoginMethods } from "@/interfaces";
 import { useRoute } from "vue-router";
 import ActionButtons from "@/components/buttons/ActionButtons.vue";

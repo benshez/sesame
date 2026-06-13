@@ -57,7 +57,7 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { useDisplayStore } from "@/store";
+import { useDisplayStore } from "@/store/display/useDisplayStore";
 import { useRouter, useRoute } from "vue-router";
 import { configuration } from "@/utilities";
 import * as Session from "supertokens-web-js/recipe/session";

@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import SVGDrawer from "@/components/svg/SVGDrawer.vue";
-import { useDisplayStore } from "@/store";
+import { useDisplayStore } from "@/store/display/useDisplayStore";
 
 const displayStore = useDisplayStore();
 

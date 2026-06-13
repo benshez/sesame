@@ -32,7 +32,7 @@ import { ref, onBeforeMount, inject } from "vue";
 import { ElementProps } from "@/components/Form/props/Props";
 import FormElement from "@/components/Form/FromElement.vue";
 import Toggle from "@/components/elements/Toggle.vue";
-import { useFormStore } from "@/store/forms/formStore";
+import { useFormStore } from "@/store/forms/useFormStore";
 import type { IElement, IOption } from "@/interfaces";
 
 const props = defineProps({

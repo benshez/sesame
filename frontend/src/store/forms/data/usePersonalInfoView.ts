@@ -1,6 +1,6 @@
 import type { IElement, IPage } from "@/interfaces";
 import { useValidators } from "@/utilities";
-import { ApiClient } from "@/plugins";
+import { ApiClient } from "@/plugins/client/ApiClient";
 
 export const usePersonalInfoView = () => {
   const validators = useValidators();

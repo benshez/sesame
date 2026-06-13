@@ -101,9 +101,9 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { DateTime } from "ts-luxon";
 import Modal from "@/components/profile/Modal.vue";
 import BaseLayout from "@/layouts/BaseLayout.vue";
-import { useEventStore } from "@/store";
+import { useEventStore } from "@/store/events/useEventStore";
 import type { IEvent, IStatus } from "@/interfaces";
-import { ApiClient } from "@/plugins";
+import { ApiClient } from "@/plugins/client/ApiClient";
 import type Event from "../../../shared/interfaces/sesame_model_types/event";
 
 

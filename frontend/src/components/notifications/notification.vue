@@ -29,7 +29,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useDisplayStore } from "@/store";
+import { useDisplayStore } from "@/store/display/useDisplayStore";
 const displayStore = useDisplayStore();
 
 const props = defineProps({

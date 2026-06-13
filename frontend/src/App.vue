@@ -4,7 +4,7 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount } from "vue";
 import { RouterView } from "vue-router";
-import { useDisplayStore } from "@/store";
+import { useDisplayStore } from "@/store/display/useDisplayStore";
 import { useOnOutsideClick } from "@/plugins";
 
 const displayStore = useDisplayStore();

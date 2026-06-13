@@ -45,7 +45,9 @@ import Table from "@/components/elements/Table.vue";
 import BaseLayout from "@/layouts/BaseLayout.vue";
 import FormBody from "@/components/Form/FormBody.vue";
 import Notification from "@/components/notifications/notification.vue";
-import { useRoleStore, useFormStore, useDisplayStore } from "@/store";
+import { useRoleStore } from "@/store/role/useRoleStore";
+import { useFormStore } from "@/store/forms/useFormStore";
+import { useDisplayStore } from "@/store/display/useDisplayStore";
 import type { IRole } from "../../../shared/interfaces";
 
 const roleStore = useRoleStore();

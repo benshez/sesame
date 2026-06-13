@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 import { type Component, ref } from "vue";
-import { ApiClient } from "@/plugins";
-import { useFormStore, useUserStore } from "@/store";
+import { ApiClient } from "@/plugins/client/ApiClient";
+import { useFormStore } from "@/store/forms/useFormStore";
+import { useUserStore } from "@/store/user/useUserStore";
 import type { IRole } from "../../../../shared/interfaces";
 import type { ITableColumn, ITableRow } from "@/interfaces";
 import ActionButtons from "@/components/buttons/ActionButtons.vue";

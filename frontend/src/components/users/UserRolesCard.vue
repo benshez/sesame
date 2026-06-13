@@ -5,7 +5,9 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import Table from "@/components/elements/Table.vue";
-import { useRoleStore, useUserStore, useDisplayStore } from "@/store";
+import { useRoleStore } from "@/store/role/useRoleStore";
+import { useUserStore } from "@/store/user/useUserStore";
+import { useDisplayStore } from "@/store/display/useDisplayStore";
 
 const roleStore = useRoleStore();
 const userStore = useUserStore();

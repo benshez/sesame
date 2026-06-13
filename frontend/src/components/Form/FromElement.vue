@@ -15,7 +15,7 @@
 </template>
 <script lang="ts" setup>
 import { ElementProps } from "@/components/Form/props/Props";
-import { useFormStore } from "@/store/forms/formStore";
+import { useFormStore } from "@/store/forms/useFormStore";
 import type { IElement } from "@/interfaces";
 
 const formStore = useFormStore();

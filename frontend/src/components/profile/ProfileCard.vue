@@ -79,7 +79,8 @@ import { ref, onBeforeMount } from "vue";
 import * as Session from "supertokens-web-js/recipe/session";
 import Modal from "@/components/profile/Modal.vue";
 import FormBody from "@/components/Form/FormBody.vue";
-import { useUserStore, useFormStore } from "@/store";
+import { useFormStore } from "@/store/forms/useFormStore";
+import { useUserStore } from "@/store/user/useUserStore";
 import ProfileIcon from "@/components/svg/ProfileIcon.vue";
 import SocialIcons from "@/components/svg/SocialIcons.vue"
 import EditIcon from "@/components/svg/EditIcon.vue";

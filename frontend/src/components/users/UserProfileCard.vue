@@ -25,7 +25,8 @@
 import { onMounted } from "vue";
 import FormBody from "@/components/Form/FormBody.vue";
 import * as Session from "supertokens-web-js/recipe/session";
-import { useUserStore, useFormStore } from "@/store";
+import { useUserStore } from "@/store/user/useUserStore";
+import { useFormStore } from "@/store/forms/useFormStore";
 import type { IUserMetaData } from "@/interfaces";
 import { useObjectHelper } from "@/utilities";
 

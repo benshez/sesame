@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { useDisplayStore } from "@/store"
+import { useDisplayStore } from "@/store/display/useDisplayStore"
 import { configuration } from "@/utilities";
 import { useRoutes } from "@/router/useRoutes";
 

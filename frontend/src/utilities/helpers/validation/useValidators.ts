@@ -1,12 +1,23 @@
 import validator from "validator";
 import type { IElement } from "@/interfaces";
-import { ApiClient } from "@/plugins";
+import { ApiClient } from "@/plugins/client/ApiClient";
 
 export const useValidators = () => {
   const apiClient = new ApiClient();
 
+  const GetElementValue = (element: IElement): string => {
+    let value: string = "";
+
+    if (typeof element.value === "string") {
+      value = element.value;
+    } else {
+      value = element.value.at(0) as string;
+    }
+;
+    return value
+  }
   const IsEmpty = (element: IElement): boolean => {
-    if (element.isRequired) return validator.isEmpty(element.value);
+    if (element.isRequired) return validator.isEmpty(GetElementValue(element));
 
     return true;
   }
@@ -34,7 +45,7 @@ export const useValidators = () => {
 
     if (isEmpty) return false;
 
-    return validator.isEmail(element.value);
+    return validator.isEmail(GetElementValue(element));
   }
 
   const IsStrongPassword = (element: IElement, matchedElement: IElement = {} as IElement): boolean => {
@@ -43,7 +54,7 @@ export const useValidators = () => {
 
     if (isEmpty || !isMatchedElement) return false;
 
-    return validator.isStrongPassword(element.value, {
+    return validator.isStrongPassword(GetElementValue(element), {
       minLength: 8,
       minLowercase: 1,
       minUppercase: 1,
@@ -74,7 +85,7 @@ export const useValidators = () => {
       .countries() as unknown as [];
 
     data.forEach((place: any) => {
-      if (place.description.toLowerCase() === element.value.toLowerCase()) found = true;
+      if (place.description.toLowerCase() === GetElementValue(element).toLowerCase()) found = true;
     })
 
     return found;

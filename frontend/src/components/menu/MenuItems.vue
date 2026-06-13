@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import DisplayModeButton from "@/components/buttons/DisplayModeButton.vue";
 import Profile from "@/components/menu/Profile.vue";
-import { useDisplayStore } from "@/store";
+import { useDisplayStore } from "@/store/display/useDisplayStore";
 
 const displayStore = useDisplayStore();
 </script>

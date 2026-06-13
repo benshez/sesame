@@ -35,7 +35,7 @@ import { ref, onBeforeMount } from "vue";
 import { useRoute } from "vue-router";
 import { ElementProps } from "@/components/Form/props/Props";
 import FormElement from "@/components/Form/FromElement.vue";
-import { useFormStore } from "@/store/forms/formStore";
+import { useFormStore } from "@/store/forms/useFormStore";
 import type { IOption } from "@/interfaces";
 
 const route = useRoute();

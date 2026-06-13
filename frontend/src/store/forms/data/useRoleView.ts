@@ -1,6 +1,7 @@
 import type { IElement, IOption, IPage } from "@/interfaces";
 import { useValidators } from "@/utilities";
-import { useRoleStore, useUserStore } from "@/store";
+import { useRoleStore } from "@/store/role/useRoleStore";
+import { useUserStore } from "@/store/user/useUserStore";
 
 export const useRoleView = () => {
   const validators = useValidators();
