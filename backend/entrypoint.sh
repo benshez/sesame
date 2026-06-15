@@ -1,3 +1,3 @@
-npm install
+npx install
 npx run create-migrations
-npm run build-only
+npx run build-only
