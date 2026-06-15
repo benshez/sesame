@@ -73,7 +73,7 @@ Loader.Load();
 app.use(errorHandler);
 
 app.listen(3001, () => {
-  console.log(`API Server listening on port ${useBackendConfig().GetApiDomain()} || 3001`);
+  //console.log(`API Server listening on port ${useBackendConfig().GetApiDomain()} || 3001`);
   // const routes = [];
   // let route;
   // app._router.stack.forEach(function (middleware: any) {

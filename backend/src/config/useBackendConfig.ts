@@ -3,22 +3,24 @@ import * as dotenvx from "@dotenvx/dotenvx";
 export const useBackendConfig = () => {
 
   const GetEnvironment = (): string => {
-    let environment = "env.development";
+    let environment = ".env.development";
 
     switch (process.env.NODE_ENV?.trim()) {
       case "development":
-        environment = "env.development";
+        environment = ".env.development";
         break;
       case "test":
-        environment = "env.test";
+        environment = ".env.test";
         break;
       case "production":
         environment = ".env.production";
         break;
       default:
-        environment = "env.development"
+        environment = ".env.development"
         break;
     }
+
+    if (!environment) throw new Error('environment is missing');
 
     return `environment/${environment}`;
   }

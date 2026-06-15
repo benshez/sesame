@@ -9,6 +9,7 @@ export class TenantController extends BaseController<ITenantService> {
   public Id: string = "TenantsController";
   private request = new TenantRequest();
 
+/* @ts-expect-error Description */
   GetTenants = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const reponse = await this.ControllerService.GetTenants();

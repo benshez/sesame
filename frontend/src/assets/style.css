@@ -209,10 +209,10 @@ layer(base);
     @apply dark:bg-gray-900;
   }
 
-  .fc-next-button::before,
-  .fc-prev-button::before,
   .flatpickr-am-pm,
-  .flatpickr-time input {
+  .flatpickr-time input,
+  .fc-next-button::before,
+  .fc-prev-button::before{
     @apply dark:bg-gray-dark!;
   }
 
@@ -265,10 +265,10 @@ layer(base);
     @apply base:text-gray-400;
   }
 
-  .fc-next-button::before,
-  .fc-prev-button::before  
   .flatpickr-am-pm,
-  .flatpickr-time input  {
+  .flatpickr-time input,
+  .fc-next-button::before,
+  .fc-prev-button::before  {
     @apply base:bg-white;
   }  
 

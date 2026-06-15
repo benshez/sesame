@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CustomError } from "./index";
 
+/* @ts-expect-error Description */
 export const errorHandler = (err: Error, req: Request, res: Response) => {
   switch (true) {
     case err instanceof CustomError:

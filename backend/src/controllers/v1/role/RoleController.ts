@@ -9,6 +9,7 @@ export class RoleController extends BaseController<IRoleService> {
   public Id: string = "RoleController";
   private request = new RoleRequest();
 
+  /* @ts-expect-error Description */
   GetRoles = async (req: SessionRequest, res: Response, next: NextFunction) => {
     try {
       const response = await this.ControllerService.GetRoles();

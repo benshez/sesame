@@ -6,20 +6,23 @@ FROM node:lts-alpine AS backend-dev-stage
 WORKDIR /app
 
 # Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+COPY package*.json ./app
 
 # Install dependencies
 RUN npm install
 
 # Copy the rest of the application code
-COPY . .
+COPY . ./app
+
+COPY --from=shared-context . ./shared
 
 # Expose the port the app runs on
-EXPOSE 3000
+EXPOSE 80
 
 # Define the command to run the app
-RUN npm run start
+RUN npm run build
 
+CMD ["node","index.js"]
 
 # Production stage
 #FROM node:lts AS prod-stage

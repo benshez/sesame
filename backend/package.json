@@ -6,6 +6,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "build-only": "npm run build",
     "encrypt": "cd environment && dotenvx encrypt touch '.env.development'",
     "start": "set NODE_ENV=production && npx vite-node ./index.ts",
     "lint": "eslint .",
@@ -35,6 +36,7 @@
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.17",
     "@types/node": "^16.11.38",
+    "typescript": "^6.0.3",
     "eslint": "^9.16.0",
     "globals": "^15.13.0",
     "typescript-eslint": "^8.18.0",

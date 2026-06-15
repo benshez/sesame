@@ -4,6 +4,9 @@
   "description": "",
   "main": "./src/index.js",
   "scripts": {
+    "build-only": "npm run build-frontend-only",
+    "build-frontend-only": "cd frontend && npm run build-only",
+    "build-backend-only": "",
     "debug": "cd frontend && npm run debug",
     "encrypt:frontend": "cd frontend && npm run encrypt",
     "encrypt:backend": "cd backend && npm run encrypt",

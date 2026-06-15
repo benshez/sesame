@@ -21,9 +21,9 @@ export default defineConfig({
       convention: "nextjs",
 
       // Advanced options
-      /*applyInBuild: true, // Apply in build mode as well
+      applyInBuild: true, // Apply in build mode as well
       strict: true, // Exit with code 1 if any errors are encountered
-      ignore: ["MISSING_ENV_FILE"], // Ignore specific errors
+      /*ignore: ["MISSING_ENV_FILE"], // Ignore specific errors
       generateExample: true, // Auto-generate .env.example file
       updateGitignore: true, // Auto-add .env.keys to .gitignore
       exposeToClient: ["VITE_._", "PUBLIC_._"], // Expose specific variables to client*/

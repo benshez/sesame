@@ -2,11 +2,10 @@
   "compilerOptions": {
     /* Basic Options */
     "target": "ES2022",
-    "outDir": "./dist",
+    "outDir": "../",
     "rootDir": "../",
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "ignoreDeprecations": "6.0",
     "resolveJsonModule": true,
     "types": [
       "node"
@@ -16,27 +15,6 @@
     "module": "ESNext",
     /* Source Map Options */
     "sourceMap": true,
-    /* Module Resolution Options */
-    "baseUrl": "src",
-    "paths": {
-      "@/*": ["*"],
-      "@models/*": ["models/*"],
-      "@routes/*": [
-        "routes/*"
-      ],
-      "@modelTypes/*": [
-        "model_types/*"
-      ],
-      "@controllers/*": [
-        "controllers/*"
-      ],
-      "@utilities/*": [
-        "utilities/*"
-      ],
-      "@core/*": [
-        "core/*"
-      ],
-    },
     "moduleResolution": "bundler",
     "esModuleInterop": true,
     "skipLibCheck": true,
