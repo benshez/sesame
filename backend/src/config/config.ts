@@ -20,6 +20,7 @@ const smtpSettings = backendConfig.GetSMTPConfig();
 export const SuperTokensConfig: TypeInput = {
   supertokens: {
     connectionURI: `${process.env.SUPERTOKENS_CONNECTION_URL}`,
+    apiKey: `${process.env.SUPERTOKENS_API_KEY}`
   },
   appInfo: {
     appName: `${process.env.APP_NAME}`,
@@ -40,7 +41,6 @@ export const SuperTokensConfig: TypeInput = {
                 {
                   clientId: process.env.GOOGLE_CLIENT_ID as string,
                   clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-
                 },
               ],
             },
@@ -52,7 +52,6 @@ export const SuperTokensConfig: TypeInput = {
                 {
                   clientId: process.env.GITHUB_CLIENT_ID as string,
                   clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-
                 },
               ],
             },
