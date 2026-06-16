@@ -3,6 +3,8 @@ FROM node:lts-alpine  AS backend-dev-stage
 
 RUN apk update && apk add bash
 
+RUN apk add git
+
 # Set working directory
 WORKDIR /app
 
@@ -16,13 +18,14 @@ COPY package*.json ./
 # Install production dependencies only
 RUN npm install
 
-#RUN git clone https://github.com/vishnubob/wait-for-it.git
+RUN npm install db-migrate-pg
 
 COPY . .
 
 COPY --from=shared-context . ./shared
 
 #RUN npm run build
+RUN git clone https://github.com/vishnubob/wait-for-it.git
 
 # Expose the application port
 EXPOSE 3001

@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "build": "tsc",
     "create-db": "npm run create-migrations  && npm run create-models",
-    "create-migrations": "pg-migrations apply --directory src/core/db/migrations --database ***sesame",
+    "create-migrations": "pg-migrations apply --directory src/core/db/migrations --database postgres://sesame_supertokens_user:B3nSh3z*@host.docker.internal:5435/sesame",
     "create-seeds": "pg-migrations apply --directory src/core/db/seeds --database ***sesame",
     "create-models": "npx @databases/pg-schema-cli --database ***sesame --directory ../shared/interfaces/sesame_model_types",
     "create-supertokens-models": "npx @databases/pg-schema-cli --database ***supertokens --directory supertokens_model_types"

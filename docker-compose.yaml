@@ -6,9 +6,10 @@ services:
     env_file:
       - path: "./backend/environment/.env.production"
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_SESAME_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_SESAME_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_SESAME_DB}
+      PGDATA: /data/postgres
       PGPORT: ${PGPORT}
     command:
       - postgres
@@ -25,10 +26,33 @@ services:
       - pgdata:/var/lib/postgresql           
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "sesame_supertokens_user", "-d", "supertokens"]
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_SESAME_USER}", "-d", "postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
+
+  sesame-db-migration:
+    container_name: sesame-db-migration
+    build:
+      context: ./backend
+      additional_contexts:
+        shared-context: ./shared      
+    command:
+      [
+        "./wait-for-it/wait-for-it.sh",
+        "${POSTGRES_SESAME_HOST}:5435",
+        "--",
+        "npm",
+        "run",
+        "create-migrations"
+      ]
+    links:
+      - sesame-db
+    depends_on:
+      - sesame-db
+    env_file: "./backend/environment/.env.production"
+    environment:
+      - DB_HOST=${PG_CONNECTION_STRING}
 
   sesame-frontend:
     build:
