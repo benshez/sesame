@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "encrypt": "cd environment && dotenvx encrypt touch '.env.development'",
-    "debug": "vite --port 3000 --host",
+    "debug": "vite --port 3000 --host --mode=development",
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "build-only": "vite build",

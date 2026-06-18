@@ -10,7 +10,6 @@ import { middleware } from "supertokens-node/framework/express";
 import { SuperTokensConfig } from "./src/config/config";
 //import Multitenancy from "supertokens-node/recipe/multitenancy";
 import { useBackendConfig } from "./src/config/useBackendConfig";
-//import { EmailRoutes, SessionRoutes, LookupRoutes } from "./src/routes";
 import { RouteLoader } from "./src/core/routing";
 import { errorHandler } from "./src/core/error";
 import { xss } from "express-xss-sanitizer";

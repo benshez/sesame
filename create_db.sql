@@ -1,0 +1,2 @@
+CREATE DATABASE sesame;
+GRANT ALL PRIVILEGES ON DATABASE sesame to "postgres";

@@ -9,11 +9,10 @@ import ThirdParty from "supertokens-web-js/recipe/thirdparty";
 import EmailPassword from "supertokens-web-js/recipe/emailpassword";
 import Session from "supertokens-web-js/recipe/session";
 import Multitenancy from "supertokens-web-js/recipe/multitenancy";
+import { configuration } from "@/utilities";
 
 const pinia = createPinia();
-
-const apiPort = import.meta.env.VUE_APP_API_PORT || 3001;
-export const apiDomain = import.meta.env.VUE_APP_API_URL || `http://localhost:${apiPort}`;
+const apiDomain = configuration.GetApiDomain();
 
 SuperTokens.init({
   appInfo: {

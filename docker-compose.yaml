@@ -8,14 +8,14 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_SESAME_USER}
       POSTGRES_PASSWORD: ${POSTGRES_SESAME_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_SESAME_DB}
-      PGDATA: /data/postgres
-      PGPORT: ${PGPORT}
+      #POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_MULTIPLE_DATABASES: ${POSTGRES_DB}, ${POSTGRES_SESAME_DB}
+      #PGDATA: /data/postgres
+      #PGPORT: ${PGPORT}
     command:
       - postgres
       - -c
       - ssl=off   
-      #- /bin/bash -c "until pg_isready -U ${POSTGRES_USER} -p ${PGPORT}; do sleep 1; done; psql -U ${POSTGRES_USER} -c 'CREATE DATABASE sesame;'"   
     ports:
       - ${PGPORT}:${PGPORT}
     networks:
@@ -23,36 +23,15 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway" 
     volumes:
-      - pgdata:/var/lib/postgresql           
+      #- ./dumps:/docker-entrypoint-initdb.d/dumps
+      - ./create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
+      - pgdata:/var/lib/postgresql         
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${POSTGRES_SESAME_USER}", "-d", "postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
-
-  sesame-db-migration:
-    container_name: sesame-db-migration
-    build:
-      context: ./backend
-      additional_contexts:
-        shared-context: ./shared      
-    command:
-      [
-        "./wait-for-it/wait-for-it.sh",
-        "${POSTGRES_SESAME_HOST}:5435",
-        "--",
-        "npm",
-        "run",
-        "create-migrations"
-      ]
-    links:
-      - sesame-db
-    depends_on:
-      - sesame-db
-    env_file: "./backend/environment/.env.production"
-    environment:
-      - DB_HOST=${PG_CONNECTION_STRING}
 
   sesame-frontend:
     build:
@@ -70,6 +49,9 @@ services:
       - CHOKIDAR_USEPOLLING=true
     networks:
       - sesame-network
+    depends_on:
+      sesame-db:
+        condition: service_healthy      
 
   sesame-backend:
     build:
@@ -90,28 +72,6 @@ services:
     networks:
       - sesame-network
 
-  sesame-supertokens:
-    image: registry.supertokens.io/supertokens/supertokens-postgresql:latest
-    container_name: sesame-supertokens
-    depends_on:
-      sesame-db:
-        condition: service_healthy
-    ports:
-      - 3567:3567
-    env_file:
-      - path: ./backend/environment/.env.production      
-    environment:
-      POSTGRESQL_CONNECTION_URI: ${PG_CONNECTION_STRING_SUPER_TOKENS}
-    networks:
-      - sesame-network
-    restart: unless-stopped
-    healthcheck:
-      test: >
-        bash -c "exec 3<>/dev/tcp/127.0.0.1/3567 && echo -e "GET /hello HTTP/1.1\r\nhost: 127.0.0.1:3567\r\nConnection: close\r\n\r\n" >&3 && cat <&3 | grep "Hello""
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   sesame-pgadmin:
     image: dpage/pgadmin4:9.15
     env_file:
@@ -130,6 +90,53 @@ services:
     depends_on:
       - sesame-db
     restart: always      
+
+  sesame-db-migration:
+    container_name: sesame-db-migration
+    build:
+      context: ./backend
+      additional_contexts:
+        shared-context: ./shared      
+    command:
+      [
+        "./wait-for-it/wait-for-it.sh",
+        "${POSTGRES_SESAME_HOST}:${PGPORT}",
+        "--",
+        "npm",
+        "run",
+        "create-migrations"
+      ]
+    links:
+      - sesame-db
+    depends_on:
+      - sesame-db
+    env_file: "./backend/environment/.env.production"
+    environment:
+      - DB_HOST=sesame-db
+
+  sesame-supertokens:
+    image: registry.supertokens.io/supertokens/supertokens-postgresql:latest
+    container_name: sesame-supertokens
+    depends_on:
+      sesame-db-migration:
+        condition: service_completed_successfully
+      sesame-db:
+        condition: service_healthy
+    ports:
+      - 3567:3567
+    env_file:
+      - path: ./backend/environment/.env.production      
+    environment:
+      POSTGRESQL_CONNECTION_URI: ${PG_CONNECTION_STRING_SUPER_TOKENS}
+    networks:
+      - sesame-network
+    restart: unless-stopped
+    healthcheck:
+      test: >
+        bash -c "exec 3<>/dev/tcp/127.0.0.1/3567 && echo -e "GET /hello HTTP/1.1\r\nhost: 127.0.0.1:3567\r\nConnection: close\r\n\r\n" >&3 && cat <&3 | grep "Hello""
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
   sesame-network:

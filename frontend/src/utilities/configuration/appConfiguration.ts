@@ -28,7 +28,7 @@ class appConfiguration implements IConfig {
     this.AppName = import.meta.env.VITE_APP_NAME;
     this.IsProductionEnvironment = import.meta.env.PROD;
     this.IsDevelopmentEnvironment = import.meta.env.DEV;
-    this.ApiBaseUrl = `${import.meta.env.VITE_APP_BASE_URL}:${import.meta.env.VITE_API_PORT}/api/v1`;
+    this.ApiBaseUrl = `${import.meta.env.VITE_API_BASE_URL}:${import.meta.env.VITE_API_PORT}/api/v1`;
     this.CorsDomains = import.meta.env.VITE_APP_ACCESS_CONTROL_ALLOW_ORIGINS;
     this.AppBaseRoute = import.meta.env.VITE_APP_BASE_ROUTE;
     this.MapboxToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
@@ -60,6 +60,20 @@ class appConfiguration implements IConfig {
 
   GetMapboxToken = () => {
     return this.MapboxToken
+  }
+
+  GetWebsiteDomain = (): string => {
+    const websitePort = import.meta.env.VITE_APP_PORT || 3000;
+    const websiteDomain = import.meta.env.VITE_APP_BASE_URL || `http://localhost:${websitePort}`;
+
+    return `${websiteDomain}:${websitePort}`;
+  }
+
+  GetApiDomain = (): string => {
+    const websitePort = import.meta.env.VITE_API_PORT || 3001;
+    const websiteDomain = import.meta.env.VITE_API_BASE_URL || `http://localhost:${websitePort}`;
+
+    return `${websiteDomain}:${websitePort}`;
   }
 
 }

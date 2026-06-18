@@ -8,14 +8,16 @@
   "scripts": {
     "build-only": "npm run build",
     "encrypt": "cd environment && dotenvx encrypt touch '.env.development'",
-    "start": "set NODE_ENV=production && npx vite-node ./index.ts",
+    "start": "set NODE_ENV=development && npx vite-node ./index.ts",
     "lint": "eslint .",
     "build": "tsc",
     "create-db": "npm run create-migrations  && npm run create-models",
-    "create-migrations": "pg-migrations apply --directory src/core/db/migrations --database postgres://sesame_supertokens_user:B3nSh3z*@host.docker.internal:5435/sesame",
     "create-seeds": "pg-migrations apply --directory src/core/db/seeds --database ***sesame",
     "create-models": "npx @databases/pg-schema-cli --database ***sesame --directory ../shared/interfaces/sesame_model_types",
-    "create-supertokens-models": "npx @databases/pg-schema-cli --database ***supertokens --directory supertokens_model_types"
+    "create-migrations": "npm run create-supertokens-migrations && npm run create-sesame-migrations",
+    "create-supertokens-migrations": "pg-migrations apply --directory src/core/db/migrations/supertokens --database ***/supertokens",
+    "create-sesame-migrations": "pg-migrations apply --directory src/core/db/migrations/sesame --database ***/sesame",
+    "create-supertokens-models": "npx @databases/pg-schema-cli --database ***/supertokens --directory supertokens_model_types"
   },
   "dependencies": {
     "@databases/pg": "^5.5.0",

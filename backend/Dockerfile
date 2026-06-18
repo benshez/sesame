@@ -18,14 +18,18 @@ COPY package*.json ./
 # Install production dependencies only
 RUN npm install
 
-RUN npm install db-migrate-pg
+#RUN npm install db-migrate-pg
 
 COPY . .
+
+#COPY entrypoint.sh /docker-entrypoint-initdb.d/
 
 COPY --from=shared-context . ./shared
 
 #RUN npm run build
 RUN git clone https://github.com/vishnubob/wait-for-it.git
+
+#ENTRYPOINT [ "./create-dbs.sh" ]
 
 # Expose the application port
 EXPOSE 3001

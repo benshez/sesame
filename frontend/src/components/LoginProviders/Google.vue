@@ -25,11 +25,11 @@
 <script setup lang="ts">
 import SVGDrawer from "@/components/svg/SVGDrawer.vue";
 import ThirdParty from "supertokens-web-js/recipe/thirdparty";
-
-const websitePort = import.meta.env.VUE_APP_WEB_PORT || 3000;
-const websiteDomain = import.meta.env.VUE_APP_WEB_URL || `http://localhost:${websitePort}`;
+import { configuration } from "@/utilities";
 
 const googleAuth = async () => {
+  const websiteDomain: string = configuration.GetWebsiteDomain();
+
   const authUrl = await ThirdParty.getAuthorisationURLWithQueryParamsAndSetState({
     thirdPartyId: "google",
     frontendRedirectURI: `${websiteDomain}/auth/callback/google`,

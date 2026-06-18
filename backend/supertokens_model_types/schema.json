@@ -1,0 +1,2324 @@
+[
+  {
+    "name": "all_auth_recipe_users",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "is_linked_or_is_a_primary_user",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
+        "name": "primary_or_recipe_user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      },
+      {
+        "name": "primary_or_recipe_user_time_joined",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "recipe_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "time_joined",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      }
+    ]
+  },
+  {
+    "name": "app_id_to_user_id",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "is_linked_or_is_a_primary_user",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
+        "name": "primary_or_recipe_user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      },
+      {
+        "name": "recipe_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      }
+    ]
+  },
+  {
+    "name": "apps",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "created_at_time",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      }
+    ]
+  },
+  {
+    "name": "atdatabases_migrations_applied",
+    "columns": [
+      {
+        "name": "applied_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1184,
+        "typeName": "TIMESTAMPTZ"
+      },
+      {
+        "name": "id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "ignored_error",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "index",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "name",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "obsolete",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
+        "name": "script",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      }
+    ]
+  },
+  {
+    "name": "atdatabases_migrations_version",
+    "columns": [
+      {
+        "name": "id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "version",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      }
+    ]
+  },
+  {
+    "name": "bulk_import_users",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "created_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "error_msg",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      },
+      {
+        "name": "primary_user_id",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "raw_data",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "status",
+        "isNullable": true,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "updated_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      }
+    ]
+  },
+  {
+    "name": "dashboard_user_sessions",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "expiry",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "session_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      },
+      {
+        "name": "time_created",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      }
+    ]
+  },
+  {
+    "name": "dashboard_users",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "email",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "password_hash",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "time_joined",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      }
+    ]
+  },
+  {
+    "name": "emailpassword_pswd_reset_tokens",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "email",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "token",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "token_expiry",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      }
+    ]
+  },
+  {
+    "name": "emailpassword_user_to_tenant",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "email",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      }
+    ]
+  },
+  {
+    "name": "emailpassword_users",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "email",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "password_hash",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "time_joined",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      }
+    ]
+  },
+  {
+    "name": "emailverification_tokens",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "email",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "token",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "token_expiry",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "emailverification_verified_emails",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "email",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "jwt_signing_keys",
+    "columns": [
+      {
+        "name": "algorithm",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "created_at",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "key_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "key_string",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      }
+    ]
+  },
+  {
+    "name": "key_value",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "created_at_time",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "name",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "value",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      }
+    ]
+  },
+  {
+    "name": "oauth_clients",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "client_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "client_secret",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "enable_refresh_token_rotation",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
+        "name": "is_client_credentials_only",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      }
+    ]
+  },
+  {
+    "name": "oauth_logout_challenges",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "challenge",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "client_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "post_logout_redirect_uri",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "session_handle",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "state",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "time_created",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      }
+    ]
+  },
+  {
+    "name": "oauth_m2m_tokens",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "client_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "exp",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "iat",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      }
+    ]
+  },
+  {
+    "name": "oauth_sessions",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": true,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "client_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "exp",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "external_refresh_token",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "gid",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "internal_refresh_token",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "jti",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "session_handle",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "passwordless_codes",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "code_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      },
+      {
+        "name": "created_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "device_id_hash",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      },
+      {
+        "name": "link_code_hash",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "passwordless_devices",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "device_id_hash",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      },
+      {
+        "name": "email",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "failed_attempts",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "link_code_salt",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      },
+      {
+        "name": "phone_number",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "passwordless_user_to_tenant",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "email",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "phone_number",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      }
+    ]
+  },
+  {
+    "name": "passwordless_users",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "email",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "phone_number",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "time_joined",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      }
+    ]
+  },
+  {
+    "name": "role_permissions",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "permission",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "role",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "roles",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "role",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "saml_claims",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "claims",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "client_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "code",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "created_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "expires_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "saml_clients",
+    "columns": [
+      {
+        "name": "allow_idp_initiated_login",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "client_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "client_secret",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "created_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "default_redirect_uri",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "enable_request_signing",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
+        "name": "idp_entity_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "idp_signing_certificate",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "redirect_uris",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "sso_login_url",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "updated_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      }
+    ]
+  },
+  {
+    "name": "saml_relay_state",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "client_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "created_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "expires_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "redirect_uri",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "relay_state",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "state",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "session_access_token_signing_keys",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "created_at_time",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "value",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      }
+    ]
+  },
+  {
+    "name": "session_info",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "created_at_time",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "expires_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "jwt_user_payload",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "refresh_token_hash_2",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "session_data",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "session_handle",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "use_static_key",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "tenant_configs",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "connection_uri_domain",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "core_config",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "email_password_enabled",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
+        "name": "is_first_factors_null",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
+        "name": "passwordless_enabled",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "third_party_enabled",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      }
+    ]
+  },
+  {
+    "name": "tenant_first_factors",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "connection_uri_domain",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "factor_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "tenant_required_secondary_factors",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "connection_uri_domain",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "factor_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "tenant_thirdparty_provider_clients",
+    "columns": [
+      {
+        "name": "additional_config",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "client_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "client_secret",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "client_type",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "connection_uri_domain",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "force_pkce",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
+        "name": "scope",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1015,
+        "typeName": "VARCHAR[]"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "third_party_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "tenant_thirdparty_providers",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "authorization_endpoint",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "authorization_endpoint_query_params",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "connection_uri_domain",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "jwks_uri",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "name",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "oidc_discovery_endpoint",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "require_email",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "third_party_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "token_endpoint",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "token_endpoint_body_params",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "user_info_endpoint",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "user_info_endpoint_headers",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "user_info_endpoint_query_params",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "user_info_map_from_id_token_payload_email",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_info_map_from_id_token_payload_email_verified",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_info_map_from_id_token_payload_user_id",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_info_map_from_user_info_endpoint_email",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_info_map_from_user_info_endpoint_email_verified",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_info_map_from_user_info_endpoint_user_id",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "tenants",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "created_at_time",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "thirdparty_user_to_tenant",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "third_party_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "third_party_user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      }
+    ]
+  },
+  {
+    "name": "thirdparty_users",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "email",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "third_party_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "third_party_user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "time_joined",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      }
+    ]
+  },
+  {
+    "name": "totp_used_codes",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "code",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "created_time_ms",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "expiry_time_ms",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "is_valid",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "totp_user_devices",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "created_at",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "device_name",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "period",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "secret_key",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "skew",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "verified",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 16,
+        "typeName": "BOOL"
+      }
+    ]
+  },
+  {
+    "name": "totp_users",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "user_last_active",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "last_active_time",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "user_metadata",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_metadata",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      }
+    ]
+  },
+  {
+    "name": "user_roles",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "role",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "userid_mapping",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "external_user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "external_user_id_info",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "supertokens_user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      }
+    ]
+  },
+  {
+    "name": "webauthn_account_recovery_tokens",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "email",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "expires_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "token",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      }
+    ]
+  },
+  {
+    "name": "webauthn_credentials",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "counter",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "created_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "public_key",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 17,
+        "typeName": "BYTEA"
+      },
+      {
+        "name": "rp_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "transports",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "updated_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "user_id",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      }
+    ]
+  },
+  {
+    "name": "webauthn_generated_options",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "challenge",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "created_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "email",
+        "isNullable": true,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "expires_at",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      },
+      {
+        "name": "origin",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "rp_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "rp_name",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_presence_required",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 16,
+        "typeName": "BOOL"
+      },
+      {
+        "name": "user_verification",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      }
+    ]
+  },
+  {
+    "name": "webauthn_user_to_tenant",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "email",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "tenant_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      }
+    ]
+  },
+  {
+    "name": "webauthn_users",
+    "columns": [
+      {
+        "name": "app_id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "email",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "rp_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1043,
+        "typeName": "VARCHAR"
+      },
+      {
+        "name": "time_joined",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 20,
+        "typeName": "BIGINT"
+      },
+      {
+        "name": "user_id",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1042,
+        "typeName": "BPCHAR"
+      }
+    ]
+  }
+]
