@@ -20,3 +20,11 @@ export type {
   IEvent, 
   IStatus 
 } from "../../../shared/interfaces";
+
+// export type {
+//   IOption,
+//   IElement,
+//   IPage,
+//   IStep,
+//   IValidator
+// } from "@/interfaces/formBuilder"

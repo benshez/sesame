@@ -83,7 +83,7 @@ export const useRegisterView = () => {
   } as IPage
 
   const GetElements = (): Array<IElement> => {
-    return RegisterView.elements;
+    return RegisterView.elements as Array<IElement>;
   }
   const GetElement = (key: string): IElement => {
     const element: IElement = GetElements().find((e: IElement) => {

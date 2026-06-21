@@ -218,7 +218,7 @@ export const usePersonalInfoView = () => {
   } as IPage
 
   const GetElements = (): Array<IElement> => {
-    return PersonalInfoView.elements;
+    return PersonalInfoView.elements as Array<IElement>;
   }
   const GetElement = (key: string): IElement => {
     const element: IElement = GetElements().find((e: IElement) => {

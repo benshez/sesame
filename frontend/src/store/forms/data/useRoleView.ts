@@ -79,7 +79,7 @@ export const useRoleView = () => {
   } as IPage
 
   const GetElements = (): Array<IElement> => {
-    return RoleView.elements;
+    return RoleView.elements as Array<IElement>;
   }
   const GetElement = (key: string): IElement => {
     const element: IElement = GetElements().find((e: IElement) => {

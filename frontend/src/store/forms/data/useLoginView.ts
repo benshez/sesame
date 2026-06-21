@@ -59,7 +59,7 @@ export const useLoginView = () => {
   } as IPage
 
   const GetElements = (): Array<IElement> => {
-    return LoginView.elements;
+    return LoginView.elements as Array<IElement>;
   }
   const GetElement = (key: string): IElement => {
     const element: IElement = GetElements().find((e: IElement) => {

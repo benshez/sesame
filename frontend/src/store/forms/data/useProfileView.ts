@@ -103,7 +103,7 @@ export const useProfileView = () => {
   } as IPage
 
   const GetElements = (): Array<IElement> => {
-    return ProfileView.elements;
+    return ProfileView.elements as Array<IElement>;
   }
   const GetElement = (key: string): IElement => {
     const element: IElement = GetElements().find((e: IElement) => {

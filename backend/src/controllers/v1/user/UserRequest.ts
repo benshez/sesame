@@ -19,7 +19,7 @@ export class UserRequest {
     const params = req.params;
     let userId = session!.getUserId();
 
-    if (userId !== req.params.userId) userId = req.params.userId;
+    if (userId !== req.params.userId && typeof(req.params.userId) !== "undefined") userId = req.params.userId;
 
     if (session) {
       this.request.baseRequest.userId = sanitize(userId);

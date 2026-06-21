@@ -73,7 +73,7 @@ services:
       - sesame-network
 
   sesame-pgadmin:
-    image: dpage/pgadmin4:9.15
+    image: dpage/pgadmin4:9.16
     env_file:
       - path: ./backend/environment/.env.development 
     container_name: sesame-pgadmin

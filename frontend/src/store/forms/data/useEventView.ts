@@ -174,7 +174,7 @@ export const useEventView = () => {
   } as IPage
 
   const GetElements = (): Array<IElement> => {
-    return MapView.elements;
+    return MapView.elements as unknown as Array<IElement>;
   }
   const GetElement = (key: string): IElement => {
     const element: IElement = GetElements().find((e: IElement) => {

@@ -30,7 +30,7 @@ export class UserController extends BaseController<IUserService> {
       res
         .json(response);
     } catch (error) {
-      next(new BadRequestError({ message: `Error un-verifying email ${error}`, logging: true }));
+      next(new BadRequestError({ message: `Error getting user metadata ${error}`, logging: true }));
     }
   }
 
@@ -41,7 +41,7 @@ export class UserController extends BaseController<IUserService> {
       res
         .json(response.status);
     } catch (error) {
-      next(new BadRequestError({ message: `Error un-verifying email ${error}`, logging: true }));
+      next(new BadRequestError({ message: `Error updating user metadata ${error}`, logging: true }));
     }
   }
 
@@ -62,7 +62,7 @@ export class UserController extends BaseController<IUserService> {
       res
         .json(response);
     } catch (error) {
-      next(new BadRequestError({ message: `Error un-verifying email ${error}`, logging: true }));
+      next(new BadRequestError({ message: `Error adding role to user ${error}`, logging: true }));
     }
   }
 
@@ -82,7 +82,7 @@ export class UserController extends BaseController<IUserService> {
       res
         .json(response.roles);
     } catch (error) {
-      next(new BadRequestError({ message: `Error fetching user roles ${error}`, logging: true }));
+      next(new BadRequestError({ message: `Error removing role from user ${error}`, logging: true }));
     }
   }
 
@@ -101,7 +101,7 @@ export class UserController extends BaseController<IUserService> {
       res
         .json(userId);
     } catch (error) {
-      next(new BadRequestError({ message: `Error un-verifying email ${error}`, logging: true }));
+      next(new BadRequestError({ message: `Error geting user roles ${error}`, logging: true }));
     }
   }
 
@@ -121,7 +121,7 @@ export class UserController extends BaseController<IUserService> {
         .json(userId);
 
     } catch (error) {
-      next(new BadRequestError({ message: `Error un-verifying email ${error}`, logging: true }));
+      next(new BadRequestError({ message: `Error getting user claims ${error}`, logging: true }));
     }
   }
 
@@ -139,7 +139,7 @@ export class UserController extends BaseController<IUserService> {
         .json(response.metadata);
 
     } catch (error) {
-      next(new BadRequestError({ message: `Error un-verifying email ${error}`, logging: true }));
+      next(new BadRequestError({ message: `Error updating user password and email ${error}`, logging: true }));
     }
   }
 
@@ -161,7 +161,7 @@ export class UserController extends BaseController<IUserService> {
       res
         .json(response);
     } catch (error) {
-      next(new BadRequestError({ message: `Error signing up ${error}`, logging: true }));
+      next(new BadRequestError({ message: `Error signing in ${error}`, logging: true }));
     }
   }  
 }
