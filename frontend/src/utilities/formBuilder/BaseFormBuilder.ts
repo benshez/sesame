@@ -1,13 +1,15 @@
+import { useRoute } from "vue-router";
 import type { IBasePage, IKeyValue, IPage } from "@/interfaces/formBuilder";
 import type { Visibility } from "@/utilities/formBuilder/Visibility";
 import type { Validation } from "./Validation";
 
-export class BasePages<TVisibility, TValidation> implements IBasePage<TVisibility, TValidation> {
+export class BaseFormBuilder<TVisibility, TValidation> implements IBasePage<TVisibility, TValidation> {
 
   public Visibility: TVisibility;
   public Validation: TValidation;
   public Pages: Array<IPage> = {} as Array<IPage>;
   public TenantId: string = "";
+  public CurrentRouteName: string = "auth";
 
   constructor(
     Visibility: TVisibility,
@@ -17,6 +19,7 @@ export class BasePages<TVisibility, TValidation> implements IBasePage<TVisibilit
     this.Visibility = Visibility;
     this.Validation = Validation;
     this.TenantId = TenantId;
+    this.CurrentRouteName = "auth" //|| useRoute().name as string;
   }
 
   Initialise = async (): Promise<void> => {
@@ -27,17 +30,15 @@ export class BasePages<TVisibility, TValidation> implements IBasePage<TVisibilit
 
   IsValidOrVisible = async (Instance: typeof this.Visibility | typeof this.Validation, Query: IKeyValue): Promise<boolean> => {
     const IsObject: boolean = typeof Query === "object" || false;
-    const HasKey: boolean = Object.keys(Query.Key).length > 0 || false;
+    const HasKeyAndValue: boolean = (Object.keys(Query.Key).length > 0 && Object.keys(Query.Value).length > 0) || false;
 
-    if (IsObject && HasKey) {
+    if (IsObject && HasKeyAndValue) {
       switch (Query.Key.toString().toLowerCase()) {
         case "class":
-          if (Query.Value) {
-            const Method = Reflect.get(Instance as Visibility | Validation, Query.Value);
+          const Method = Reflect.get(Instance as Visibility | Validation, Query.Value);
 
-            if (typeof Method === "function") {
-              return await Method.call(Instance);
-            }
+          if (typeof Method === "function") {
+            return await Method.call(Instance);
           }
           break;
         case "array":
@@ -50,5 +51,9 @@ export class BasePages<TVisibility, TValidation> implements IBasePage<TVisibilit
     }
 
     return true;
+  }
+
+  HandleInput = () => {
+
   }
 }

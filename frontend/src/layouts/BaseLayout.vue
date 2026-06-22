@@ -4,7 +4,7 @@
     <div class="relative flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
       <Menubar />
       <div class="p-4 md:p-6">
-
+        <FormStepper />
         <slot />
       </div>
     </div>
@@ -16,7 +16,7 @@
 import Menubar from "@/components/menu/Menubar.vue";
 import Sidebar from "@/components/sidebar/Sidebar.vue";
 import { useDisplayStore } from "@/store/display/useDisplayStore";
-
+import FormStepper from "@/components/FormBuilder/FormStepper.vue";
 const displayStore = useDisplayStore();
 
 </script>

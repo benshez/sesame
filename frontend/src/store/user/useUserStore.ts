@@ -386,6 +386,7 @@ export const useUserStore = defineStore("user", () => {
     UpdateSelectedUserState,
     VerifyOrUnverifyUserEmail,
     GetRolesForSelectedUser,
+    GetTenantIdFromRoute,
     RemoveUser,
     AddRoleToUser,
     RemoveRoleFromUser,

@@ -3,6 +3,7 @@ import { useDisplayStore } from "@/store/display/useDisplayStore";
 import { useFormStore } from "@/store/forms/useFormStore";
 import { useEventStore } from "@/store/events/useEventStore";
 import { useRoleStore } from "@/store/role/useRoleStore";
+import { useFormBuilderStore } from "@/store/formBuilder/useFormBuilderStore";
 
 import { useProfileView } from "@/store/forms/data/useProfileView";
 import { usePersonalInfoView } from "@/store/forms/data/usePersonalInfoView";
@@ -17,5 +18,6 @@ export {
   useLoginView,
   useRegisterView,
   useEventView,
-  useRoleView
+  useRoleView,
+  useFormBuilderStore
 }
