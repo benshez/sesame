@@ -6,8 +6,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-import FormStepper from '~~/components/FormBuilder/components/FormStepper.vue'
-import FormBody from '~~/components/FormBuilder/components/FormBody.vue'
+import FormStepper from "@/components/FormBuilder/FormStepper.vue";
+import FormBody from "@/components/FormBuilder/FormBody.vue";
 const page = await usePage()
 
 </script>

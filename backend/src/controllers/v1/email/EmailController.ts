@@ -2,7 +2,7 @@ import { SessionRequest } from "supertokens-node/framework/express";
 import { Response } from "express-serve-static-core";
 import { NextFunction } from "supertokens-node/lib/build/framework/custom/framework";
 import { BaseController } from "../../../core/routing";
-import { IEmailService } from "../index";
+import { IEmailService } from ".";
 import { BadRequestError } from "../../../core/error";
 import { EmailRequest } from "./";
 

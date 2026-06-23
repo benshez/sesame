@@ -5,6 +5,7 @@ import LookupRoutes from "./lookup/LookupRoutes";
 import TenantRoutes from "./tenant/TenantRoutes";
 import EventRoutes from "./event/EventRoutes";
 import RoleRoutes from "./role/RoleRoutes";
+import FormBuilderRoutes from "./formBuilder/FormBuilderRoutes";
 
 export { 
   UserRoutes, 
@@ -13,5 +14,6 @@ export {
   LookupRoutes, 
   TenantRoutes, 
   EventRoutes,
-  RoleRoutes
+  RoleRoutes,
+  FormBuilderRoutes
 };

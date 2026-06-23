@@ -5,7 +5,8 @@ import {
   LookupRoutes, 
   TenantRoutes, 
   EventRoutes,
-  RoleRoutes
+  RoleRoutes,
+  FormBuilderRoutes
 } from "../../routes/v1";
 import { IRouteMap } from "./";
 
@@ -34,7 +35,10 @@ export const RouteRegistry: IRouteMap = {
         },
         "role": () => {
           return new RoleRoutes()
-        }
+        },
+        "formbuilder": () => {
+          return new FormBuilderRoutes()
+        },
       }
     }
   ]

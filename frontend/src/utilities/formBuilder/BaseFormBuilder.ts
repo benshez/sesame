@@ -1,7 +1,8 @@
 import { useRoute } from "vue-router";
-import type { IBasePage, IKeyValue, IPage } from "@/interfaces/formBuilder";
+import type { IBasePage, IKeyValue, IPage, IPages } from "@/interfaces/formBuilder";
 import type { Visibility } from "@/utilities/formBuilder/Visibility";
 import type { Validation } from "./Validation";
+import { ApiClient } from "@/plugins/client/ApiClient";
 
 export class BaseFormBuilder<TVisibility, TValidation> implements IBasePage<TVisibility, TValidation> {
 
@@ -20,10 +21,12 @@ export class BaseFormBuilder<TVisibility, TValidation> implements IBasePage<TVis
     this.Validation = Validation;
     this.TenantId = TenantId;
     this.CurrentRouteName = "auth" //|| useRoute().name as string;
+
   }
 
   Initialise = async (): Promise<void> => {
-    const Json: { Pages: Array<IPage>, default: {} } = await import(/* webpackChunkName: `GetPagesForTenant${this.TenantId}` */ `@/utilities/formBuilder/data/${this.TenantId}.json`);
+    const apiClient = new ApiClient();
+    const Json: IPages = await apiClient.formbuilder().getTenantJson("1") as unknown as IPages;
 
     this.Pages = Json.Pages;
   }

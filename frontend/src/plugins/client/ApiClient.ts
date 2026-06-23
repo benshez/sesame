@@ -93,4 +93,10 @@ export class ApiClient extends HttpClient {
       getRolesThatHavePermission: (permission: string) => this.get(`/role/get-roles-that-have-permission/${permission}`, this.getHeader("Authorization")),
       }
   }
+
+  formbuilder = () => {
+    return {
+      getTenantJson: (version: string) => this.get(`/formbuilder/read-tenant-json/${version}`, this.getHeader("Authorization"))
+    }
+  }
 }

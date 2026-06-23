@@ -24,22 +24,29 @@ export { LookupController } from "./lookup";
 
 export { SessionController } from "./session";
 
-export { 
+export {
   type ITenantRequest,
   type ITenantService,
   TenantRequest,
   TenantService,
-  TenantController 
+  TenantController
 } from "./tenant";
 
-export { 
-  type IUserService, 
-  type IUserRequest, 
-  UserRequest,  
+export {
+  type IUserService,
+  type IUserRequest,
+  UserRequest,
   UserService,
-  UserController 
+  UserController
 } from "./user";
 
+export {
+  type IFormBuilderService,
+  type IFormBuilderRequest,
+  FormBuilderRequest,
+  FormBuilderService,
+  FormBuilderController
+} from "./formBuilder";
 
 export type { IBaseRequest } from "./IBaseRequest";
 

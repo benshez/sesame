@@ -17,6 +17,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" :d="Step.StepIcon">
             </path>
           </svg>
+          <span v-else>{{ StepIndex + 1 }}</span>
           <div class="absolute -bottom-[4.5rem] w-max text-center">
             <h6 :class="[
               'block text-base antialiased leading-relaxed tracking-normal text-gray-700',
@@ -31,7 +32,7 @@
         </div>
       </div>
 
-      <div class="border border-gray-200 dark:border-gray-800 p-6 rounded-lg mt-22">
+      <div class="border border-gray-200 dark:border-gray-800 px-6 py-5 rounded-lg mt-22">
         {{ FormBuilderStore.FormBuilderState.CurrentStep }}
         <!-- Form fields for current step -->
       </div>
