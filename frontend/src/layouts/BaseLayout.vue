@@ -4,7 +4,8 @@
     <div class="relative flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
       <Menubar />
       <div class="p-4 md:p-6">
-        <FormStepper />
+        <FormStepper :-show-navigator="true" :-show-stepper="true" :-next-navigation-text="'Next'"
+          :-previous-navigation-text="'Back'" />
         <slot />
       </div>
     </div>

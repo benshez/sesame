@@ -8,7 +8,7 @@
       </h3>
     </div>
 
-    <FormStepperElements :-elements="Fieldset.Elements" :-in-valid-items-count="InValidItemsCount" @on-input="OnInput"/>
+    <FormStepperElements :-elements="Fieldset.Elements" :-in-valid-items-count="InValidItemsCount" :-layout="Layout" @on-input="OnInput"/>
   </div>
 </template>
 <script lang="ts" setup>
@@ -19,6 +19,7 @@ interface Props {
   Fieldsets: Array<IFieldset>;
   StepCount: number;
   InValidItemsCount: number;
+  Layout: number
 }
 
 const props = defineProps<Props>();

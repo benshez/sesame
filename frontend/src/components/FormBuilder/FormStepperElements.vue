@@ -1,6 +1,6 @@
 <template>
-  <div class="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6" v-if="Elements">
-    <div v-for="(Element, ElementIndex) in Elements" :key="ElementIndex">
+  <div :class="[Layout !== 1 ? 'p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6 grid grid-cols-2 gap-4': 'p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6 grid']" v-if="Elements">
+    <div v-for="(Element, ElementIndex) in Elements" :key="ElementIndex" >
       <FormStepperElement :-element="Element" :-in-valid-items-count="InValidItemsCount" @on-input="OnInput" />
     </div>
   </div>
@@ -12,6 +12,7 @@ import type { IElement } from '@/interfaces/formBuilder';
 interface Props {
   Elements: Array<IElement>;
   InValidItemsCount: number;
+  Layout: number;
 }
 
 const props = defineProps<Props>();

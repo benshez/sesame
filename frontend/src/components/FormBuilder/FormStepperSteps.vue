@@ -14,7 +14,7 @@
         </path>
       </svg>
       <span v-else>{{ StepIndex + 1 }}</span>
-      <div class="absolute -bottom-[4.5rem] w-max text-center">
+      <div class="absolute -bottom-[4.5rem] w-max text-center mr-0">
         <h6 :class="[
           'block antialiased leading-relaxed tracking-normal',
           CurrentPage.CurrentStepIndex === StepIndex ? 'font-bold' : ''

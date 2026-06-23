@@ -1,8 +1,16 @@
 <template>
   <div class="mb-4" v-if="Element && Element.IsVisible">
     <slot name="label">
-      <label :for="Element.Id" v-if="Element.Label"
-        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"> {{ Element.Label }} </label>
+      <div class="relative h-8">
+        <svg v-if="Element.LabelIcon !== ''" class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" :d="Element.LabelIcon">
+          </path>
+        </svg>
+        <label :for="Element.Id" v-if="Element.Label"
+          class="absolute left-8 top-0 block text-sm font-medium text-gray-700 dark:text-gray-400"> {{ Element.Label }}
+        </label>
+      </div>
     </slot>
     <slot name="component">
       <label v-if="Element.IsReadonly">{{ Element.Value }}</label>
