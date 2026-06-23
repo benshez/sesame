@@ -24,8 +24,8 @@ import type { IElement } from "@/interfaces/formBuilder";
 
 const FormBuilderStore = useFormBuilderStore();
 
-const NextStep = () => {
-  FormBuilderStore.NextStep();
+const NextStep = async () => {
+  await FormBuilderStore.NextStep();
 }
 
 const PreviousStep = () => {

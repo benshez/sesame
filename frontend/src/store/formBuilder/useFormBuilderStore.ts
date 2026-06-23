@@ -45,10 +45,18 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
     }
   }
 
-  const NextStep = () => {
+  const NextStep = async () => {
     const CurrentIndex = FormBuilderState.value.CurrentPage.CurrentStepIndex;
     const StepCount = FormBuilderState.value.CurrentPage.Steps ? FormBuilderState.value.CurrentPage.Steps.length : 0;
     const IsFinalStep: boolean = FormBuilderState.value.CurrentPage.Steps ? CurrentIndex === FormBuilderState.value.CurrentPage.Steps.length - 1 : false;
+
+    for (const Fieldset of FormBuilderState.value.CurrentStep.Fieldsets as Array<IFieldset>) {
+      for (const Element of Fieldset.Elements as Array<IElement>) {
+        await OnValidate(Element);
+      }
+    }
+
+    if (FormBuilderState.value.CurrentStep.InValidItemsCount > 0) return;
 
     if (StepCount > CurrentIndex && !IsFinalStep) {
       FormBuilderState.value.CurrentPage.CurrentStepIndex++;
@@ -75,12 +83,11 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
   }
 
   const OnInput = async (e: IElement) => {
+    UpdateElementState(e.Id as string, { key: "Value", value: e.Value });
     await OnValidate(e);
   }
 
   const OnValidate = async (e: IElement) => {
-    UpdateElementState(e.Id as string, { key: "Value", value: e.Value });
-
     const IsValid = await FormBuilderPages.HandleIsValid(e);
 
     UpdateElementState(e.Id as string, { key: "IsValid", value: IsValid });
@@ -89,7 +96,7 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
 
     FormBuilderState.value.CurrentStep.Fieldsets?.forEach((Fieldset: IFieldset) => {
       Fieldset.Elements?.forEach((Element: IElement) => {
-        if (!Element.IsValid)  {
+        if (!Element.IsValid) {
           InvalidItemsCount++;
         }
       })

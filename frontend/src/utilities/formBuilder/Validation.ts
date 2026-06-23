@@ -10,7 +10,6 @@ export class Validation {
   }
 
   IsValid = async (): Promise<boolean> => {
-    console.log(this.Element)
     return false;
   }
 
