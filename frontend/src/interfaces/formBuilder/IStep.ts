@@ -1,9 +1,9 @@
-import type { IElement } from "@/interfaces/formBuilder";
+import type { IFieldset } from "@/interfaces/formBuilder";
 
 export interface IStep {
   Label: string;
   StepIndex: number;
   StepIcon?: string;
   InValidItemsCount: number;
-  Elements?: Array<IElement>;
+  Fieldsets?: Array<IFieldset>;
 }

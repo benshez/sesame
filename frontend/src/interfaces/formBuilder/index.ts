@@ -4,4 +4,5 @@ export { type IKeyValue } from "@/interfaces/formBuilder/IKeyValue";
 export { type IPages } from "@/interfaces/formBuilder/IPages";
 export { type IPage } from "@/interfaces/formBuilder/IPage";
 export { type IStep } from "@/interfaces/formBuilder/IStep";
+export { type IFieldset } from "@/interfaces/formBuilder/IFieldSet";
 export type { IBasePage, IVisibility, IValidation } from "@/interfaces/formBuilder/IBasePage";

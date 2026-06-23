@@ -1,5 +1,5 @@
 import { useRoute } from "vue-router";
-import type { IBasePage, IKeyValue, IPage, IPages } from "@/interfaces/formBuilder";
+import type { IBasePage, IElement, IKeyValue, IPage, IPages } from "@/interfaces/formBuilder";
 import type { Visibility } from "@/utilities/formBuilder/Visibility";
 import type { Validation } from "./Validation";
 import { ApiClient } from "@/plugins/client/ApiClient";
@@ -21,7 +21,6 @@ export class BaseFormBuilder<TVisibility, TValidation> implements IBasePage<TVis
     this.Validation = Validation;
     this.TenantId = TenantId;
     this.CurrentRouteName = "auth" //|| useRoute().name as string;
-
   }
 
   Initialise = async (): Promise<void> => {
@@ -31,7 +30,7 @@ export class BaseFormBuilder<TVisibility, TValidation> implements IBasePage<TVis
     this.Pages = Json.Pages;
   }
 
-  IsValidOrVisible = async (Instance: typeof this.Visibility | typeof this.Validation, Query: IKeyValue): Promise<boolean> => {
+  IsValidOrVisible = async (Instance: typeof this.Visibility | typeof this.Validation, Query: IKeyValue, element: IElement): Promise<boolean> => {
     const IsObject: boolean = typeof Query === "object" || false;
     const HasKeyAndValue: boolean = (Object.keys(Query.Key).length > 0 && Object.keys(Query.Value).length > 0) || false;
 
@@ -41,7 +40,7 @@ export class BaseFormBuilder<TVisibility, TValidation> implements IBasePage<TVis
           const Method = Reflect.get(Instance as Visibility | Validation, Query.Value);
 
           if (typeof Method === "function") {
-            return await Method.call(Instance);
+            return await Method.call(Instance, element);
           }
           break;
         case "array":

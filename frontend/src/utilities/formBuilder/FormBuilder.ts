@@ -5,7 +5,8 @@ import type {
   IElement,
   IKeyValue,
   IValidation,
-  IVisibility
+  IVisibility,
+  IFieldset
 } from "@/interfaces/formBuilder";
 
 export class FormBuilder extends BaseFormBuilder<IVisibility, IValidation> {
@@ -33,26 +34,26 @@ export class FormBuilder extends BaseFormBuilder<IVisibility, IValidation> {
     return Steps.find(Step => Step.StepIndex === StepIndex) as unknown as IStep;
   }
 
-  GetElements = (): Array<IElement> => {
-    const Step: IStep = this.GetCurrentStep();
+  GetElements = (StepIndex: number = 0): Array<IElement> => {
+    const Step: IStep = this.GetCurrentStep(StepIndex);
 
-    return Step.Elements as Array<IElement>;
+    return Step.Fieldsets?.find(Fieldset => Fieldset.Elements)?.Elements as Array<IElement>;
   }
 
-  GetElement = (Id: string): IElement => {
-    const Elements: Array<IElement> = this.GetElements();
+  GetElement = (Id: string, StepIndex: number): IElement => {
+    const Elements: Array<IElement> = this.GetElements(StepIndex);
 
     return Elements.find(Element => Element.Id === Id) as IElement;
   }
 
   HandleIsVisible = async (Element: IElement): Promise<boolean> => {
-    const IsVisible: boolean = await this.IsValidOrVisible(this.Visibility, Element.IsVisibleIf as IKeyValue);
+    const IsVisible: boolean = await this.IsValidOrVisible(this.Visibility, Element.IsVisibleIf as IKeyValue, Element);
 
     return IsVisible;
   }
 
   HandleIsValid = async (Element: IElement): Promise<boolean> => {
-    const IsValid: boolean = await this.IsValidOrVisible(this.Validation, Element.IsValidIf as IKeyValue);
+    const IsValid: boolean = await this.IsValidOrVisible(this.Validation, Element.IsValidIf as IKeyValue, Element);
 
     return IsValid;
   }

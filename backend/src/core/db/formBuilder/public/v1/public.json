@@ -11,29 +11,64 @@
           "StepIndex": 0,
           "StepIcon": "M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25",
           "InValidItemsCount": 0,
-          "Elements": [
+          "Fieldsets": [
             {
-              "Id": "email",
-              "Label": "Email",
-              "Component": "FormInput",
-              "Value": "",
-              "HelpText": "Enter your username/email.",
-              "PlaceholderText": "Username/Email",
-              "IsReadonly": false,
-              "IsVisible": true,
-              "IsVisibleIf": {
-                "Key": "Class",
-                "Value": "IsVisible"
-              },
-              "IsRequired": true,
-              "IsValid": true,
-              "IsValidIf": {
-                "Key": "Class",
-                "Value": "IsValid"
-              },
-              "Type": "email",
-              "CssClass": "dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800",
-              "LabelIcon": "m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"
+              "Label": "FS 1.1",
+              "Description": "This is the Login Page",
+              "Elements": [
+                {
+                  "Id": "email-1",
+                  "Label": "Email",
+                  "Component": "FormInput",
+                  "Value": "",
+                  "HelpText": "Enter your username/email.",
+                  "PlaceholderText": "Username/Email",
+                  "IsReadonly": false,
+                  "IsVisible": true,
+                  "IsVisibleIf": {
+                    "Key": "Class",
+                    "Value": "IsVisible"
+                  },
+                  "IsRequired": true,
+                  "IsValid": false,
+                  "IsValidIf": {
+                    "Key": "Class",
+                    "Value": "IsValidEmail"
+                  },
+                  "Type": "email",
+                  "CssClass": "dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800",
+                  "LabelIcon": "m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"
+                }
+              ]
+            },
+            {
+              "Label": "FS 1.2",
+              "Description": "This is the Login Page 1.2",
+              "Elements": [
+                {
+                  "Id": "email-2",
+                  "Label": "Email",
+                  "Component": "FormInput",
+                  "Value": "",
+                  "HelpText": "Enter your username/email.",
+                  "PlaceholderText": "Username/Email",
+                  "IsReadonly": false,
+                  "IsVisible": true,
+                  "IsVisibleIf": {
+                    "Key": "Class",
+                    "Value": "IsVisible"
+                  },
+                  "IsRequired": true,
+                  "IsValid": true,
+                  "IsValidIf": {
+                    "Key": "Class",
+                    "Value": "IsValid"
+                  },
+                  "Type": "email",
+                  "CssClass": "dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800",
+                  "LabelIcon": "m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"
+                }
+              ]
             }
           ]
         },
@@ -42,60 +77,72 @@
           "StepIndex": 1,
           "StepIcon": "",
           "InValidItemsCount": 0,
-          "Elements": [
+          "Fieldsets": [
             {
-              "Id": "email",
-              "Label": "Email",
-              "Component": "FormInput",
-              "Value": "",
-              "HelpText": "Enter your username/email.",
-              "PlaceholderText": "Username/Email",
-              "IsReadonly": false,
-              "IsVisible": true,
-              "IsVisibleIf": {
-                "Key": "Class",
-                "Value": "IsVisible"
-              },
-              "IsRequired": true,
-              "IsValid": true,
-              "IsValidIf": {
-                "Key": "Class",
-                "Value": "IsValid"
-              },
-              "Type": "email",
-              "CssClass": "dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800",
-              "LabelIcon": "m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"
+              "Label": "FS 2",
+              "Description": "This is the Logout Page",
+              "Elements": [
+                {
+                  "Id": "email",
+                  "Label": "Email",
+                  "Component": "FormInput",
+                  "Value": "",
+                  "HelpText": "Enter your username/email.",
+                  "PlaceholderText": "Username/Email",
+                  "IsReadonly": false,
+                  "IsVisible": true,
+                  "IsVisibleIf": {
+                    "Key": "Class",
+                    "Value": "IsVisible"
+                  },
+                  "IsRequired": true,
+                  "IsValid": true,
+                  "IsValidIf": {
+                    "Key": "Class",
+                    "Value": "IsValid"
+                  },
+                  "Type": "email",
+                  "CssClass": "dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800",
+                  "LabelIcon": "m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"
+                }
+              ]
             }
           ]
         },
         {
-          "Label": "Logout 1",
+          "Label": "Some Page",
           "StepIndex": 2,
           "StepIcon": "",
           "InValidItemsCount": 0,
-          "Elements": [
+          "Fieldsets": [
             {
-              "Id": "email",
-              "Label": "Email",
-              "Component": "FormInput",
-              "Value": "",
-              "HelpText": "Enter your username/email.",
-              "PlaceholderText": "Username/Email",
-              "IsReadonly": false,
-              "IsVisible": true,
-              "IsVisibleIf": {
-                "Key": "Class",
-                "Value": "IsVisible"
-              },
-              "IsRequired": true,
-              "IsValid": true,
-              "IsValidIf": {
-                "Key": "Class",
-                "Value": "IsValid"
-              },
-              "Type": "email",
-              "CssClass": "dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800",
-              "LabelIcon": "m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"
+              "Label": "FS 3",
+              "Description": "This is some page",
+              "Elements": [
+                {
+                  "Id": "email",
+                  "Label": "Email",
+                  "Component": "FormInput",
+                  "Value": "",
+                  "HelpText": "Enter your username/email.",
+                  "PlaceholderText": "Username/Email",
+                  "IsReadonly": false,
+                  "IsVisible": true,
+                  "IsVisibleIf": {
+                    "Key": "Class",
+                    "Value": "IsVisible"
+                  },
+                  "IsRequired": true,
+                  "IsValid": true,
+                  "IsValidIf": {
+                    "Key": "Class",
+                    "Value": "IsValid"
+                  },
+                  "Type": "email",
+                  "CssClass": "dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800",
+                  "LabelIcon": "m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"
+                }
+              ]
             }
           ]
         }

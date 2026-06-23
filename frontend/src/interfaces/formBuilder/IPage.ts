@@ -1,4 +1,4 @@
-import type { IStep, IElement } from "@/interfaces/formBuilder";
+import type { IStep, IFieldset } from "@/interfaces/formBuilder";
 
 export interface IPage {
   Name: string;
@@ -7,6 +7,5 @@ export interface IPage {
   Path?: string;
   Steps?: Array<IStep>;
   CurrentStepIndex: number;
-  Elements?: Array<IElement> | undefined;
   HasValidationErrors?: boolean;
 }
