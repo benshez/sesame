@@ -17,7 +17,7 @@
       <div v-else class="relative">
         <input :id="Element.Id" :name="Element.Id" type="input" @input="OnInput(Element)"
           :placeholder="Element.PlaceholderText" :class="Element.CssClass" v-model="Element.Value" />
-        <span class="absolute right-3.5 top-1/2 -translate-y-1/2" v-if="InValidItemsCount > 0">
+        <span class="absolute right-3.5 top-1/2 -translate-y-1/2" v-if="HasValidationErrors">
           <svg v-if="Element.IsValid" width="16" height="16" viewBox="0 0 16 16" fill="none"
             xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -36,7 +36,7 @@
       </div>
     </slot>
     <slot name="help">
-      <span v-if="InValidItemsCount > 0">
+      <span v-if="HasValidationErrors">
         <p :id="`${Element.Id}-help`" v-if="Element.HelpText" :class="[
           Element.IsValid ? 'mt-1.5 text-theme-xs text-success-500' : 'mt-1.5 text-theme-xs text-error-500',
         ]"> {{ Element.HelpText }}</p>
@@ -46,13 +46,9 @@
 </template>
 <script lang="ts" setup>
 import type { IElement } from '@/interfaces/formBuilder';
+import { FormBuilderProps } from "@/interfaces/formBuilder/IFormBuilderProps";
 
-interface Props {
-  Element: IElement;
-  InValidItemsCount: number;
-}
-
-const props = defineProps<Props>();
+const props = defineProps(FormBuilderProps);
 const emit = defineEmits(["onInput"]);
 
 const OnInput = async (e: IElement) => {

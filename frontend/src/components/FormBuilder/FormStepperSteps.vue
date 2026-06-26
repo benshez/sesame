@@ -29,13 +29,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-import type { IPage } from '@/interfaces/formBuilder';
+import { FormBuilderProps } from "@/interfaces/formBuilder/IFormBuilderProps";
 
-interface Props {
-  CurrentPage: IPage;
-  StepCount: number;
-}
-
-const props = defineProps<Props>();
+const props = defineProps(FormBuilderProps);
 
 </script>

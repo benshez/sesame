@@ -1,4 +1,4 @@
-export interface IBasePage<TVisibility, TValidation, TStep = null, TElement = null> {
+export interface IBasePage<TVisibility = null, TValidation = null, TStep = null, TElement = null> {
   Visibility: TVisibility,
   Validation: TValidation,
   Step?: TStep | null,

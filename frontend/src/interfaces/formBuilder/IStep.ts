@@ -4,6 +4,6 @@ export interface IStep {
   Label: string;
   StepIndex: number;
   StepIcon?: string;
-  InValidItemsCount: number;
+  HasValidationErrors?: boolean;
   Fieldsets?: Array<IFieldset>;
 }

@@ -8,12 +8,16 @@ export class Validation {
 
   }
 
-  IsMinimunCharacterLength = (element: IElement, count: number = 2): boolean => {
+  IsMinimumCharacterLength = (element: IElement, count: number): boolean => {
     const isEmpty = this.IsEmpty(element);
 
     if (isEmpty) return false;
 
     return element.Value.length >= count;
+  }
+
+  IsMinimumTwoCharacterLength = (element: IElement): boolean => {
+    return this.IsMinimumCharacterLength(element, 2);
   }
 
   IsString = (element: IElement): boolean => {
@@ -83,7 +87,7 @@ export class Validation {
 
   IsValidCountry = async (element: IElement): Promise<boolean> => {
     const isEmpty = this.IsEmpty(element);
-    const hasMinimumTwoCharacters = this.IsMinimunCharacterLength(element);
+    const hasMinimumTwoCharacters = this.IsMinimumTwoCharacterLength(element);
     const apiClient = new ApiClient();
 
     if (isEmpty || !hasMinimumTwoCharacters) return false;

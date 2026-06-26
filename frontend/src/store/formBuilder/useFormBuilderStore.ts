@@ -9,39 +9,21 @@ import type {
   IPage,
   IStep,
   IElement,
-  IKeyValue,
-  IValidation,
-  IVisibility,
   IFieldset
 } from "@/interfaces/formBuilder";
 
 export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
-  const UserStore = useUserStore();
 
-  const FormBuilderPages = new FormBuilder(
-    new Visibility(),
-    new Validation(),
-    UserStore.GetTenantIdFromRoute());
+  const FormBuilderPages = new FormBuilder();
 
   const FormBuilderState = ref(useLocalStorage("sesame.form.builder.state", {
-    Pages: [] as Array<IPage>,
     CurrentPage: {} as IPage,
-    CurrentStep: {} as IStep
   }));
 
   const Initialise = async () => {
-    await FormBuilderPages.Initialise();
-
-    FormBuilderState.value.Pages = FormBuilderPages.Pages;
-
-    FormBuilderState.value.CurrentPage = FormBuilderPages.GetCurrentPage();
-
-    SetCurrentStep();
-  }
-
-  const SetCurrentStep = () => {
-    if (FormBuilderState.value.CurrentPage.Steps) {
-      FormBuilderState.value.CurrentStep = FormBuilderPages.GetCurrentStep(FormBuilderState.value.CurrentPage.CurrentStepIndex);
+    if (typeof FormBuilderState.value.CurrentPage.CurrentStepIndex === "undefined") {
+      await FormBuilderPages.Initialise();
+      FormBuilderState.value.CurrentPage = FormBuilderPages.GetCurrentPage();
     }
   }
 
@@ -49,23 +31,24 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
     const CurrentIndex = FormBuilderState.value.CurrentPage.CurrentStepIndex;
     const StepCount = FormBuilderState.value.CurrentPage.Steps ? FormBuilderState.value.CurrentPage.Steps.length : 0;
     const IsFinalStep: boolean = FormBuilderState.value.CurrentPage.Steps ? CurrentIndex === FormBuilderState.value.CurrentPage.Steps.length - 1 : false;
+    const Fieldsets: Array<IFieldset> = FormBuilderState.value.CurrentPage.Steps?.at(FormBuilderState.value.CurrentPage.CurrentStepIndex)?.Fieldsets as Array<IFieldset>;
+    const CurrentStep: IStep = FormBuilderState.value.CurrentPage.Steps?.at(FormBuilderState.value.CurrentPage.CurrentStepIndex) as unknown as IStep;
 
-    for (const Fieldset of FormBuilderState.value.CurrentStep.Fieldsets as Array<IFieldset>) {
+    for (const Fieldset of Fieldsets) {
       for (const Element of Fieldset.Elements as Array<IElement>) {
         await OnValidate(Element);
       }
     }
 
-    if (FormBuilderState.value.CurrentStep.InValidItemsCount > 0) return;
+    if (CurrentStep && CurrentStep.HasValidationErrors) return;
+
+    if (IsFinalStep) {
+      Submit();
+      return;
+    }
 
     if (StepCount > CurrentIndex && !IsFinalStep) {
       FormBuilderState.value.CurrentPage.CurrentStepIndex++;
-
-      if (IsFinalStep) {
-        Submit();
-      } else {
-        SetCurrentStep();
-      }
     }
   }
 
@@ -78,7 +61,6 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
 
     if (CurrentIndex > 0) {
       FormBuilderState.value.CurrentPage.CurrentStepIndex--;
-      SetCurrentStep();
     }
   }
 
@@ -89,12 +71,13 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
 
   const OnValidate = async (e: IElement) => {
     const IsValid = await FormBuilderPages.HandleIsValid(e);
+    const Fieldsets: Array<IFieldset> = FormBuilderState.value.CurrentPage.Steps?.at(FormBuilderState.value.CurrentPage.CurrentStepIndex)?.Fieldsets as Array<IFieldset>;
 
     UpdateElementState(e.Id as string, { key: "IsValid", value: IsValid });
 
     let InvalidItemsCount: number = 0;
 
-    FormBuilderState.value.CurrentStep.Fieldsets?.forEach((Fieldset: IFieldset) => {
+    Fieldsets.forEach((Fieldset: IFieldset) => {
       Fieldset.Elements?.forEach((Element: IElement) => {
         if (!Element.IsValid) {
           InvalidItemsCount++;
@@ -102,7 +85,7 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
       })
     })
 
-    FormBuilderState.value.CurrentStep.InValidItemsCount = InvalidItemsCount;
+    //FormBuilderState.value.CurrentStep.InvalidItemsCount = InvalidItemsCount;
   }
 
   const UpdateElementState = (key: string, options: { key: string, value: unknown | [] }) => {

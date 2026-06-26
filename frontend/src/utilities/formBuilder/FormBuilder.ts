@@ -4,57 +4,39 @@ import type {
   IStep,
   IElement,
   IKeyValue,
-  IValidation,
   IVisibility,
-  IFieldset
+  IValidation
 } from "@/interfaces/formBuilder";
 
-export class FormBuilder extends BaseFormBuilder<IVisibility, IValidation> {
+export class FormBuilder extends BaseFormBuilder<IVisibility, IValidation, IStep, IElement> {
 
-  public TenantId: string = "";
-
-  constructor(
-    Visibility: IVisibility,
-    Validation: IValidation,
-    TenantId: string) {
-    super(Visibility, Validation, TenantId);
-
-    this.TenantId = TenantId;
-  }
-
-  GetCurrentPage = (): IPage => {
-    return this.Pages.find(Page => Page.Name === this.CurrentRouteName) as unknown as IPage;
-  }
-
-  GetCurrentStep = (StepIndex: number = 0): IStep => {
-    const Page: IPage = this.GetCurrentPage();
-    const Steps: Array<IStep> = Page.Steps as unknown as Array<IStep>;
-    if(StepIndex === 0) StepIndex = Page.CurrentStepIndex
-
-    return Steps.find(Step => Step.StepIndex === StepIndex) as unknown as IStep;
-  }
-
-  GetElements = (StepIndex: number = 0): Array<IElement> => {
-    const Step: IStep = this.GetCurrentStep(StepIndex);
-
-    return Step.Fieldsets?.find(Fieldset => Fieldset.Elements)?.Elements as Array<IElement>;
+  constructor() {
+    super();
   }
 
   GetElement = (Id: string, StepIndex: number): IElement => {
     const Elements: Array<IElement> = this.GetElements(StepIndex);
 
-    return Elements.find(Element => Element.Id === Id) as IElement;
+    this.Element = Elements.find(Element => Element.Id === Id) as IElement;
+
+    return this.Element;
   }
 
   HandleIsVisible = async (Element: IElement): Promise<boolean> => {
-    const IsVisible: boolean = await this.IsValidOrVisible(this.Visibility, Element.IsVisibleIf as IKeyValue, Element);
+    Element.IsVisible = await this.IsValidOrVisible(this.Visibility, Element.IsVisibleIf as IKeyValue, Element);
 
-    return IsVisible;
+    return Element.IsVisible;
   }
 
-  HandleIsValid = async (Element: IElement): Promise<boolean> => {
-    const IsValid: boolean = await this.IsValidOrVisible(this.Validation, Element.IsValidIf as IKeyValue, Element);
+  HandleIsValid = async (Element: IElement, MatchedElement: IElement = {} as IElement): Promise<boolean> => {
+    const HasMatchedElement: boolean = Object.keys(MatchedElement).length > 0;
 
-    return IsValid;
+    if (HasMatchedElement) {
+      Element.IsValid = await this.IsValidOrVisible(this.Validation, Element.IsValidIf as IKeyValue, Element, MatchedElement);
+    } else {
+      Element.IsValid = await this.IsValidOrVisible(this.Validation, Element.IsValidIf as IKeyValue, Element);
+    }
+
+    return Element.IsValid;
   }
 }

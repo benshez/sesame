@@ -7,22 +7,15 @@
         <p class="text-sm text-gray-500 dark:text-gray-400"> {{ Fieldset.Description }} </p>
       </h3>
     </div>
-
-    <FormStepperElements :-elements="Fieldset.Elements" :-in-valid-items-count="InValidItemsCount" :-layout="Layout" @on-input="OnInput"/>
+    <FormStepperElements :-elements="Fieldset.Elements" :-has-validation-errors="HasValidationErrors" :-layout="Layout" @on-input="OnInput"/>
   </div>
 </template>
 <script lang="ts" setup>
-import type { IFieldset, IElement } from '@/interfaces/formBuilder';
+import type { IElement } from "@/interfaces/formBuilder";
 import FormStepperElements from '@/components/FormBuilder/FormStepperElements.vue';
+import { FormBuilderProps } from "@/interfaces/formBuilder/IFormBuilderProps";
 
-interface Props {
-  Fieldsets: Array<IFieldset>;
-  StepCount: number;
-  InValidItemsCount: number;
-  Layout: number
-}
-
-const props = defineProps<Props>();
+const props = defineProps(FormBuilderProps);
 const emit = defineEmits(["onInput"]);
 
 const OnInput = (e: IElement) => {
