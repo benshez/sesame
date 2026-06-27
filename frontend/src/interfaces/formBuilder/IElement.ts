@@ -17,4 +17,5 @@ export interface IElement {
   CssClass?: string;
   Type?: string;
   LabelIcon?: string;
+  Score?: IKeyValue | null; 
 }

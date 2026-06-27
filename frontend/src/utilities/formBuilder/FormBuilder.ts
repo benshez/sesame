@@ -5,13 +5,20 @@ import type {
   IElement,
   IKeyValue,
   IVisibility,
-  IValidation
+  IValidation,
+  IScorer
 } from "@/interfaces/formBuilder";
 
-export class FormBuilder extends BaseFormBuilder<IVisibility, IValidation, IStep, IElement> {
+export class FormBuilder extends BaseFormBuilder<IVisibility, IValidation, IScorer, IStep, IElement> {
 
-  constructor() {
-    super();
+  constructor(
+    visibility = null,
+    validation = null,
+    scorer = null,
+    step = null,
+    element = null
+  ) {
+    super(visibility, validation, scorer, step, element);
   }
 
   GetElement = (Id: string, StepIndex: number): IElement => {

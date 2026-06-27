@@ -4,6 +4,7 @@ import { ref } from "vue";
 import { FormBuilder } from "@/utilities/formBuilder/FormBuilder";
 
 import type {
+  IPages,
   IPage,
   IStep,
   IElement,
@@ -15,23 +16,20 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
   const FormBuilderPages = new FormBuilder();
 
   const FormBuilderState = ref(useLocalStorage("sesame.form.builder.state", {
-    Pages: [] as Array<IPage>,
-    CurrentPage: {} as IPage,
+    Pages: {} as IPages,
   }));
 
   const Initialise = async () => {
-    if (FormBuilderState.value.Pages && FormBuilderState.value.Pages.length === 0) {
+    if (!FormBuilderState.value.Pages.Pages) {
       await FormBuilderPages.Initialise();
       FormBuilderState.value.Pages = FormBuilderPages.Pages;
-      FormBuilderState.value.CurrentPage = FormBuilderPages.GetCurrentPage();
     } else {
       FormBuilderPages.Pages = FormBuilderState.value.Pages;
-      FormBuilderState.value.CurrentPage = FormBuilderPages.GetCurrentPage();
     }
   }
 
   const NextStep = async () => {
-    const CurrentPage: IPage = GetCurrentPage();
+    const CurrentPage: IPage = FormBuilderPages.Pages.Page;
     const CurrentIndex = CurrentPage.CurrentStepIndex;
     const StepCount = CurrentPage.Steps ? CurrentPage.Steps.length : 0;
     const IsFinalStep: boolean = CurrentPage.Steps ? CurrentIndex === CurrentPage.Steps.length - 1 : false;
@@ -63,7 +61,7 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
   }
 
   const GetCurrentPage = (): IPage => {
-    return FormBuilderState.value.CurrentPage;
+    return FormBuilderState.value.Pages.Page;
   }
 
   const PreviousStep = () => {
