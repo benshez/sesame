@@ -2,9 +2,7 @@ import { defineStore, } from "pinia";
 import { useLocalStorage } from "@vueuse/core";
 import { ref } from "vue";
 import { FormBuilder } from "@/utilities/formBuilder/FormBuilder";
-import { Visibility } from "@/utilities/formBuilder/Visibility";
-import { Validation } from "@/utilities/formBuilder/Validation";
-import { useUserStore } from "@/store/user/useUserStore";
+
 import type {
   IPage,
   IStep,
@@ -17,27 +15,35 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
   const FormBuilderPages = new FormBuilder();
 
   const FormBuilderState = ref(useLocalStorage("sesame.form.builder.state", {
+    Pages: [] as Array<IPage>,
     CurrentPage: {} as IPage,
   }));
 
   const Initialise = async () => {
-    if (typeof FormBuilderState.value.CurrentPage.CurrentStepIndex === "undefined") {
+    if (FormBuilderState.value.Pages && FormBuilderState.value.Pages.length === 0) {
       await FormBuilderPages.Initialise();
+      FormBuilderState.value.Pages = FormBuilderPages.Pages;
+      FormBuilderState.value.CurrentPage = FormBuilderPages.GetCurrentPage();
+    } else {
+      FormBuilderPages.Pages = FormBuilderState.value.Pages;
       FormBuilderState.value.CurrentPage = FormBuilderPages.GetCurrentPage();
     }
   }
 
   const NextStep = async () => {
-    const CurrentIndex = FormBuilderState.value.CurrentPage.CurrentStepIndex;
-    const StepCount = FormBuilderState.value.CurrentPage.Steps ? FormBuilderState.value.CurrentPage.Steps.length : 0;
-    const IsFinalStep: boolean = FormBuilderState.value.CurrentPage.Steps ? CurrentIndex === FormBuilderState.value.CurrentPage.Steps.length - 1 : false;
-    const Fieldsets: Array<IFieldset> = FormBuilderState.value.CurrentPage.Steps?.at(FormBuilderState.value.CurrentPage.CurrentStepIndex)?.Fieldsets as Array<IFieldset>;
-    const CurrentStep: IStep = FormBuilderState.value.CurrentPage.Steps?.at(FormBuilderState.value.CurrentPage.CurrentStepIndex) as unknown as IStep;
+    const CurrentPage: IPage = GetCurrentPage();
+    const CurrentIndex = CurrentPage.CurrentStepIndex;
+    const StepCount = CurrentPage.Steps ? CurrentPage.Steps.length : 0;
+    const IsFinalStep: boolean = CurrentPage.Steps ? CurrentIndex === CurrentPage.Steps.length - 1 : false;
+    const Fieldsets: Array<IFieldset> = CurrentPage.Steps?.at(CurrentPage.CurrentStepIndex)?.Fieldsets as Array<IFieldset>;
+    const CurrentStep: IStep = CurrentPage.Steps?.at(CurrentPage.CurrentStepIndex) as unknown as IStep;
 
     for (const Fieldset of Fieldsets) {
       for (const Element of Fieldset.Elements as Array<IElement>) {
         await OnValidate(Element);
+        if (CurrentStep && CurrentStep.HasValidationErrors) break;
       }
+      if (CurrentStep && CurrentStep.HasValidationErrors) break;
     }
 
     if (CurrentStep && CurrentStep.HasValidationErrors) return;
@@ -48,7 +54,7 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
     }
 
     if (StepCount > CurrentIndex && !IsFinalStep) {
-      FormBuilderState.value.CurrentPage.CurrentStepIndex++;
+      CurrentPage.CurrentStepIndex++;
     }
   }
 
@@ -56,11 +62,16 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
 
   }
 
+  const GetCurrentPage = (): IPage => {
+    return FormBuilderState.value.CurrentPage;
+  }
+
   const PreviousStep = () => {
-    const CurrentIndex = FormBuilderState.value.CurrentPage.CurrentStepIndex;
+    const CurrentPage: IPage = GetCurrentPage();
+    const CurrentIndex = GetCurrentPage().CurrentStepIndex;
 
     if (CurrentIndex > 0) {
-      FormBuilderState.value.CurrentPage.CurrentStepIndex--;
+      CurrentPage.CurrentStepIndex--;
     }
   }
 
@@ -71,25 +82,20 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
 
   const OnValidate = async (e: IElement) => {
     const IsValid = await FormBuilderPages.HandleIsValid(e);
-    const Fieldsets: Array<IFieldset> = FormBuilderState.value.CurrentPage.Steps?.at(FormBuilderState.value.CurrentPage.CurrentStepIndex)?.Fieldsets as Array<IFieldset>;
+    const CurrentPage: IPage = GetCurrentPage();
+    const Step: IStep = CurrentPage.Steps?.at(CurrentPage.CurrentStepIndex) as unknown as IStep;
+    Step.HasValidationErrors = false;
 
     UpdateElementState(e.Id as string, { key: "IsValid", value: IsValid });
 
-    let InvalidItemsCount: number = 0;
-
-    Fieldsets.forEach((Fieldset: IFieldset) => {
-      Fieldset.Elements?.forEach((Element: IElement) => {
-        if (!Element.IsValid) {
-          InvalidItemsCount++;
-        }
-      })
-    })
-
-    //FormBuilderState.value.CurrentStep.InvalidItemsCount = InvalidItemsCount;
+    if (!IsValid && Step) {
+      Step.HasValidationErrors = true;
+    }
   }
 
   const UpdateElementState = (key: string, options: { key: string, value: unknown | [] }) => {
-    const element: IElement = FormBuilderPages.GetElement(key, FormBuilderState.value.CurrentPage.CurrentStepIndex);
+    const CurrentPage: IPage = GetCurrentPage();
+    const element: IElement = FormBuilderPages.GetElement(key, CurrentPage.CurrentStepIndex);
 
     if (!element) return;
 
@@ -112,6 +118,7 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
   return {
     FormBuilderState,
     Initialise,
+    GetCurrentPage,
     NextStep,
     Submit,
     PreviousStep,
