@@ -1,4 +1,4 @@
 export interface IKeyValue {
-  Key: string | number | Array<string>,
-  Value: string | Array<string>
+  Key: string | number,
+  Value: string
 }

@@ -1,7 +1,7 @@
-import type { IElement } from "@/interfaces/formBuilder";
+import type { IField } from "@/interfaces/formBuilder";
 
 export interface IFieldset {
   Label?: string;
   Description?: string;
-  Elements?: Array<IElement> | undefined;
+  Fields?: Array<IField> | undefined;
 }

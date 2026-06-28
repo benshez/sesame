@@ -1,30 +1,30 @@
 import { useRoute } from "vue-router";
-import type { IBasePage, IElement, IKeyValue, IStep, IPage, IPages, IScorer } from "@/interfaces/formBuilder";
+import type { IBasePage, IField, IKeyValue, IStep, IPage, IPages, IScorer, IFieldset } from "@/interfaces/formBuilder";
 import { Visibility } from "@/utilities/formBuilder/Visibility";
 import { Validation } from "@/utilities/formBuilder/Validation";
 import { Scorer } from "@/utilities/formBuilder/Scorer";
 import { ApiClient } from "@/plugins/client/ApiClient";
 import { useUserStore } from "@/store/user/useUserStore";
 
-export class BaseFormBuilder<TVisibility = null, TValidation = null, TScorer = null, TStep = null, TElement = null> implements IBasePage<TVisibility, TValidation, TScorer, TStep, TElement> {
+export class BaseFormBuilder<TVisibility = null, TValidation = null, TScorer = null, TStep = null, TField = null> implements IBasePage<TVisibility, TValidation, TScorer, TStep, TField> {
 
   public Visibility: TVisibility;
   public Validation: TValidation;
-  public Scorer: TScorer;
+  public Scorer: typeof Scorer | TScorer;
   public Pages: IPages = {} as IPages;
   public TenantId: string = "";
   public CurrentRouteName: string = "auth";
   public Step: TStep = undefined as TStep;
-  public Element: TElement = {} as TElement;
+  public Field: TField = {} as TField;
   public StepCount: number = 0;
   public IsFinalStep: boolean = false;
 
   constructor(
     visibility = null,
     validation = null,
-    scorer = null,
+    scorer: typeof this.Scorer | null,
     step = null,
-    element = null
+    field = null
   ) {
     const UserStore = useUserStore();
 
@@ -32,7 +32,7 @@ export class BaseFormBuilder<TVisibility = null, TValidation = null, TScorer = n
     this.Validation = validation || new Validation() as TValidation;
     this.Scorer = scorer || new Scorer() as TScorer;
     if (step) this.Step = step
-    if (element) this.Element = element;
+    if (field) this.Field = field;
     this.TenantId = UserStore.GetTenantIdFromRoute();
     this.CurrentRouteName = "auth" //|| useRoute().name as string;
   }
@@ -44,7 +44,7 @@ export class BaseFormBuilder<TVisibility = null, TValidation = null, TScorer = n
     this.Pages = Json;
 
     this.SetCurrentPage();
-    this.GetCurrentStep();
+    //this.GetCurrentStep();
   }
 
   SetCurrentPage = (): IPage => {
@@ -62,55 +62,76 @@ export class BaseFormBuilder<TVisibility = null, TValidation = null, TScorer = n
 
     this.Step = Steps.find(Step => Step.StepIndex === StepIndex) as IStep as TStep;
 
-    //this.Page.HasValidationErrors = true;
-
     return this.Step as IStep;
   }
 
-  GetElements = (StepIndex: number = 0): Array<IElement> => {
+  GetFields = (StepIndex: number = 0): Array<IField> => {
     const Step: IStep = this.GetCurrentStep(StepIndex);
+    let Fields: Array<IField> = [];
 
-    return Step.Fieldsets?.find(Fieldset => Fieldset.Elements)?.Elements as Array<IElement>;
+    Step.Fieldsets?.forEach((Fieldset: IFieldset) => {
+      Fieldset.Fields?.forEach(Field => {
+        Fields.push(Field)
+      })
+
+    })
+
+    return Fields;
   }
 
-  IsValidOrVisible = async (
-    Instance: typeof this.Visibility | typeof this.Validation,
-    Query: IKeyValue,
-    Element: IElement,
-    MatchedElement: IElement = {} as IElement
-  ): Promise<boolean> => {
-    const IsObject: boolean = typeof Query === "object" || false;
-    const HasKeyAndValue: boolean = (Object.keys(Query.Key).length > 0 && Object.keys(Query.Value).length > 0) || false;
-    const HasMatchedElement: boolean = Object.keys(MatchedElement).length > 0;
+  GetScore = async (Steps: Array<IStep>): Promise<number> => {
+    let Score: number = 0;
 
-    if (IsObject && HasKeyAndValue) {
-      switch (Query.Key.toString().toLowerCase()) {
-        case "class":
-          const Values = (Array.isArray(Query.Value)) ? Query.Value : [Query.Value];
-
-          for (const Value of Values) {
-            const Method = Reflect.get(Instance as Visibility | Validation, Value);
-
-            if (typeof Method === "function") {
-              if (HasMatchedElement) {
-                return await Method.call(Instance, Element, MatchedElement);
-              } else {
-                return await Method.call(Instance, Element);
+    if (this.Pages.Page.Steps) {
+      for (const Step of this.Pages.Page.Steps) {
+        if (Step.Fieldsets) {
+          for (const FieldSet of Step.Fieldsets) {
+            if (FieldSet.Fields) {
+              for (const Field of FieldSet.Fields) {
+                const Instance = this.Scorer as Scorer;
+                const Method = Reflect.get(Instance, "GetScore");
+                const Result = await Method.call(Instance, Field);
+                Score = Score + Result;
               }
             }
           }
-
-          break;
-        case "array":
-          return true;
-          break;
-        default:
-          return true;
-          break;
+        }
       }
     }
 
-    return true;
+    return Score;
+  }
+
+  IsValid = async (Field: IField, MatchedField: IField = {} as IField): Promise<boolean> => {
+    let IsValid: boolean = true;
+    const HasMatchedField: boolean = Object.keys(MatchedField).length > 0;
+
+    if (Field) {
+      const Instance = this.Validation as Validation;
+      const Method = Reflect.get(Instance, "IsValid");
+      if (HasMatchedField) {
+        IsValid = await Method.call(Instance, Field, MatchedField);
+      } else {
+        IsValid = await Method.call(Instance, Field);
+      }
+
+      return IsValid;
+    }
+
+    return IsValid;
+  }
+
+  IsVisible = async (Field: IField): Promise<boolean> => {
+    let IsVisible: boolean = true;
+
+    if (Field) {
+      const Instance = this.Visibility as Visibility;
+      const Method = Reflect.get(Instance, "IsVisible");
+      const IsVisible = await Method.call(Instance, Field);
+      return IsVisible;
+    }
+
+    return IsVisible;
   }
 
   HandleInput = () => {

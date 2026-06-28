@@ -28,7 +28,7 @@ import { useFormBuilderStore } from "@/store";
 import FormStepperSteps from "@/components/FormBuilder/FormStepperSteps.vue";
 import FormStepperFieldsets from "@/components/FormBuilder/FormStepperFieldsets.vue";
 import FormStepperNavigator from "@/components/FormBuilder/FormStepperNavigator.vue";
-import type { IElement } from "@/interfaces/formBuilder";
+import type { IField } from "@/interfaces/formBuilder";
 import { FormBuilderProps } from "@/interfaces/formBuilder/IFormBuilderProps";
 
 const props = defineProps(FormBuilderProps);
@@ -42,7 +42,7 @@ const PreviousStep = () => {
   FormBuilderStore.PreviousStep();
 }
 
-const OnInput = async (e: IElement) => {
+const OnInput = async (e: IField) => {
   await FormBuilderStore.OnInput(e);
 }
 

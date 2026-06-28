@@ -1,4 +1,4 @@
-export { type IElement } from "@/interfaces/formBuilder/IElement";
+export { type IField } from "@/interfaces/formBuilder/IField";
 export { type IOption } from "@/interfaces/formBuilder/IOption";
 export { type IKeyValue } from "@/interfaces/formBuilder/IKeyValue";
 export { type IPages } from "@/interfaces/formBuilder/IPages";

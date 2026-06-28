@@ -7,7 +7,7 @@ import type {
   IPages,
   IPage,
   IStep,
-  IElement,
+  IField,
   IFieldset
 } from "@/interfaces/formBuilder";
 
@@ -37,8 +37,8 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
     const CurrentStep: IStep = CurrentPage.Steps?.at(CurrentPage.CurrentStepIndex) as unknown as IStep;
 
     for (const Fieldset of Fieldsets) {
-      for (const Element of Fieldset.Elements as Array<IElement>) {
-        await OnValidate(Element);
+      for (const Field of Fieldset.Fields as Array<IField>) {
+        await OnValidate(Field);
         if (CurrentStep && CurrentStep.HasValidationErrors) break;
       }
       if (CurrentStep && CurrentStep.HasValidationErrors) break;
@@ -73,42 +73,51 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
     }
   }
 
-  const OnInput = async (e: IElement) => {
-    UpdateElementState(e.Id as string, { key: "Value", value: e.Value });
+  const OnInput = async (e: IField) => {
+    UpdateFieldState(e.Id as string, { key: "Value", value: e.Value });
     await OnValidate(e);
+    await CalculateScore()
   }
 
-  const OnValidate = async (e: IElement) => {
-    const IsValid = await FormBuilderPages.HandleIsValid(e);
+  const CalculateScore = async () => {
+    const CurrentPage: IPage = GetCurrentPage();
+    const Steps: Array<IStep> = FormBuilderPages.Pages.Page.Steps as Array<IStep>;
+    const Score = await FormBuilderPages.GetScore(Steps);
+    CurrentPage.Score = Score;
+  }
+
+  const OnValidate = async (e: IField) => {
     const CurrentPage: IPage = GetCurrentPage();
     const Step: IStep = CurrentPage.Steps?.at(CurrentPage.CurrentStepIndex) as unknown as IStep;
+    const IsValid = await FormBuilderPages.IsValid(e);
+
     Step.HasValidationErrors = false;
 
-    UpdateElementState(e.Id as string, { key: "IsValid", value: IsValid });
+    UpdateFieldState(e.Id as string, { key: "IsValid", value: IsValid });
 
     if (!IsValid && Step) {
       Step.HasValidationErrors = true;
     }
   }
 
-  const UpdateElementState = (key: string, options: { key: string, value: unknown | [] }) => {
+  const UpdateFieldState = (key: string, options: { key: string, value: unknown | [] }) => {
     const CurrentPage: IPage = GetCurrentPage();
-    const element: IElement = FormBuilderPages.GetElement(key, CurrentPage.CurrentStepIndex);
+    const field: IField = FormBuilderPages.GetField(key, CurrentPage.CurrentStepIndex);
 
-    if (!element) return;
+    if (!field) return;
 
     switch (options.key) {
       case "Value":
-        element.Value = options.value as string | Array<string>;
+        field.Value = options.value as string | Array<string>;
         break;
       case "IsValid":
-        element.IsValid = options.value as boolean;
+        field.IsValid = options.value as boolean;
         break;
       case "IsVisible":
-        element.IsVisible = options.value as boolean;
+        field.IsVisible = options.value as boolean;
         break;
       case "HelpText":
-        element.HelpText = options.value as string;
+        field.HelpText = options.value as string;
         break;
     }
   }

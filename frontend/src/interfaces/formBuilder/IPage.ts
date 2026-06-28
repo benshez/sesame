@@ -7,4 +7,5 @@ export interface IPage {
   Path?: string;
   Steps?: Array<IStep>;
   CurrentStepIndex: number;
+  Score: number;
 }

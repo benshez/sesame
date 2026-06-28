@@ -1,6 +1,6 @@
 import type { IOption, IKeyValue } from "@/interfaces/formBuilder";
 
-export interface IElement {
+export interface IField {
   Id?: string;
   Label?: string;
   Component: string;
@@ -10,12 +10,12 @@ export interface IElement {
   Options?: Object | Array<IOption>;
   IsRequired?: boolean;
   IsValid?: boolean;
-  IsValidIf?: IKeyValue | null;
+  IsValidIf?: Array<IKeyValue> | null;
   IsReadonly?: boolean,
   IsVisible?: boolean,
-  IsVisibleIf?: IKeyValue | null,
+  IsVisibleIf?: Array<IKeyValue> | null;
   CssClass?: string;
   Type?: string;
   LabelIcon?: string;
-  Score?: IKeyValue | null; 
+  Score?: Array<IKeyValue> | null; 
 }

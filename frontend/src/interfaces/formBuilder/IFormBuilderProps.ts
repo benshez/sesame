@@ -1,8 +1,7 @@
 import type { PropType } from "vue";
 import type { IPage } from "@/interfaces/formBuilder";
 import type { IFieldset } from "@/interfaces/formBuilder";
-import type { IElement } from "@/interfaces/formBuilder";
-
+import type { IField } from "@/interfaces/formBuilder";
 
 export type IFormBuilderProps = {
   Fieldsets: {
@@ -10,13 +9,13 @@ export type IFormBuilderProps = {
     required: false,
     default: {}
   }
-  Elements: {
-    type: PropType<Array<IElement>>,
+  Fields: {
+    type: PropType<Array<IField>>,
     required: false,
     default: []
   }
-  Element: {
-    type: PropType<IElement>,
+  Field: {
+    type: PropType<IField>,
     required: false,
     default: {}
   }
@@ -63,13 +62,13 @@ export type IFormBuilderProps = {
 }
 
 export const FormBuilderProps: IFormBuilderProps = {
-  Element: {
-    type: Object as PropType<IElement>,
+  Field: {
+    type: Object as PropType<IField>,
     required: false,
     default: {}
   },
-  Elements: {
-    type: Array as PropType<Array<IElement>>,
+  Fields: {
+    type: Array as PropType<Array<IField>>,
     required: false,
     default: []
   },

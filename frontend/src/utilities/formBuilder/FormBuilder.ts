@@ -1,15 +1,13 @@
 import { BaseFormBuilder } from "@/utilities/formBuilder/BaseFormBuilder";
 import type {
-  IPage,
   IStep,
-  IElement,
-  IKeyValue,
+  IField,
   IVisibility,
   IValidation,
   IScorer
 } from "@/interfaces/formBuilder";
 
-export class FormBuilder extends BaseFormBuilder<IVisibility, IValidation, IScorer, IStep, IElement> {
+export class FormBuilder extends BaseFormBuilder<IVisibility, IValidation, IScorer, IStep, IField> {
 
   constructor(
     visibility = null,
@@ -21,29 +19,11 @@ export class FormBuilder extends BaseFormBuilder<IVisibility, IValidation, IScor
     super(visibility, validation, scorer, step, element);
   }
 
-  GetElement = (Id: string, StepIndex: number): IElement => {
-    const Elements: Array<IElement> = this.GetElements(StepIndex);
+  GetField = (Id: string, StepIndex: number): IField => {
+    const Fields: Array<IField> = this.GetFields(StepIndex);
 
-    this.Element = Elements.find(Element => Element.Id === Id) as IElement;
+    this.Field = Fields.find(Field => Field.Id === Id) as IField;
 
-    return this.Element;
-  }
-
-  HandleIsVisible = async (Element: IElement): Promise<boolean> => {
-    Element.IsVisible = await this.IsValidOrVisible(this.Visibility, Element.IsVisibleIf as IKeyValue, Element);
-
-    return Element.IsVisible;
-  }
-
-  HandleIsValid = async (Element: IElement, MatchedElement: IElement = {} as IElement): Promise<boolean> => {
-    const HasMatchedElement: boolean = Object.keys(MatchedElement).length > 0;
-
-    if (HasMatchedElement) {
-      Element.IsValid = await this.IsValidOrVisible(this.Validation, Element.IsValidIf as IKeyValue, Element, MatchedElement);
-    } else {
-      Element.IsValid = await this.IsValidOrVisible(this.Validation, Element.IsValidIf as IKeyValue, Element);
-    }
-
-    return Element.IsValid;
+    return this.Field;
   }
 }

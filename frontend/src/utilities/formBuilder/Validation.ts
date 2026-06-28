@@ -1,14 +1,56 @@
 import validator from "validator";
-import type { IElement } from "@/interfaces/formBuilder";
+import type { IField, IKeyValue } from "@/interfaces/formBuilder";
 import { ApiClient } from "@/plugins/client/ApiClient";
 
 export class Validation {
 
-  constructor() {
+  constructor() { }
 
+  IsValid = async (Element: IField, MatchedElement: IField = {} as IField): Promise<boolean> => {
+    const IsValidIfs: Array<IKeyValue> = Element.IsValidIf as Array<IKeyValue>;
+    const IsObject: boolean = typeof IsValidIfs === "object" || false;
+    const HasItems: boolean = IsValidIfs.length !== 0;
+    const HasMatchedElement: boolean = Object.keys(MatchedElement).length > 0;
+    let IsValid: boolean = true;
+
+    if (!IsObject || !HasItems) return IsValid;
+
+    for (const IsValidIf of IsValidIfs) {
+      const Keys: Array<string> = Array.isArray(IsValidIf.Key) ? IsValidIf.Key : [IsValidIf.Key] as Array<string>;
+      const Values: Array<string> = Array.isArray(IsValidIf.Value) ? IsValidIf.Value : [IsValidIf.Value] as Array<string>;
+
+      for (const Key of Keys) {
+        const Index = Keys.indexOf(Key) | 0;
+        const Value = Values[Index];
+
+        switch (Key.toString().toLowerCase()) {
+          case "class":
+            const Method = Reflect.get(this, Value);
+            const IsFunction = typeof Method === "function";
+
+            if (IsFunction) {
+              if (HasMatchedElement) {
+                return await Method.call(this, Element, MatchedElement);
+              } else {
+                return await Method.call(this, Element);
+              }
+            }
+
+            break;
+          default:
+            if (Element.IsValid && (Element.Value === Key || (Element.Value !== "" && Key === "*"))) {
+              return true;
+            }
+
+            break;
+        }
+      }
+    }
+
+    return IsValid;
   }
 
-  IsMinimumCharacterLength = (element: IElement, count: number): boolean => {
+  IsMinimumCharacterLength = (element: IField, count: number): boolean => {
     const isEmpty = this.IsEmpty(element);
 
     if (isEmpty) return false;
@@ -16,11 +58,11 @@ export class Validation {
     return element.Value.length >= count;
   }
 
-  IsMinimumTwoCharacterLength = (element: IElement): boolean => {
+  IsMinimumTwoCharacterLength = (element: IField): boolean => {
     return this.IsMinimumCharacterLength(element, 2);
   }
 
-  IsString = (element: IElement): boolean => {
+  IsString = (element: IField): boolean => {
     const isEmpty = this.IsEmpty(element);
 
     if (isEmpty) return false;
@@ -30,11 +72,7 @@ export class Validation {
     return (!validator.isNumeric(element.Value) && !validator.isBoolean(element.Value as string));
   }
 
-  IsValid = async (): Promise<boolean> => {
-    return true;
-  }
-
-  GetElementValue = (element: IElement): string => {
+  GetElementValue = (element: IField): string => {
     let value: string = "";
 
     if (typeof element.Value === "string") {
@@ -46,13 +84,13 @@ export class Validation {
     return value;
   }
 
-  IsEmpty = (element: IElement): boolean => {
+  IsEmpty = (element: IField): boolean => {
     if (element.IsRequired) return validator.isEmpty(this.GetElementValue(element));
 
     return true;
   }
 
-  IsValidEmail = (element: IElement): boolean => {
+  IsValidEmail = (element: IField): boolean => {
     const isEmpty = this.IsEmpty(element);
 
     if (isEmpty) return false;
@@ -61,7 +99,7 @@ export class Validation {
   }
 
 
-  IsStrongPassword = (element: IElement, matchedElement: IElement = {} as IElement): boolean => {
+  IsStrongPassword = (element: IField, matchedElement: IField = {} as IField): boolean => {
     const isEmpty = this.IsEmpty(element);
     const isMatchedElement = !matchedElement.Id ? true : this.MatchesValue(element, matchedElement);
 
@@ -76,7 +114,7 @@ export class Validation {
     });
   }
 
-  MatchesValue = (element: IElement, matchedElement: IElement): boolean => {
+  MatchesValue = (element: IField, matchedElement: IField): boolean => {
     const isEmpty = this.IsEmpty(element);
     const isMatchedElement = this.IsEmpty(matchedElement);
 
@@ -85,7 +123,7 @@ export class Validation {
     return element.Value === matchedElement.Value;
   }
 
-  IsValidCountry = async (element: IElement): Promise<boolean> => {
+  IsValidCountry = async (element: IField): Promise<boolean> => {
     const isEmpty = this.IsEmpty(element);
     const hasMinimumTwoCharacters = this.IsMinimumTwoCharacterLength(element);
     const apiClient = new ApiClient();
@@ -103,5 +141,5 @@ export class Validation {
     })
 
     return found;
-  }  
+  }
 }
