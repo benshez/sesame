@@ -13,7 +13,7 @@ import type {
 
 export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
 
-  const FormBuilderPages = new FormBuilder();
+  const FormBuilderPages = new FormBuilder(null, null, null, null);
 
   const FormBuilderState = ref(useLocalStorage("sesame.form.builder.state", {
     Pages: {} as IPages,
