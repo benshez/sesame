@@ -29,30 +29,34 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
   }
 
   const NextStep = async () => {
-    const CurrentPage: IPage = FormBuilderPages.Pages.Page;
-    const CurrentIndex = CurrentPage.CurrentStepIndex;
+    const CurrentPage: IPage = FormBuilderPages.Pages.Page || {} as IPage;
+    let CurrentIndex = CurrentPage.CurrentStepIndex || 0;
     const StepCount = CurrentPage.Steps ? CurrentPage.Steps.length : 0;
-    const IsFinalStep: boolean = CurrentPage.Steps ? CurrentIndex === CurrentPage.Steps.length - 1 : false;
-    const Fieldsets: Array<IFieldset> = CurrentPage.Steps?.at(CurrentPage.CurrentStepIndex)?.Fieldsets as Array<IFieldset>;
-    const CurrentStep: IStep = CurrentPage.Steps?.at(CurrentPage.CurrentStepIndex) as unknown as IStep;
 
-    for (const Fieldset of Fieldsets) {
-      for (const Field of Fieldset.Fields as Array<IField>) {
-        await OnValidate(Field);
+    if (CurrentPage) {
+      const IsFinalStep: boolean = CurrentPage.Steps ? CurrentIndex === CurrentPage.Steps.length - 1 : false;
+      const Fieldsets: Array<IFieldset> = CurrentPage.Steps?.at(CurrentIndex)?.Fieldsets as Array<IFieldset>;
+      const CurrentStep: IStep = CurrentPage.Steps?.at(CurrentIndex) as unknown as IStep;
+
+      for (const Fieldset of Fieldsets) {
+        for (const Field of Fieldset.Fields as Array<IField>) {
+          await OnValidate(Field);
+          if (CurrentStep && CurrentStep.HasValidationErrors) break;
+        }
         if (CurrentStep && CurrentStep.HasValidationErrors) break;
       }
-      if (CurrentStep && CurrentStep.HasValidationErrors) break;
-    }
 
-    if (CurrentStep && CurrentStep.HasValidationErrors) return;
+      if (CurrentStep && CurrentStep.HasValidationErrors) return;
 
-    if (IsFinalStep) {
-      Submit();
-      return;
-    }
+      if (IsFinalStep) {
+        Submit();
+        return;
+      }
 
-    if (StepCount > CurrentIndex && !IsFinalStep) {
-      CurrentPage.CurrentStepIndex++;
+      if (StepCount > CurrentIndex && !IsFinalStep && CurrentPage) {
+        CurrentIndex++;
+        CurrentPage.CurrentStepIndex = CurrentIndex;
+      }
     }
   }
 
@@ -61,15 +65,16 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
   }
 
   const GetCurrentPage = (): IPage => {
-    return FormBuilderState.value.Pages.Page;
+    return FormBuilderState.value.Pages.Page || {} as IPage;
   }
 
   const PreviousStep = () => {
     const CurrentPage: IPage = GetCurrentPage();
-    const CurrentIndex = GetCurrentPage().CurrentStepIndex;
+    let CurrentIndex = CurrentPage.CurrentStepIndex || 0;
 
-    if (CurrentIndex > 0) {
-      CurrentPage.CurrentStepIndex--;
+    if (CurrentPage) {
+      CurrentIndex++;
+      CurrentPage.CurrentStepIndex = CurrentIndex;
     }
   }
 
@@ -81,44 +86,52 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
 
   const CalculateScore = async () => {
     const CurrentPage: IPage = GetCurrentPage();
-    const Steps: Array<IStep> = FormBuilderPages.Pages.Page.Steps as Array<IStep>;
-    const Score = await FormBuilderPages.GetScore(Steps);
-    CurrentPage.Score = Score;
+    if (FormBuilderPages.Pages && FormBuilderPages.Pages.Page) {
+      const Steps: Array<IStep> = FormBuilderPages.Pages.Page.Steps as Array<IStep>;
+      const Score = await FormBuilderPages.GetScore(Steps);
+      CurrentPage.Score = Score;
+    }
   }
 
   const OnValidate = async (e: IField) => {
     const CurrentPage: IPage = GetCurrentPage();
-    const Step: IStep = CurrentPage.Steps?.at(CurrentPage.CurrentStepIndex) as unknown as IStep;
-    const IsValid = await FormBuilderPages.IsValid(e);
+    const CurrentIndex = CurrentPage.CurrentStepIndex || 0;
 
-    Step.HasValidationErrors = false;
+    if (CurrentPage) {
+      const Step: IStep = CurrentPage.Steps?.at(CurrentIndex) as unknown as IStep;
+      const IsValid = await FormBuilderPages.IsValid(e);
 
-    UpdateFieldState(e.Id as string, { key: "IsValid", value: IsValid });
+      Step.HasValidationErrors = false;
 
-    if (!IsValid && Step) {
-      Step.HasValidationErrors = true;
+      UpdateFieldState(e.Id as string, { key: "IsValid", value: IsValid });
+
+      if (!IsValid && Step) {
+        Step.HasValidationErrors = true;
+      }
     }
   }
 
   const UpdateFieldState = (key: string, options: { key: string, value: unknown | [] }) => {
     const CurrentPage: IPage = GetCurrentPage();
-    const field: IField = FormBuilderPages.GetField(key, CurrentPage.CurrentStepIndex);
+    if (CurrentPage && CurrentPage.CurrentStepIndex) {
+      const field: IField = FormBuilderPages.GetField(key, CurrentPage.CurrentStepIndex);
 
-    if (!field) return;
+      if (!field) return;
 
-    switch (options.key) {
-      case "Value":
-        field.Value = options.value as string | Array<string>;
-        break;
-      case "IsValid":
-        field.IsValid = options.value as boolean;
-        break;
-      case "IsVisible":
-        field.IsVisible = options.value as boolean;
-        break;
-      case "HelpText":
-        field.HelpText = options.value as string;
-        break;
+      switch (options.key) {
+        case "Value":
+          field.Value = options.value as string | Array<string>;
+          break;
+        case "IsValid":
+          field.IsValid = options.value as boolean;
+          break;
+        case "IsVisible":
+          field.IsVisible = options.value as boolean;
+          break;
+        case "HelpText":
+          field.HelpText = options.value as string;
+          break;
+      }
     }
   }
 

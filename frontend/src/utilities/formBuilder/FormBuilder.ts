@@ -48,17 +48,17 @@ export class FormBuilder<TVisibility = null, TValidation = null, TScorer = null,
   }
 
   SetCurrentPage = (): IPage => {
-    this.Pages.Page = this.Pages.Pages.find(Page => Page.Name === this.CurrentRouteName) as unknown as IPage;
+    this.Pages.Page = this.Pages.Pages?.find(Page => Page.Name === this.CurrentRouteName) as unknown as IPage;
     this.StepCount = this.Pages.Page.Steps ? this.Pages.Page.Steps.length : 0;
 
     return this.Pages.Page
   }
 
   GetCurrentStep = (StepIndex: number = 0): IStep => {
-    const Steps: Array<IStep> = this.Pages.Page.Steps as unknown as Array<IStep>;
-    if (StepIndex === 0) StepIndex = this.Pages.Page.CurrentStepIndex;
+    const Steps: Array<IStep> = this.Pages.Page?.Steps as unknown as Array<IStep>;
+    if (StepIndex === 0) StepIndex = this.Pages.Page?.CurrentStepIndex || 0;
 
-    this.IsFinalStep = (this.Pages.Page.CurrentStepIndex === Steps.length - 1);
+    this.IsFinalStep = (this.Pages.Page?.CurrentStepIndex === Steps.length - 1);
 
     this.Step = Steps.find(Step => Step.StepIndex === StepIndex) as IStep as TStep;
 
@@ -90,7 +90,7 @@ export class FormBuilder<TVisibility = null, TValidation = null, TScorer = null,
   GetScore = async (Steps: Array<IStep>): Promise<number> => {
     let Score: number = 0;
 
-    if (this.Pages.Page.Steps) {
+    if (this.Pages && this.Pages.Page && this.Pages.Page.Steps) {
       for (const Step of this.Pages.Page.Steps) {
         if (Step.Fieldsets) {
           for (const FieldSet of Step.Fieldsets) {
