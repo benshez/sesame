@@ -5,16 +5,16 @@ export class Page implements IPage {
   Heading?: string;
   RequiresAuthenticaton?: boolean;
   CurrentStepIndex?: number;
-  Score: number;
+  Score?: number;
   Path?: string;
   Steps?: Array<IStep>;
 
   constructor(
-    Name: string,
-    Heading: string,
-    RequiresAuthenticaton: boolean,
-    CurrentStepIndex: number,
-    Score: number,
+    Name?: string,
+    Heading?: string,
+    RequiresAuthenticaton?: boolean,
+    CurrentStepIndex?: number,
+    Score?: number,
     Path?: string,
     Steps?: Array<IStep>,
   ) {
