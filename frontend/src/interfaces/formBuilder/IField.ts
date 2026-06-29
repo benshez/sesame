@@ -11,8 +11,8 @@ export interface IField {
   IsRequired?: boolean;
   IsValid?: boolean;
   IsValidIf?: Array<IKeyValue> | null;
-  IsReadonly?: boolean,
-  IsVisible?: boolean,
+  IsReadonly?: boolean;
+  IsVisible?: boolean;
   IsVisibleIf?: Array<IKeyValue> | null;
   CssClass?: string;
   Type?: string;
