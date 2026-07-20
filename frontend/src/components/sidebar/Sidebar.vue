@@ -3,7 +3,7 @@
     enter-to-class="translate-x-0" leave-from-class="translate-x-0"
     leave-active-class="transition-transform duration-300 ease-in-out" leave-to-class="translate-x-[-100%]">
     <aside ref="sideBar" v-if="displayStore.displayState.sidebarShowing"
-      class="show-sidebar-trigger fixed left-0 top-0 h-full w-64 z-50 border-r xl:relative px-5 py-5">
+      class="show-sidebar-trigger fixed left-0 top-0 h-full w-64 z-99999 border-r xl:relative px-5 py-5">
       <div class="flex flex-col gap-4 mt-15">
         <ul class="flex flex-col gap-1">
           <li v-for="(item, itemIndex) in displayStore.displayState.siderbarMenuItems" :key="itemIndex">

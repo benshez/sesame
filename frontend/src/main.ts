@@ -10,6 +10,8 @@ import EmailPassword from "supertokens-web-js/recipe/emailpassword";
 import Session from "supertokens-web-js/recipe/session";
 import Multitenancy from "supertokens-web-js/recipe/multitenancy";
 import { configuration } from "@/utilities";
+import { pageBuilder } from '@myissue/vue-website-page-builder'
+import '@myissue/vue-website-page-builder/style.css'
 
 const pinia = createPinia();
 const apiDomain = configuration.GetApiDomain();
@@ -39,5 +41,6 @@ SuperTokens.init({
 createApp(App)
   .provide("options", widget.GetWidgetOptions())
   .use(pinia)
+  .use(pageBuilder)
   .use(router)
   .mount(`#${widget.GetAppMountId()}`);

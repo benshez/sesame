@@ -8,15 +8,15 @@
     <div class="border-b border-gray-200 dark:border-gray-800 mt-5">
       <div class="px-6 py-5">
         <FormStepperFieldsets
-          :-fieldsets="FormBuilderStore.FormBuilderState.Pages.Page.Steps?.at(FormBuilderStore.FormBuilderState.Pages.Page.CurrentStepIndex)?.Fieldsets"
+          :-fieldsets="FormBuilderStore.FormBuilderState.Pages.Page.Steps?.at(FormBuilderStore.FormBuilderState.Pages.Page.CurrentStepIndex as number)?.Fieldsets"
           :-step-count="FormBuilderStore.FormBuilderState.Pages.Page.Steps?.length"
-          :-has-validation-errors="FormBuilderStore.FormBuilderState.Pages.Page.Steps?.at(FormBuilderStore.FormBuilderState.Pages.Page.CurrentStepIndex)?.HasValidationErrors"
+          :-has-validation-errors="FormBuilderStore.FormBuilderState.Pages.Page.Steps?.at(FormBuilderStore.FormBuilderState.Pages.Page.CurrentStepIndex as number)?.HasValidationErrors"
           :-layout="2" @on-input="OnInput" />
       </div>
     </div>
     <div class="px-6 py-5" v-if="ShowNavigator">
       <FormStepperNavigator :-current-page="FormBuilderStore.FormBuilderState.Pages.Page" :-step-count="FormBuilderStore.FormBuilderState.Pages.Page.Steps?.length"
-        :-has-validation-errors="FormBuilderStore.FormBuilderState.Pages.Page.Steps?.at(FormBuilderStore.FormBuilderState.Pages.Page.CurrentStepIndex)?.HasValidationErrors"
+        :-has-validation-errors="FormBuilderStore.FormBuilderState.Pages.Page.Steps?.at(FormBuilderStore.FormBuilderState.Pages.Page.CurrentStepIndex as number)?.HasValidationErrors"
         :-next-navigation-text="NextNavigationText" :-previous-navigation-text="PreviousNavigationText"
         @on-previous-step="PreviousStep" @on-next-step="NextStep" />
     </div>

@@ -81,7 +81,7 @@ export const useFormBuilderStore = defineStore("FormBuilderStore", () => {
   const OnInput = async (e: IField) => {
     UpdateFieldState(e.Id as string, { key: "Value", value: e.Value });
     await OnValidate(e);
-    await CalculateScore()
+    await CalculateScore();
   }
 
   const CalculateScore = async () => {

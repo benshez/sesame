@@ -154,6 +154,7 @@ export class KeyValue implements IKeyValue {
 }
 
 export class Pages implements IPages {
+  Page?: IPage = {};
   Pages?: Array<IPage> = [];
 
   constructor() { }
